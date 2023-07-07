@@ -1,0 +1,32 @@
+package com.team1.finalproject.sportsdata.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Team {
+    @Id
+    private Long id;
+    @Column
+    private String name;
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    private List<SeasonTeam> seasonTeams = new ArrayList<>();
+    @OneToMany(mappedBy = "team_home")
+    private List<GameTeam> gameTeamsHome = new ArrayList<>();
+    @OneToMany(mappedBy = "team_away")
+    private List<GameTeam> gameTeamsAway = new ArrayList<>();
+
+    @Builder
+    public Team(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
+}

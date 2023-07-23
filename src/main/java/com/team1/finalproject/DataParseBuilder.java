@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -66,5 +67,25 @@ public class DataParseBuilder {
             String[] parts = result1.split("\\s+");
             return parts[1] + " " +parts[0];
         }
+    }
+    public int calculateAge(Timestamp timestamp){
+        Date birthDate = new Date(timestamp.getTime());
+        Date currentDate = new Date();
+        java.util.Calendar birthCalendar = java.util.Calendar.getInstance();
+        birthCalendar.setTime(birthDate);
+
+        java.util.Calendar currentCalendar = java.util.Calendar.getInstance();
+        currentCalendar.setTime(currentDate);
+
+        int age = currentCalendar.get(java.util.Calendar.YEAR) - birthCalendar.get(java.util.Calendar.YEAR);
+
+        // 생일이 지났는지 체크
+        if (currentCalendar.get(java.util.Calendar.MONTH) < birthCalendar.get(java.util.Calendar.MONTH)) {
+            age--;
+        } else if (currentCalendar.get(java.util.Calendar.MONTH) == birthCalendar.get(java.util.Calendar.MONTH)
+                && currentCalendar.get(java.util.Calendar.DAY_OF_MONTH) < birthCalendar.get(java.util.Calendar.DAY_OF_MONTH)) {
+            age--;
+        }
+        return age;
     }
 }

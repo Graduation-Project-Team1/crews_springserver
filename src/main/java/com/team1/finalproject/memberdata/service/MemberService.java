@@ -1,11 +1,23 @@
 package com.team1.finalproject.memberdata.service;
 
+import com.team1.finalproject.memberdata.dto.SetUserPreferencesRequestDto;
+import com.team1.finalproject.memberdata.dto.ViewUserDataRequestDto;
+import org.springframework.security.core.token.Token;
+
 public interface MemberService {
-    public String signin();
+    String signin();
 
-    public String login();
+    String kakaoLogin();
 
-    public String chkduplicateNickname();
+    String appleLogin();
 
-    public String viewUserData();
+    String googleLogin();
+
+    String chkduplicateNickname(String nickname);
+
+    String chkUserToken(Token token);
+
+    String setUserPreferences(SetUserPreferencesRequestDto dto);
+
+    String viewUserData(ViewUserDataRequestDto dto);
 }

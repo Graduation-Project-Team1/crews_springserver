@@ -19,14 +19,14 @@ public class Season {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "tournament_id")
-    private Tournament tournament;
+    private Category category;
     @OneToMany(mappedBy = "season", fetch = FetchType.LAZY)
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
 
     @Builder
-    public Season(Long id, String name, Tournament tournament){
+    public Season(Long id, String name, Category category){
         this.id = id;
         this.name = name;
-        this.tournament = tournament;
+        this.category = category;
     }
 }

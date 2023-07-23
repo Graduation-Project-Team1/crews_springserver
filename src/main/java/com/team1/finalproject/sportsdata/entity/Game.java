@@ -14,25 +14,32 @@ import java.sql.Timestamp;
 public class Game {
     @Id
     private Long id;
-    @Column
+    @Column(name = "is_started")
     private String isStarted;
     @Column(name = "round_num")
     private Long roundNum;
     @Column(name = "date_time")
     private Timestamp dateTime;
     @ManyToOne
-    @JoinColumn
-    private Tournament tournament;
-    @OneToOne(mappedBy = "game")
-    private GameTeam gameTeam;
+    @JoinColumn(name = "category_id")
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "team_home_id")
+    private Team teamHome;
+    @ManyToOne
+    @JoinColumn(name = "team_away_id")
+    private Team teamAway;
 
     @Builder
-    public Game(Long id, String isStarted, Long roundNum, Timestamp dateTime, Tournament tournament) {
-        this.id=id;
-        this.isStarted=isStarted;
-        this.roundNum=roundNum;
-        this.dateTime=dateTime;
-        this.tournament=tournament;
-    }
 
+    public Game(Long id, String isStarted, Long roundNum, Timestamp dateTime,
+                Category category, Team teamHome, Team teamAway) {
+        this.id = id;
+        this.isStarted = isStarted;
+        this.roundNum = roundNum;
+        this.dateTime = dateTime;
+        this.category = category;
+        this.teamHome = teamHome;
+        this.teamAway = teamAway;
+    }
 }

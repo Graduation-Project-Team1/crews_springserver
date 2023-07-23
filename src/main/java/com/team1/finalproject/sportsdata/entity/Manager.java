@@ -1,6 +1,5 @@
 package com.team1.finalproject.sportsdata.entity;
 
-import com.team1.finalproject.common.entity.Nation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,15 +20,14 @@ public class Manager {
     private int age;
     @Column (name = "date_of_birth")
     private Timestamp dateOfBirth;
-    @ManyToOne
-    @JoinColumn(name = "nationality")
-    private Nation nation;
+    @Column(name = "nationality")
+    private String nation;
     @OneToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
     @Builder
-    public Manager(Long id, String name, int age, Timestamp dateOfBirth, Nation nation, Team team){
+    public Manager(Long id, String name, int age, Timestamp dateOfBirth, String nation, Team team){
         this.id = id;
         this.name = name;
         this.age = age;

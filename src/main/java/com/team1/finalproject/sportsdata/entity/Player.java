@@ -1,6 +1,5 @@
 package com.team1.finalproject.sportsdata.entity;
 
-import com.team1.finalproject.common.entity.Nation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -19,7 +17,7 @@ public class Player {
     @Column
     private String name;
     @Column
-    private int age;
+    private Integer age;
     @Column(name = "date_of_birth")
     private Timestamp dateOfBirth;
     @Column
@@ -28,16 +26,15 @@ public class Player {
     private Long shirtNumber;
     @Column
     private String position;
-    @ManyToOne
-    @JoinColumn(name = "nationality")
-    private Nation nation;
+    @Column(name = "nationality")
+    private String nation;
     @ManyToOne
     @JoinColumn(name="team_id")
     private Team team;
 
     @Builder
-    public Player(Long id, String name, Timestamp dateOfBirth, Long height, Long shirtNumber,
-                  Nation nation, String position, Team team){
+    public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
+                  String nation, String position, Team team){
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -46,29 +43,13 @@ public class Player {
         this.nation = nation;
         this.position = position;
         this.team = team;
-        this.age = calculateAge(dateOfBirth);
+        this.age = age;
     }
-    public int calculateAge(Timestamp timestamp){
-        Date birthDate = new Date(timestamp.getTime());
-        Date currentDate = new Date();
-        java.util.Calendar birthCalendar = java.util.Calendar.getInstance();
-        birthCalendar.setTime(birthDate);
 
-        java.util.Calendar currentCalendar = java.util.Calendar.getInstance();
-        currentCalendar.setTime(currentDate);
-
-        int age = currentCalendar.get(java.util.Calendar.YEAR) - birthCalendar.get(java.util.Calendar.YEAR);
-
-        // 생일이 지났는지 체크
-        if (currentCalendar.get(java.util.Calendar.MONTH) < birthCalendar.get(java.util.Calendar.MONTH)) {
-            age--;
-        } else if (currentCalendar.get(java.util.Calendar.MONTH) == birthCalendar.get(java.util.Calendar.MONTH)
-                && currentCalendar.get(java.util.Calendar.DAY_OF_MONTH) < birthCalendar.get(java.util.Calendar.DAY_OF_MONTH)) {
-            age--;
-        }
-        return age;
-    }
-    public boolean containsNull(){
-        return id == null || name == null || dateOfBirth == null || height == null || shirtNumber == null || nation == null || position == null;
+    public boolean containsNull() {
+        if (dateOfBirth != null && height != null && shirtNumber != null && nation != null
+                && position != null && team != null && age != null)
+            return false;
+        return true;
     }
 }

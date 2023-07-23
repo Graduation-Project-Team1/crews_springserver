@@ -19,10 +19,6 @@ public class Team {
     private String name;
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
-    @OneToMany(mappedBy = "team_home")
-    private List<GameTeam> gameTeamsHome = new ArrayList<>();
-    @OneToMany(mappedBy = "team_away")
-    private List<GameTeam> gameTeamsAway = new ArrayList<>();
 
     @Builder
     public Team(Long id, String name){

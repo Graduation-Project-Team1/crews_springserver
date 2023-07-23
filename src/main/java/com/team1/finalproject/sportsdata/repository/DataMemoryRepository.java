@@ -23,7 +23,7 @@ public class DataMemoryRepository {
     }
     public boolean containsRegion(Long id) { // Enum 내부에 존재하는지 확인
         for (availableRegions region : availableRegions.values()) {
-            if (region.getId() == id) {
+            if (region.getId().equals(id)) {
                 return true;
             }
         }

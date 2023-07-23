@@ -15,7 +15,7 @@ public class DataBuildController {
     private final PeriodicBuildService periodicBuildService;
     @PostMapping("/build/data/initial")
     public void buildData() throws ParseException {
-
+        categoryBuildService.setCategory();
     }
     @PostMapping("/build/data/annual")
     public void buildAnnualData() throws ParseException {

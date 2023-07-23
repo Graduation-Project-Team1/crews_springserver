@@ -47,9 +47,7 @@ public class Player {
     }
 
     public boolean containsNull() {
-        if (dateOfBirth != null && height != null && shirtNumber != null && nation != null
-                && position != null && team != null && age != null)
-            return false;
-        return true;
+        return dateOfBirth == null || height == null || shirtNumber == null || nation == null
+                || position == null || team == null || age == null;
     }
 }

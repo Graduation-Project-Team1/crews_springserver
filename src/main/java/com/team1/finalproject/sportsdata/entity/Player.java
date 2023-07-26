@@ -1,6 +1,7 @@
 package com.team1.finalproject.sportsdata.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,9 @@ public class Player {
     @Column(name = "date_of_birth")
     private Timestamp dateOfBirth;
     @Column
-    private Long height;
+    private Integer height;
     @Column(name = "shirt_number")
-    private Long shirtNumber;
+    private Integer shirtNumber;
     @Column
     private String position;
     @Column(name = "nationality")
@@ -33,7 +34,7 @@ public class Player {
     private Team team;
 
     @Builder
-    public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
+    public Player(Long id, String name, Timestamp dateOfBirth, int age, int height, int shirtNumber,
                   String nation, String position, Team team){
         this.id = id;
         this.name = name;

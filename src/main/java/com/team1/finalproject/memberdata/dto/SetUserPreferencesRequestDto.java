@@ -11,8 +11,6 @@ import org.springframework.security.core.token.Token;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SetUserPreferencesRequestDto {
-    private Token token;
-
     //private Nation nation;
     private String nickname;
 

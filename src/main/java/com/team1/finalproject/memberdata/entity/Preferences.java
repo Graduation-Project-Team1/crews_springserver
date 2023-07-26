@@ -26,5 +26,10 @@ public class Preferences {
     @JoinColumn(name = "favorite_player")
     private Player player;
 
-
+    public Preferences(Member member, String nickname, Team team, Player player) {
+        this.member = member;
+        this.nickname = nickname;
+        this.team = team;
+        this.player = player;
+    }
 }

@@ -91,7 +91,7 @@ public class PeriodicBuildService {
                         else
                             playerName = (String) temp.get("name");
                         Player player = new Player((Long) temp.get("id"), playerName, dateOfBirth, dataParseBuilder.calculateAge(dateOfBirth),
-                                (Long) temp.get("height"), (Long) temp.get("shirtNumber"), nation, (String) temp.get("position"), team);
+                                (int) temp.get("height"), (int) temp.get("shirtNumber"), nation, (String) temp.get("position"), team);
                         // check if player's name exists
                         if (!playerRepository.existsByName(playerName) && !player.containsNull())
                             playerRepository.save(player);

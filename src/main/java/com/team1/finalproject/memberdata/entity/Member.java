@@ -23,4 +23,8 @@ public class Member {
     public Member(String email) {
         this.email = email;
     }
+
+    public void setPreferences(Preferences preferences) {
+        this.preferences = preferences;
+    }
 }

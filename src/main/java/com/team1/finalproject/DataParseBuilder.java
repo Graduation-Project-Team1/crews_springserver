@@ -24,7 +24,7 @@ public class DataParseBuilder {
     private final MessageSource messageSource;
     public JSONArray getResponse(String url) throws ParseException, HttpClientErrorException.NotFound {
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", messageSource.getMessage("API_Key", null, null));
+        headers.set("X-RapidAPI-Key", messageSource.getMessage("SofaScore_Key1", null, null));
         headers.set("X-RapidAPI-Host", "sofasport.p.rapidapi.com");
         String requestBody = "";
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);

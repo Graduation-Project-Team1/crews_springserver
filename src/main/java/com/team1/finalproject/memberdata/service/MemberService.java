@@ -1,7 +1,8 @@
 package com.team1.finalproject.memberdata.service;
 
-import com.team1.finalproject.memberdata.dto.SetUserPreferencesRequestDto;
-import com.team1.finalproject.memberdata.dto.ViewUserDataRequestDto;
+import com.team1.finalproject.memberdata.dto.MemberDataResponse;
+import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
+import com.team1.finalproject.memberdata.dto.UpdatePreferencesRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import org.springframework.security.core.token.Token;
 
@@ -14,11 +15,14 @@ public interface MemberService {
 
     String googleLogin();
 
-    Boolean chkduplicateNickname(SetUserPreferencesRequestDto dto);
+    Boolean chkduplicateNickname(SetPreferencesRequest dto);
 
-    String chkUserToken(Token token);
+    String chkMemberToken(Token token);
 
-    void setUserPreferences(Member member, SetUserPreferencesRequestDto dto);
+    void setMemberPreferences(Member member, SetPreferencesRequest dto);
+    void updateMemberPreference(Member member, UpdatePreferencesRequest dto);
 
-    String viewUserData(ViewUserDataRequestDto dto);
+    MemberDataResponse viewMemberData(Long memberId);
+
+    void resignMember(Long memberId);
 }

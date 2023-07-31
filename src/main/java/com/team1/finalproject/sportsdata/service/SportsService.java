@@ -2,19 +2,19 @@ package com.team1.finalproject.sportsdata.service;
 
 public interface SportsService {
 
-    public String getSportsList();
+    String getSportsList();
 
-    public String getLeagueList();
+    String getLeagueList();
 
-    public String getTeamList();
+    String getTeamList();
 
-    public String getPlayerList();
+    String getPlayerList();
 
-    public String getTeamSchedule();
+    String getTeamSchedule();
 
-    public String getTeamRecord();
+    String getTeamRecord();
 
-    public String getPlayerRecord();
+    String getPlayerRecord();
 
-    public String getManagerRecord();
+    String getManagerRecord();
 }

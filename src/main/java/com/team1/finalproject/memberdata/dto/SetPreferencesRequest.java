@@ -5,16 +5,15 @@ import com.team1.finalproject.sportsdata.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.token.Token;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SetUserPreferencesRequestDto {
+public class SetPreferencesRequest {
     //private Nation nation;
     private String nickname;
 
-    private Team team;
+    private Long teamId;
 
-    private Player player;
+    private Long playerId;
 }

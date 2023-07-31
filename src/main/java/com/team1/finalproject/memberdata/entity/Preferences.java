@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 @Entity
 @Getter
@@ -28,6 +29,12 @@ public class Preferences {
 
     public Preferences(Member member, String nickname, Team team, Player player) {
         this.member = member;
+        this.nickname = nickname;
+        this.team = team;
+        this.player = player;
+    }
+
+    public void updatePreferences(String nickname, Team team, Player player) {
         this.nickname = nickname;
         this.team = team;
         this.player = player;

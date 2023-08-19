@@ -17,9 +17,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // 기본로그인
     public UserDetails loadUserByUsername(String email) {
-        Member user = userRepository.findByEmail(email)/*.orElseThrow(
+        Member user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
-        )*/;
+        );
         return new UserDetailsImpl(user);
     }
 

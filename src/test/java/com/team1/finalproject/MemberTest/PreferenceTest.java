@@ -3,6 +3,7 @@ package com.team1.finalproject.MemberTest;
 import com.team1.finalproject.DataParseBuilder;
 import com.team1.finalproject.memberdata.dto.MemberDataResponse;
 import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
+import com.team1.finalproject.memberdata.dto.UpdatePasswordRequest;
 import com.team1.finalproject.memberdata.dto.UpdatePreferencesRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -45,13 +46,12 @@ public class PreferenceTest {
     SetPreferencesRequest dto;
     @BeforeEach
     public void beforeEach() {
-        member = memberRepository.save(new Member("asdf"));
+        member = memberRepository.save(new Member("asdf", "1234"));
         team = teamRepository.save(new Team(1L,"name"));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
                 20, 170, 10, "Korea", "FW", team));
         dto = new SetPreferencesRequest("nickname", 1L, 2L);
         memberService.setMemberPreferences(member, dto);
-        System.out.println("dto = " + dto);
     }
     @Test
     public void findAllRegionIdTest(){
@@ -100,5 +100,13 @@ public class PreferenceTest {
     public void resignMemberTest() {
         memberService.resignMember(member.getId());
         assertThat(memberRepository.findById(member.getId())).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void updateMemberPasswordTest() {
+        UpdatePasswordRequest dto = new UpdatePasswordRequest("1234", "4321");
+        memberService.updateMemberPassword(dto, member.getEmail());
+
+        assertThat(member.getPassword()).isEqualTo("4321");
     }
 }

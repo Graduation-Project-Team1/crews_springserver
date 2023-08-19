@@ -1,13 +1,13 @@
 package com.team1.finalproject.memberdata.service;
 
-import com.team1.finalproject.memberdata.dto.MemberDataResponse;
-import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
-import com.team1.finalproject.memberdata.dto.UpdatePreferencesRequest;
+import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import org.springframework.security.core.token.Token;
 
 public interface MemberService {
-    String signin();
+    String signin(SigninRequest dto);
+
+    void logIn(LoginRequest dto);
 
     String kakaoLogin();
 
@@ -17,7 +17,8 @@ public interface MemberService {
 
     Boolean chkduplicateNickname(SetPreferencesRequest dto);
 
-    String chkMemberToken(Token token);
+    Member chkMemberToken(Token token);
+    void updateMemberPassword(UpdatePasswordRequest dto, String email);
 
     void setMemberPreferences(Member member, SetPreferencesRequest dto);
     void updateMemberPreference(Member member, UpdatePreferencesRequest dto);

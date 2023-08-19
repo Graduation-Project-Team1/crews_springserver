@@ -1,8 +1,6 @@
 package com.team1.finalproject.memberdata.service;
 
-import com.team1.finalproject.memberdata.dto.MemberDataResponse;
-import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
-import com.team1.finalproject.memberdata.dto.UpdatePreferencesRequest;
+import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.entity.Preferences;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -13,10 +11,10 @@ import com.team1.finalproject.sportsdata.repository.PlayerRepository;
 import com.team1.finalproject.sportsdata.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.token.Token;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,8 +25,23 @@ public class MemberServiceImpl implements MemberService{
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     @Override
-    public String signin() {
+    public String signin(SigninRequest dto) {
+        String email = dto.getEmail();
+        String password = dto.getPassword();
+        Member member = new Member(email, password);
+        memberRepository.save(member);
+
         return null;
+    }
+
+    @Override
+    public void logIn(LoginRequest dto) {
+        String email = dto.getEmail();
+        String password = dto.getPassword();
+        memberRepository.findByEmailAndPassword(email, password).orElseThrow(
+                () -> new UsernameNotFoundException("유효하지 않은 요청입니다.")
+        );
+        // 유저 데이터가 담긴 토큰 발급
     }
 
     @Override
@@ -52,8 +65,21 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String chkMemberToken(Token token) {
+    public Member chkMemberToken(Token token) {
         return null;
+    }
+
+    @Override
+    public void updateMemberPassword(UpdatePasswordRequest dto, String email) {
+        String password = dto.getPassword();
+        String newPassword = dto.getNewPassword();
+
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+        );
+
+        if (member.getPassword() == password)
+            member.setPassword(newPassword);
     }
 
     @Override

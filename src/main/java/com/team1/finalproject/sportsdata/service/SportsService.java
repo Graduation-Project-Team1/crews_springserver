@@ -1,14 +1,28 @@
 package com.team1.finalproject.sportsdata.service;
 
+import com.team1.finalproject.sportsdata.dto.*;
+
+import java.util.List;
+
 public interface SportsService {
 
-    String getSportsList();
+    List<String> getSportsList();
 
-    String getLeagueList();
+    SportsInfoResponse getSportsInfo(SportsInfoRequest dto);
 
-    String getTeamList();
+    List<LeagueInfoResponse> getLeagueList(LeagueListRequest dto);
 
-    String getPlayerList();
+    LeagueInfoResponse getLeagueInfo(LeagueInfoRequest dto);
+
+    List<TeamInfoResponse> getTeamList(TeamListRequest dto);
+
+    TeamInfoResponse getTeamInfo(TeamInfoRequest dto);
+
+    List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto);
+
+    PlayerInfoResponse getPlayerInfo(PlayerInfoRequest dto);
+
+    ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto);
 
     String getTeamSchedule();
 

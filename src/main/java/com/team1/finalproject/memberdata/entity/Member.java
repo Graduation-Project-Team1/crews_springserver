@@ -28,11 +28,16 @@ public class Member {
     private Preferences preferences;
 
     @Builder
-    public Member(String email) {
+    public Member(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 
     public void setPreferences(Preferences preferences) {
         this.preferences = preferences;
+    }
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
     }
 }

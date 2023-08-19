@@ -1,9 +1,9 @@
 package com.team1.finalproject.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team1.finalproject.common.dto.ResponseLogin;
+import com.team1.finalproject.common.dto.LoginResponse;
 import com.team1.finalproject.config.UserDetailsImpl;
-import com.team1.finalproject.memberdata.dto.RequestLogin;
+import com.team1.finalproject.memberdata.dto.LoginRequest;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                                 HttpServletResponse response) throws AuthenticationException {
         log.info("로그인 시도중");
         try{
-            RequestLogin user = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
+            LoginRequest user = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
             // UserDetailsService로 넘어감
             // authentication -> ProviderManager 구현체
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ObjectMapper objectMapper = new ObjectMapper();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ResponseLogin loginSuccess = ResponseLogin.builder()
+        LoginResponse loginSuccess = LoginResponse.builder()
                 .success(true)
                 .message("Login Success")
                 .token(jwtToken)

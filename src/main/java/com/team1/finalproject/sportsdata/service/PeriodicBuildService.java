@@ -25,7 +25,7 @@ public class PeriodicBuildService {
     private final PlayerRepository playerRepository;
     private final DataParseBuilder dataParseBuilder;
 
-    public String setSeason() throws ParseException {
+    public String setSeason() throws ParseException{
         List<Long> leagueIdList = categoryRepository.findAllLeagueId();
         for(Long leagueId : leagueIdList){
             String url = "https://sofasport.p.rapidapi.com/v1/tournaments/seasons?tournament_id="+ leagueId;
@@ -33,12 +33,10 @@ public class PeriodicBuildService {
             if(resultArray!=null){
                 for (Object object : resultArray) {
                     JSONObject temp = (JSONObject) object;
-                    if (categoryRepository.existsByLeagueId(leagueId)) {
-                        Season season = new Season((Long) temp.get("id"), (String) temp.get("name"),
-                                categoryRepository.findByLeagueId(leagueId));
-                        if (!seasonRepository.existsById(season.getId()))
-                            seasonRepository.save(season);
-                    }
+                    Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
+                    Season season = new Season((Long) temp.get("id"), (String) temp.get("name"), category);
+                    if (!seasonRepository.existsById(season.getId()))
+                        seasonRepository.save(season);
                 }
             }
         }
@@ -119,12 +117,13 @@ public class PeriodicBuildService {
                         Team teamAway = teamRepository.findByName((String) ((JSONObject) temp.get("awayTeam")).get("name"));
                         String isStarted = (String) ((JSONObject) temp.get("status")).get("description");
                         Long roundNum = (Long) ((JSONObject) temp.get("roundInfo")).get("round");
-                        Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament")).get("name")).getLeagueId();
+                        Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament")).get("name"))
+                                .orElseThrow();
                         Long uniqueId = (Long) ((JSONObject) ((JSONObject) temp.get("tournament")).get("uniqueTournament")).get("id");
                         if (uniqueIdList.contains(uniqueId)) {
+                            Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
                             Game event = new Game((Long) temp.get("id"), isStarted, roundNum,
-                                    dataParseBuilder.toTimeStamp((Long) temp.get("startTimestamp")),
-                                    categoryRepository.findByLeagueId(leagueId), teamHome, teamAway);
+                                    dataParseBuilder.toTimeStamp((Long) temp.get("startTimestamp")), category, teamHome, teamAway);
                             // check if player data is already in repository
                             if (!gameRepository.existsById(event.getId()))
                                 gameRepository.save(event);

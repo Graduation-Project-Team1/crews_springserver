@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
@@ -37,13 +38,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-
         log.info("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = getHeader(request, response, chain);
         if (jwtHeader == null) {
             return;
         }
-
         String jwtToken = getJwtToken(jwtHeader);
         String email = jwtTokenUtils.extractUserEmail(jwtToken);
         checkUser(email);
@@ -66,7 +65,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     public void checkUser(String email) {
         if (email != null) {
-            Member user = memberRepository.findByEmail(email);
+            Member user = memberRepository.findByEmail(email).orElseThrow(
+                    () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+            );
 //            user.setVisitedTime(LocalDateTime.now());
 //            userRepository.save(user);
             UserDetails userDetails = new UserDetailsImpl(user);

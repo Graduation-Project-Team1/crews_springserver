@@ -25,7 +25,6 @@ public class JwtTokenUtils {
                 .sign(Algorithm.HMAC512(JWT_SECRET));
     }
 
-
     public String extractUserEmail(String jwtToken) {
 
         return JWT.require(Algorithm.HMAC512(JWT_SECRET)).build()

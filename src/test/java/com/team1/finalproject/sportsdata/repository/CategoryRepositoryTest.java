@@ -17,13 +17,4 @@ class CategoryRepositoryTest {
     private CategoryRepository categoryRepository;
 
 
-    @Test
-    public void findAllRegionIdTest(){
-        List<Long> allRegionId = categoryRepository.findAllRegionId();
-        for (Long aLong : allRegionId) {
-            System.out.println("aLong = " + aLong);
-        }
-        return ;
-    }
-
 }

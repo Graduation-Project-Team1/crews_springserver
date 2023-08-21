@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface SeasonRepository extends JpaRepository<Season, Long> {
     Optional<Season> findByCategory(Category category);
-    List<Long> findSeasonTeamsBySeasonId(Long seasonId);
+    List<Long> findSeasonTeamsById(Long seasonId);
 }

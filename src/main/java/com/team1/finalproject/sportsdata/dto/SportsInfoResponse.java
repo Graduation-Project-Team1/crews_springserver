@@ -17,5 +17,4 @@ public class SportsInfoResponse {
         this.sportsId = category.getSportsId();
         this.sportsName = category.getSportsName();
     }
-
 }

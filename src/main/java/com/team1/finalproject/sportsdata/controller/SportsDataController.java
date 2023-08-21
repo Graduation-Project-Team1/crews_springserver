@@ -51,7 +51,7 @@ public class SportsDataController {
         return playerInfo;
     }
 
-    @GetMapping("/team/list")
+    @GetMapping("/player/list")
     public List<PlayerInfoResponse> getPlayerList(@ModelAttribute("dto")PlayerListRequest dto){
         List<PlayerInfoResponse> playerList = sportsService.getPlayerList(dto);
         return playerList;

@@ -29,8 +29,8 @@ public class SportsServiceImpl implements SportsService {
     @Override
     public SportsInfoResponse getSportsInfo(SportsInfoRequest dto) {
         Long sportsId = dto.getSportsId();
-        Category category = categoryRepository.findBySportsId(sportsId).orElseThrow();
-        return new SportsInfoResponse(category);
+        String sportsName = categoryRepository.findSportsNameBySportsId(sportsId);
+        return new SportsInfoResponse(sportsId, sportsName);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SportsServiceImpl implements SportsService {
 
     @Override
     public List<TeamInfoResponse> getTeamList(TeamListRequest dto) {
-        List<TeamInfoResponse> teamInfoResponses = null;
+        List<TeamInfoResponse> teamInfoResponses = new java.util.ArrayList<>(List.of());
         Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow();
         Season season = seasonRepository.findByCategory(category).orElseThrow();
         List<SeasonTeam> seasonTeams = season.getSeasonTeams();
@@ -71,7 +71,7 @@ public class SportsServiceImpl implements SportsService {
 
     @Override
     public List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto) {
-        List<Player> players = playerRepository.findByTeamId(dto.getPlayerId());
+        List<Player> players = playerRepository.findByTeamId(dto.getTeamId());
         List<PlayerInfoResponse> playerInfoResponses = players.stream()
                 .map(PlayerInfoResponse::new)
                 .collect(Collectors.toList());

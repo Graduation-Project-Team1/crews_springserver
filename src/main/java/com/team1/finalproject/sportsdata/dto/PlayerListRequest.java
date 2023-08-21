@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlayerListRequest {
 
-    private Long playerId;
+    private Long teamId;
 }

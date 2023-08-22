@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import static com.team1.finalproject.memberdata.entity.status.*;
+
 @Entity
 @Table (name = "MEMBER")
 @Getter
@@ -39,5 +44,9 @@ public class Member {
 
     public void setPassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void updateAccessDate() {
+        this.last_access_date = Timestamp.valueOf(LocalDateTime.now());
     }
 }

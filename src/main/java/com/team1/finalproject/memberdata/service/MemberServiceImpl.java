@@ -1,5 +1,7 @@
 package com.team1.finalproject.memberdata.service;
 
+import com.team1.finalproject.common.exception.ErrorCode;
+import com.team1.finalproject.common.exception.GlobalException;
 import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.entity.Preferences;
@@ -12,6 +14,7 @@ import com.team1.finalproject.sportsdata.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.token.Token;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,24 +27,29 @@ public class MemberServiceImpl implements MemberService{
     private final PreferencesRepository preferencesRepository;
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public String signin(SigninRequest dto) {
         String email = dto.getEmail();
-        String password = dto.getPassword();
+        // 비밀번호 bcrypt 암호화
+        String password = bCryptPasswordEncoder.encode(dto.getPassword());
         Member member = new Member(email, password);
         memberRepository.save(member);
 
-        return null;
+        return "Sign in complete";
     }
 
     @Override
     public void logIn(LoginRequest dto) {
         String email = dto.getEmail();
         String password = dto.getPassword();
-        memberRepository.findByEmailAndPassword(email, password).orElseThrow(
+        Member member = memberRepository.findByEmailAndPassword(email, password).orElseThrow(
                 () -> new UsernameNotFoundException("유효하지 않은 요청입니다.")
         );
         // 유저 데이터가 담긴 토큰 발급
+
+        // 최근 접속 날짜 업데이트
+        member.updateAccessDate();
     }
 
     @Override
@@ -83,9 +91,10 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void setMemberPreferences(Member member, SetPreferencesRequest dto) {
+    public void setMemberPreferences(String email, SetPreferencesRequest dto) {
         Team team = teamRepository.findById(dto.getTeamId()).get();
         Player player = playerRepository.findById(dto.getPlayerId()).get();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
         Preferences preferences = new Preferences(member, dto.getNickname(), team, player);
         member.setPreferences(preferences);
         preferencesRepository.save(preferences);
@@ -93,7 +102,8 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void updateMemberPreference(Member member, UpdatePreferencesRequest dto) {
+    public void updateMemberPreference(String email, UpdatePreferencesRequest dto) {
+        Member member = memberRepository.findByEmail(email).orElseThrow();
         Preferences preferences = member.getPreferences();
         String nickname = dto.getNickname();
         if(!teamRepository.existsById(dto.getTeamId())&&!playerRepository.existsById(dto.getPlayerId()))
@@ -122,5 +132,17 @@ public class MemberServiceImpl implements MemberService{
         else {
             //오류 메시지 출력
         }
+    }
+
+    @Override
+    public PreferencesResponse chkMemberPreference(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new GlobalException(ErrorCode.INVALID_USER)
+        );
+        Preferences preferences = member.getPreferences();
+        if(preferences==null){
+            throw new GlobalException(ErrorCode.INVALID_USER);
+        }
+        return new PreferencesResponse(preferences);
     }
 }

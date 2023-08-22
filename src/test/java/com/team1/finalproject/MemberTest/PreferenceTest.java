@@ -1,10 +1,7 @@
 package com.team1.finalproject.MemberTest;
 
 import com.team1.finalproject.DataParseBuilder;
-import com.team1.finalproject.memberdata.dto.MemberDataResponse;
-import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
-import com.team1.finalproject.memberdata.dto.UpdatePasswordRequest;
-import com.team1.finalproject.memberdata.dto.UpdatePreferencesRequest;
+import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
 import com.team1.finalproject.memberdata.service.MemberService;
@@ -51,7 +48,7 @@ public class PreferenceTest {
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
                 20, 170, 10, "Korea", "FW", team));
         dto = new SetPreferencesRequest("nickname", 1L, 2L);
-        memberService.setMemberPreferences(member, dto);
+        memberService.setMemberPreferences(member.getEmail(), dto);
     }
     @Test
     public void findAllRegionIdTest(){
@@ -78,7 +75,7 @@ public class PreferenceTest {
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),
                 22, 175, 10, "Korea", "FW", team));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
-        memberService.updateMemberPreference(member, dto);
+        memberService.updateMemberPreference(member.getEmail(), dto);
         assertThat(member.getPreferences().getNickname()).isEqualTo(newNickname);
         assertThat(member.getPreferences().getTeam()).isEqualTo(newTeam);
         assertThat(member.getPreferences().getPlayer()).isEqualTo(newPlayer);
@@ -108,5 +105,18 @@ public class PreferenceTest {
         memberService.updateMemberPassword(dto, member.getEmail());
 
         assertThat(member.getPassword()).isEqualTo("4321");
+    }
+
+    @Test
+    public void memberSignInTest() {
+        String msg = memberService.signin(new SigninRequest("eemmaaiill", "paaassword"));
+        assertThat(msg).isEqualTo("Sign in complete");
+        memberService.setMemberPreferences("eemmaaiill", dto);
+        assertThat(memberRepository.findById(2L).orElseThrow().getEmail()).isEqualTo("eemmaaiill");
+    }
+
+    @Test
+    public void memberLogInTest() {
+        memberService.logIn(new LoginRequest("email", "password"));
     }
 }

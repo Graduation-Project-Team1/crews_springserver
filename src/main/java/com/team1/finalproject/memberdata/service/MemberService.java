@@ -20,10 +20,11 @@ public interface MemberService {
     Member chkMemberToken(Token token);
     void updateMemberPassword(UpdatePasswordRequest dto, String email);
 
-    void setMemberPreferences(Member member, SetPreferencesRequest dto);
-    void updateMemberPreference(Member member, UpdatePreferencesRequest dto);
+    void setMemberPreferences(String email, SetPreferencesRequest dto);
+    void updateMemberPreference(String email, UpdatePreferencesRequest dto);
 
     MemberDataResponse viewMemberData(Long memberId);
 
     void resignMember(Long memberId);
+    PreferencesResponse chkMemberPreference(String email);
 }

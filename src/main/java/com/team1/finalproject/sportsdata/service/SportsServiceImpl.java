@@ -1,5 +1,7 @@
 package com.team1.finalproject.sportsdata.service;
 
+import com.team1.finalproject.common.exception.ErrorCode;
+import com.team1.finalproject.common.exception.GlobalException;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.repository.*;
@@ -45,15 +47,21 @@ public class SportsServiceImpl implements SportsService {
 
     @Override
     public LeagueInfoResponse getLeagueInfo(LeagueInfoRequest dto) {
-        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow();
+        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
         return new LeagueInfoResponse(category);
     }
 
     @Override
     public List<TeamInfoResponse> getTeamList(TeamListRequest dto) {
         List<TeamInfoResponse> teamInfoResponses = new java.util.ArrayList<>(List.of());
-        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow();
-        Season season = seasonRepository.findByCategory(category).orElseThrow();
+        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
+        Season season = seasonRepository.findByCategory(category).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
         List<SeasonTeam> seasonTeams = season.getSeasonTeams();
         for (SeasonTeam seasonTeam : seasonTeams) {
             Team team = seasonTeam.getTeam();
@@ -65,7 +73,9 @@ public class SportsServiceImpl implements SportsService {
     @Override
     public TeamInfoResponse getTeamInfo(TeamInfoRequest dto) {
         Long teamId = dto.getTeamId();
-        Team team = teamRepository.findById(teamId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
         return new TeamInfoResponse(team);
     }
 
@@ -81,14 +91,18 @@ public class SportsServiceImpl implements SportsService {
     @Override
     public PlayerInfoResponse getPlayerInfo(PlayerInfoRequest dto) {
         Long playerId = dto.getPlayerId();
-        Player player = playerRepository.findById(playerId).orElseThrow();
+        Player player = playerRepository.findById(playerId).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
         return new PlayerInfoResponse(player);
     }
 
     @Override
     public ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto) {
         Long managerId = dto.getManagerId();
-        Manager manager = managerRepository.findById(managerId).orElseThrow();
+        Manager manager = managerRepository.findById(managerId).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
         return new ManagerInfoResponse(manager);
     }
 

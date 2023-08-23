@@ -44,10 +44,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST ,"/sign").permitAll()
-                        .requestMatchers(HttpMethod.POST ,"/member").permitAll()
-                        .requestMatchers("/sign", "/sign/*").permitAll()
-                        .requestMatchers("/user/kakao/callback").permitAll()
+                        .requestMatchers("/member",
+                                "/build/category",
+                                "/build/season",
+                                "/data/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

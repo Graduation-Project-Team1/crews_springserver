@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,12 +40,13 @@ class SportsServiceImplTest {
     @Autowired
     private ManagerRepository managerRepository;
     @Autowired
-    DataParseBuilder dataParseBuilder = new DataParseBuilder(null);
+    private DataParseBuilder dataParseBuilder;
     @Autowired
     private MemberService memberService;
     @Autowired
     private SportsService sportsService;
-
+    @Autowired
+    private DataMemoryRepository dataMemoryRepository;
     Category category;
     Category category1;
     Category category2;
@@ -72,7 +74,7 @@ class SportsServiceImplTest {
         season.getSeasonTeams().add(seasonTeam);
         season = seasonRepository.save(season);
         player = playerRepository.save(new Player(1L, "player1", dataParseBuilder.toTimeStamp(200006),
-                1,175, 1, "England", "GK", team));
+                1,175L, 1L, "England", "GK", team));
         manager = managerRepository.save(new Manager(1L, "manager1", 40,
                 dataParseBuilder.toTimeStamp(200006),"Korea", team));
     }
@@ -135,5 +137,10 @@ class SportsServiceImplTest {
     void getManagerInfo() {
         ManagerInfoResponse managerInfo = sportsService.getManagerInfo(new ManagerInfoRequest(1L));
         assertThat(managerInfo).isEqualTo(new ManagerInfoResponse(manager));
+    }
+    @Test
+    void 레포지토리점검() {
+        boolean b = dataMemoryRepository.containsRegion(1L);
+        System.out.println("b = " + b);
     }
 }

@@ -1,5 +1,6 @@
 package com.team1.finalproject.sportsdata.repository;
 
+import com.team1.finalproject.DataParseBuilder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Map;
 
 @Repository
 public class DataMemoryRepository {
-
     Map<Long, String> sports = new HashMap<>();
     Map<Long, String> regions = new HashMap<>();
     Map<Long, Long> regionSports = new HashMap<>();

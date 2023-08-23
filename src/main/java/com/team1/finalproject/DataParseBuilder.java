@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +22,11 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class DataParseBuilder {
 
-    private final MessageSource messageSource;
+    @Value("${SofaSport_Key_2}")
+    private String SofaSport_API_Key;
     public JSONArray getResponse(String url) throws ParseException, HttpClientErrorException.NotFound {
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", messageSource.getMessage("SofaScore_Key1", null, null));
+        headers.set("X-RapidAPI-Key", SofaSport_API_Key);
         headers.set("X-RapidAPI-Host", "sofasport.p.rapidapi.com");
         String requestBody = "";
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
@@ -42,10 +44,12 @@ public class DataParseBuilder {
         JSONArray resultArray;
         if (url.contains("/tournaments/seasons")) {
             resultArray = (JSONArray) ((JSONObject) jsonObject.get("data")).get("seasons");
-        } else if (url.contains("/seasons/standings")) {
+        } /*else if (url.contains("/seasons/standings")) {
             resultArray = (JSONArray) ((JSONObject) ((JSONObject) jsonObject.get("data")).get(0)).get("rows");
-        } else if (url.contains("/teams/players")) {
+        }*/ else if (url.contains("/teams/players")) {
             resultArray = (JSONArray) ((JSONObject) jsonObject.get("data")).get("players");
+        } else if (url.contains("/seasons/teams-statistics")) {
+            resultArray = (JSONArray) ((JSONObject)jsonObject.get("data")).get("avgRating");
         } else
             resultArray = (JSONArray) jsonObject.get("data");
 
@@ -87,5 +91,9 @@ public class DataParseBuilder {
             age--;
         }
         return age;
+    }
+
+    public String removeSpace(String str) {
+        return str.replaceAll(" ","_");
     }
 }

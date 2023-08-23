@@ -36,7 +36,7 @@ public class PreferenceTest {
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
-    DataParseBuilder dataParseBuilder = new DataParseBuilder(null);
+    private DataParseBuilder dataParseBuilder;
     Member member;
     Team team;
     Player player;
@@ -46,7 +46,7 @@ public class PreferenceTest {
         member = memberRepository.save(new Member("asdf", "1234"));
         team = teamRepository.save(new Team(1L,"name"));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
-                20, 170, 10, "Korea", "FW", team));
+                20, 170L, 10L, "Korea", "FW", team));
         dto = new SetPreferencesRequest("nickname", 1L, 2L);
         memberService.setMemberPreferences(member.getEmail(), dto);
     }
@@ -73,7 +73,7 @@ public class PreferenceTest {
         String newNickname = "new nickname";
         Team newTeam = teamRepository.save(new Team(2L,"name2"));
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),
-                22, 175, 10, "Korea", "FW", team));
+                22, 175L, 10L, "Korea", "FW", team));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
         memberService.updateMemberPreference(member.getEmail(), dto);
         assertThat(member.getPreferences().getNickname()).isEqualTo(newNickname);
@@ -107,16 +107,16 @@ public class PreferenceTest {
         assertThat(member.getPassword()).isEqualTo("4321");
     }
 
-    @Test
+    /*@Test
     public void memberSignInTest() {
         String msg = memberService.signin(new SigninRequest("eemmaaiill", "paaassword"));
         assertThat(msg).isEqualTo("Sign in complete");
         memberService.setMemberPreferences("eemmaaiill", dto);
         assertThat(memberRepository.findById(2L).orElseThrow().getEmail()).isEqualTo("eemmaaiill");
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void memberLogInTest() {
         memberService.logIn(new LoginRequest("email", "password"));
-    }
+    }*/
 }

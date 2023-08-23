@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.regex.Pattern;
 
 import static com.team1.finalproject.config.jwt.JwtProperties.*;
 
@@ -38,11 +42,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        log.info("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = getHeader(request, response, chain);
         if (jwtHeader == null) {
             return;
         }
+        log.info("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtToken = getJwtToken(jwtHeader);
         String email = jwtTokenUtils.extractUserEmail(jwtToken);
         checkUser(email);

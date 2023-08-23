@@ -34,13 +34,13 @@ public class Player {
     private Team team;
 
     @Builder
-    public Player(Long id, String name, Timestamp dateOfBirth, int age, int height, int shirtNumber,
+    public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
                   String nation, String position, Team team){
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
-        this.height = height;
-        this.shirtNumber = shirtNumber;
+        this.height = Math.toIntExact(height);
+        this.shirtNumber = Math.toIntExact(shirtNumber);
         this.nation = nation;
         this.position = position;
         this.team = team;

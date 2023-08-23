@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import static com.team1.finalproject.memberdata.entity.status.*;
-
 @Entity
 @Table (name = "MEMBER")
 @Getter

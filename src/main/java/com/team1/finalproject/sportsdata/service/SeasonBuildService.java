@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PeriodicBuildService {
+public class SeasonBuildService {
 
     private final CategoryRepository categoryRepository;
     private final SeasonRepository seasonRepository;
@@ -48,8 +48,9 @@ public class PeriodicBuildService {
         for(Season season : seasons){
             Long uniqueId = season.getCategory().getUniqueId();
             Long seasonId = season.getId();
-            String url = "https://sofasport.p.rapidapi.com/v1/seasons/standings?standing_type=total&seasons_id=" + seasonId +
-                    "&unique_tournament_id=" + uniqueId;
+            String url = "https://sofasport.p.rapidapi.com/v1/seasons/teams-statistics/result" +
+                    "?seasons_statistics_type=overall&unique_tournament_id=" + uniqueId +
+                    "&seasons_id=" + seasonId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
             if(resultArray!=null){
                 for (Object object : resultArray) {
@@ -80,16 +81,17 @@ public class PeriodicBuildService {
             if(resultArray!=null){
                 for (Object object : resultArray) {
                     JSONObject temp = (JSONObject) ((JSONObject) object).get("player");
-                    if (temp.get("dateOfBirthTimestamp") != null) {
+                    if (temp.get("dateOfBirthTimestamp") != null && temp.get("shirtNumber")!=null
+                            && temp.get("height")!=null&&temp.get("shirtNumber")!=null) {
                         String nation = (String) ((JSONObject) temp.get("country")).get("name");
                         Timestamp dateOfBirth = dataParseBuilder.toTimeStamp((Long) temp.get("dateOfBirthTimestamp"));
                         String playerName;
-                        if (nation != null && nation.equals("South Korea"))
+                        if (nation.equals("South Korea"))
                             playerName = dataParseBuilder.nameTrimmer((String) temp.get("name"));
                         else
                             playerName = (String) temp.get("name");
                         Player player = new Player((Long) temp.get("id"), playerName, dateOfBirth, dataParseBuilder.calculateAge(dateOfBirth),
-                                (int) temp.get("height"), (int) temp.get("shirtNumber"), nation, (String) temp.get("position"), team);
+                                (Long) temp.get("height"), (Long) temp.get("shirtNumber"), nation, (String) temp.get("position"), team);
                         // check if player's name exists
                         if (!playerRepository.existsByName(playerName) && !player.containsNull())
                             playerRepository.save(player);
@@ -117,8 +119,8 @@ public class PeriodicBuildService {
                         Team teamAway = teamRepository.findByName((String) ((JSONObject) temp.get("awayTeam")).get("name"));
                         String isStarted = (String) ((JSONObject) temp.get("status")).get("description");
                         Long roundNum = (Long) ((JSONObject) temp.get("roundInfo")).get("round");
-                        Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament")).get("name"))
-                                .orElseThrow();
+                        Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament"))
+                                        .get("name")).orElseThrow().getLeagueId();
                         Long uniqueId = (Long) ((JSONObject) ((JSONObject) temp.get("tournament")).get("uniqueTournament")).get("id");
                         if (uniqueIdList.contains(uniqueId)) {
                             Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();

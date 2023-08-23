@@ -1,7 +1,10 @@
 package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.DataParseBuilder;
-import com.team1.finalproject.sportsdata.entity.*;
+import com.team1.finalproject.sportsdata.entity.Category;
+import com.team1.finalproject.sportsdata.entity.Season;
+import com.team1.finalproject.sportsdata.entity.SeasonTeam;
+import com.team1.finalproject.sportsdata.entity.Team;
 import com.team1.finalproject.sportsdata.repository.*;
 import jakarta.transaction.Transactional;
 import org.json.simple.JSONArray;
@@ -11,10 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Timestamp;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

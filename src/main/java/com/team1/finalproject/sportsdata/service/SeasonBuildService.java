@@ -35,7 +35,7 @@ public class SeasonBuildService {
                     JSONObject temp = (JSONObject) object;
                     Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
                     Season season = new Season((Long) temp.get("id"), (String) temp.get("name"), category);
-                    if (!seasonRepository.existsById(season.getId()))
+                    if (!seasonRepository.existsById(season.getId())&&((String) temp.get("name")).contains("23"))
                         seasonRepository.save(season);
                 }
             }

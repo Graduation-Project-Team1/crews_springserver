@@ -1,6 +1,5 @@
 package com.team1.finalproject.sportsdata.repository;
 
-import com.team1.finalproject.DataParseBuilder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

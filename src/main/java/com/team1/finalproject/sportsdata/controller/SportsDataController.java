@@ -2,7 +2,6 @@ package com.team1.finalproject.sportsdata.controller;
 
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.service.SportsService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -59,7 +59,6 @@ public class PreferenceTest {
         for (Long aLong : allRegionId) {
             System.out.println("aLong = " + aLong);
         }
-        return ;
     }
     @Test
     public void setPreferencesTest() {

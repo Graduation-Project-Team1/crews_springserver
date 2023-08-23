@@ -1,26 +1,20 @@
 package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.DataParseBuilder;
-import com.team1.finalproject.memberdata.dto.SetPreferencesRequest;
-import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
 import com.team1.finalproject.memberdata.service.MemberService;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.repository.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

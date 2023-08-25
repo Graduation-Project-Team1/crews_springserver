@@ -29,14 +29,18 @@ public class MemberServiceImpl implements MemberService{
     private final PlayerRepository playerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
-    public String signin(SigninRequest dto) {
+    public String signin(SignUpRequest dto) {
         String email = dto.getEmail();
+        if (memberRepository.existsByEmail(email))
+            return "duplicate email";
         // 비밀번호 bcrypt 암호화
+        if(dto.getPassword()!=dto.getChkPassword())
+            return "password doesn't matches";
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         Member member = new Member(email, password);
         memberRepository.save(member);
 
-        return "Sign in complete";
+        return "complete";
     }
 
     @Override
@@ -70,11 +74,6 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Boolean chkduplicateNickname(SetPreferencesRequest dto) {
         return preferencesRepository.existsByNickname(dto.getNickname());
-    }
-
-    @Override
-    public Member chkMemberToken(Token token) {
-        return null;
     }
 
     @Override

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberDataResponse {
 
+    private String success;
+
     private String email;
 
     private String nickname;
@@ -16,4 +18,8 @@ public class MemberDataResponse {
     private Long teamId;
 
     private Long playerId;
+
+    public MemberDataResponse(String str) {
+        this.success = str;
+    }
 }

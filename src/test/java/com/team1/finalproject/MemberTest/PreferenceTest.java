@@ -48,7 +48,7 @@ public class PreferenceTest {
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
                 20, 170L, 10L, "Korea", "FW", team));
         dto = new SetPreferencesRequest("nickname", 1L, 2L);
-        memberService.setMemberPreferences(member.getEmail(), dto);
+        memberService.setMemberPreferences(dto, member.getId());
     }
     @Test
     public void findAllRegionIdTest(){
@@ -74,7 +74,7 @@ public class PreferenceTest {
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),
                 22, 175L, 10L, "Korea", "FW", team));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
-        memberService.updateMemberPreference(member.getEmail(), dto);
+        memberService.updateMemberPreferences(dto,member.getId());
         assertThat(member.getPreferences().getNickname()).isEqualTo(newNickname);
         assertThat(member.getPreferences().getTeam()).isEqualTo(newTeam);
         assertThat(member.getPreferences().getPlayer()).isEqualTo(newPlayer);
@@ -94,14 +94,14 @@ public class PreferenceTest {
 
     @Test
     public void resignMemberTest() {
-        memberService.resignMember(member.getId());
+        memberService.deleteMember(member.getId());
         assertThat(memberRepository.findById(member.getId())).isEqualTo(Optional.empty());
     }
 
     @Test
     public void updateMemberPasswordTest() {
         UpdatePasswordRequest dto = new UpdatePasswordRequest("1234", "4321");
-        memberService.updateMemberPassword(dto, member.getEmail());
+        memberService.updateMemberPassword(dto, member.getId());
 
         assertThat(member.getPassword()).isEqualTo("4321");
     }

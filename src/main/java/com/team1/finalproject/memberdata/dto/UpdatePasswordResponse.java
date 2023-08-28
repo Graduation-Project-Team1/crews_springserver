@@ -1,6 +1,5 @@
 package com.team1.finalproject.memberdata.dto;
 
-import com.team1.finalproject.memberdata.entity.Preferences;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,16 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PreferencesResponse {
-
+public class UpdatePasswordResponse {
     private String success;
 
     private String message;
 
-    public PreferencesResponse(String success) {
+    public UpdatePasswordResponse(String success) {
         this.success = success;
         if (success.equals("Success"))
-            this.message = "Preferences successfully updated.";
+            this.message = "Password successfully updated.";
         else
             this.message = "Invalid request. Try again.";
     }

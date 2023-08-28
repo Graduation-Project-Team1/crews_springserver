@@ -77,71 +77,92 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void updateMemberPassword(UpdatePasswordRequest dto, String email) {
+    public UpdatePasswordResponse updateMemberPassword(UpdatePasswordRequest dto, Long memberId) {
         String password = dto.getPassword();
         String newPassword = dto.getNewPassword();
-
-        Member member = memberRepository.findByEmail(email).orElseThrow(
+        Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
 
         if (member.getPassword() == password)
             member.setPassword(newPassword);
+        else
+            return new UpdatePasswordResponse("Failed");
+        return new UpdatePasswordResponse("Success");
     }
 
     @Override
-    public void setMemberPreferences(String email, SetPreferencesRequest dto) {
-        Team team = teamRepository.findById(dto.getTeamId()).get();
-        Player player = playerRepository.findById(dto.getPlayerId()).get();
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+    public PreferencesResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) {
+        Team team = teamRepository.findById(dto.getTeamId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
+        Player player = playerRepository.findById(dto.getPlayerId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+        );
         Preferences preferences = new Preferences(member, dto.getNickname(), team, player);
         member.setPreferences(preferences);
         preferencesRepository.save(preferences);
         memberRepository.save(member);
+
+        return new PreferencesResponse("Success");
     }
 
     @Override
-    public void updateMemberPreference(String email, UpdatePreferencesRequest dto) {
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+    public PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+        );
         Preferences preferences = member.getPreferences();
         String nickname = dto.getNickname();
-        if(!teamRepository.existsById(dto.getTeamId())&&!playerRepository.existsById(dto.getPlayerId()))
-            return; //업데이트 실패 로그 출력
-        Team team = teamRepository.findById(dto.getTeamId()).get();
-        Player player = playerRepository.findById(dto.getPlayerId()).get();
+        Team team = teamRepository.findById(dto.getTeamId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
+        Player player = playerRepository.findById(dto.getPlayerId()).orElseThrow(
+                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+        );
+
         preferences.updatePreferences(nickname, team, player);
+
+        return new PreferencesResponse("Success");
     }
 
     @Override
     public MemberDataResponse viewMemberData(Long id) {
         Member member = memberRepository.findById(id).get();
-        Preferences preferences = member.getPreferences();
-        return new MemberDataResponse(member.getEmail(), preferences.getNickname(),
-                preferences.getTeam().getId(), preferences.getPlayer().getId());
+        if (member != null) {
+            Preferences preferences = member.getPreferences();
+            return new MemberDataResponse("true",member.getEmail(), preferences.getNickname(),
+                    preferences.getTeam().getId(), preferences.getPlayer().getId());
+        }
+        return new MemberDataResponse("false");
     }
 
     @Override
-    public void resignMember(Long memberId) {
+    public MemberDeletionResponse deleteMember(Long memberId) {
         if (memberRepository.existsById(memberId)) {
             Member member = memberRepository.findById(memberId).get();
             Preferences preferences = member.getPreferences();
             preferencesRepository.delete(preferences);
             memberRepository.delete(member);
+            return new MemberDeletionResponse("Success");
         }
         else {
-            //오류 메시지 출력
+            return new MemberDeletionResponse("Failed");
         }
     }
 
     @Override
-    public PreferencesResponse chkMemberPreference(String email) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(
+    public GetPreferencesResponse chkMemberPreference(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new GlobalException(ErrorCode.INVALID_USER)
         );
         Preferences preferences = member.getPreferences();
         if(preferences==null){
             throw new GlobalException(ErrorCode.INVALID_USER);
         }
-        return new PreferencesResponse(preferences);
+        return new GetPreferencesResponse(preferences);
     }
 }

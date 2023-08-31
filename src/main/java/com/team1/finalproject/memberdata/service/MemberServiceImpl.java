@@ -79,7 +79,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public UpdatePasswordResponse updateMemberPassword(UpdatePasswordRequest dto, Long memberId) {
         String password = dto.getPassword();
-        String newPassword = dto.getNewPassword();
+        String newPassword = bCryptPasswordEncoder.encode(dto.getNewPassword());
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );

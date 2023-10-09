@@ -7,16 +7,12 @@ public interface MemberService {
 
     void logIn(LoginRequest dto);
 
-    String kakaoLogin();
-
-    String appleLogin();
-
-    String googleLogin();
-
     Boolean chkduplicateNickname(SetPreferencesRequest dto);
+
     UpdatePasswordResponse updateMemberPassword(UpdatePasswordRequest dto, Long memberId);
 
     PreferencesResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId);
+
     PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId);
 
     MemberDataResponse viewMemberData(Long memberId);

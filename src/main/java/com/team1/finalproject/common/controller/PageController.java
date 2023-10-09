@@ -1,33 +1,40 @@
 package com.team1.finalproject.common.controller;
 
-import com.team1.finalproject.memberdata.dto.MemberDataRequest;
-import com.team1.finalproject.memberdata.dto.MemberDataResponse;
+import com.team1.finalproject.common.dto.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+@Controller
+@RequestMapping("/page")
 public class PageController {
     @GetMapping("/main")
-    public MemberDataResponse showMainPage(@RequestBody MemberDataRequest dto) {
+    public MainPageResponse showMainPage(@RequestBody MainPageRequest dto) {
         return null;
     }
 
     @GetMapping("/news")
-    public MemberDataResponse showNewsPage(@RequestBody MemberDataRequest dto) {
+    public NewsPageResponse showNewsPage(@RequestBody NewsPageRequest dto) {
         return null;
     }
 
     @GetMapping("/podcast")
-    public MemberDataResponse showPodcastPage(@RequestBody MemberDataRequest dto) {
+    public PodcastPageResponse showPodcastPage(@RequestBody PodcastPageRequest dto) {
         return null;
     }
 
     @GetMapping("/analysis")
-    public MemberDataResponse showAnalysisPage(@RequestBody MemberDataRequest dto) {
+    public AnalysisPageResponse showAnalysisPage(@RequestBody AnalysisPageRequest dto) {
         return null;
     }
 
     @GetMapping("/myteam")
-    public MemberDataResponse showMyTeamPage(@RequestBody MemberDataRequest dto) {
+    public MyTeamPageResponse showMyTeamPage(@RequestBody MainPageRequest dto) {
+        return null;
+    }
+
+    @GetMapping("/search")
+    public MyTeamPageResponse search(@RequestBody MainPageRequest dto) {
         return null;
     }
 }

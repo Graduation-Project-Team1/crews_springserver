@@ -57,21 +57,6 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String kakaoLogin() {
-        return null;
-    }
-
-    @Override
-    public String appleLogin() {
-        return null;
-    }
-
-    @Override
-    public String googleLogin() {
-        return null;
-    }
-
-    @Override
     public Boolean chkduplicateNickname(SetPreferencesRequest dto) {
         return preferencesRepository.existsByNickname(dto.getNickname());
     }

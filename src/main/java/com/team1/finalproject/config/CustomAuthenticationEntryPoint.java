@@ -28,6 +28,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         ErrorCode errorCode = ErrorCode.INVALID_USER;
         ErrorResponse errorResponse = new ErrorResponse(errorCode.getCode(), errorCode.getMessage());
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-        log.warn("로그인을 다시 시도해 주세요");
+        log.warn("401 : 로그인을 다시 시도해 주세요");
     }
 }

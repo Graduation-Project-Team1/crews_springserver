@@ -46,7 +46,9 @@ public class SecurityConfig {
                         .requestMatchers("/member",
                                 "/build/category",
                                 "/build/season",
-                                "/data/**").permitAll()
+                                "/kakao/**",
+                                "/data/**",
+                                "/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

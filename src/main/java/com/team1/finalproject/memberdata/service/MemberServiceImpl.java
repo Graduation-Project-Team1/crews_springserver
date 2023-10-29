@@ -33,9 +33,10 @@ public class MemberServiceImpl implements MemberService{
         String email = dto.getEmail();
         if (memberRepository.existsByEmail(email))
             return "duplicate email";
+        if(!dto.getPassword().equals(dto.getChkPassword())){
+            System.out.println(dto.getPassword()+", "+ dto.getChkPassword());
+            return "password doesn't matches";}
         // 비밀번호 bcrypt 암호화
-        if(dto.getPassword()!=dto.getChkPassword())
-            return "password doesn't matches";
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         Member member = new Member(email, password);
         memberRepository.save(member);

@@ -1,7 +1,9 @@
 package com.team1.finalproject.memberdata.controller;
 
 import com.team1.finalproject.memberdata.service.KaKaoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/kakao")
 public class KaKaoController {
@@ -20,12 +23,13 @@ public class KaKaoController {
     KaKaoService ks;
 
     @GetMapping("/do")
-    public String loginPage()
+    public String kakaoLogin()
     {
-        return "kakaoCI/login";
+        log.info("kakao login request occurred");
+        return "/kakaoCI/login.html";
     }
 
-    @GetMapping("")
+    @GetMapping("/getCI")
     public String getCI(@RequestParam String code, Model model) throws IOException {
         System.out.println("code = " + code);
         String access_token = ks.getToken(code);
@@ -34,8 +38,7 @@ public class KaKaoController {
         model.addAttribute("access_token", access_token);
         model.addAttribute("userInfo", userInfo);
 
-        //ci는 비즈니스 전환후 검수신청 -> 허락받아야 수집 가능
-        return "index";
+        return "index.html";
     }
 
 }

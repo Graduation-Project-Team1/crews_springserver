@@ -30,8 +30,8 @@ public class KaKaoService{
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
             String sb = "grant_type=authorization_code" +
-                    "&client_id=2aad40910868e3c5fa9594f8de34a07b" +
-                    "&redirect_uri=http://localhost:8080/member/kakao" +
+                    "&client_id=b6d6b8757acb893872695778f57324b7" +
+                    "&redirect_uri=http://localhost:8080/kakao/getCI" +
                     "&code=" + code;
 
             bw.write(sb);
@@ -101,12 +101,12 @@ public class KaKaoService{
 
 
             String id = obj.get("id").toString();
-            String nickname = properties.get("nickname").toString();
-            String age_range = kakao_account.get("age_range").toString();
+            /*String nickname = properties.get("nickname").toString();
+            String age_range = kakao_account.get("age_range").toString();*/
 
             result.put("id", id);
-            result.put("nickname", nickname);
-            result.put("age_range", age_range);
+            /*result.put("nickname", nickname);
+            result.put("age_range", age_range);*/
 
             br.close();
 

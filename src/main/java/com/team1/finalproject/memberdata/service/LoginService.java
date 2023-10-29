@@ -1,16 +1,20 @@
 package com.team1.finalproject.memberdata.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class LoginService {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -28,7 +32,17 @@ public class LoginService {
     public void socialLogin(String code, String registrationId) {
         System.out.println("code = " + code);
         String accessToken = getAccessToken(code, registrationId);
+        JsonNode userResourceNode = getUserResource(accessToken, registrationId);
         System.out.println("accessToken = " + accessToken);
+
+        System.out.println("userResourceNode = " + userResourceNode);
+
+        String id = userResourceNode.get("id").asText();
+        String email = userResourceNode.get("email").asText();
+        String nickname = userResourceNode.get("name").asText();
+        System.out.println("id = " + id);
+        System.out.println("email = " + email);
+        System.out.println("nickname = " + nickname);
     }
 
     private String getAccessToken(String authorizationCode, String registrationId) {

@@ -125,6 +125,7 @@ class SportsServiceImplTest {
     void getPlayerInfo() {
         PlayerInfoResponse playerInfo = sportsService.getPlayerInfo(new PlayerInfoRequest(1L));
         assertThat(playerInfo).isEqualTo(new PlayerInfoResponse(player));
+        System.out.println(playerInfo.getName());
     }
 
     @Test

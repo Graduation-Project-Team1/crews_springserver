@@ -3,7 +3,6 @@ package com.team1.finalproject.memberdata.controller;
 import com.team1.finalproject.memberdata.service.KaKaoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

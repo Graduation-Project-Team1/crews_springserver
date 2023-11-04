@@ -17,12 +17,15 @@ public class Team {
     private Long id;
     @Column
     private String name;
+    @Column
+    private String code;
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
 
     @Builder
-    public Team(Long id, String name){
+    public Team(Long id, String name, String code){
         this.id = id;
         this.name = name;
+        this.code = code;
     }
 }

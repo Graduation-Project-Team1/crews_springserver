@@ -31,10 +31,12 @@ public class Player {
     @ManyToOne
     @JoinColumn(name="team_id")
     private Team team;
+    @Column
+    private String code;
 
     @Builder
     public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                  String nation, String position, Team team){
+                  String nation, String position, Team team, String code){
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -44,6 +46,7 @@ public class Player {
         this.position = position;
         this.team = team;
         this.age = age;
+        this.code = code;
     }
 
     public boolean containsNull() {

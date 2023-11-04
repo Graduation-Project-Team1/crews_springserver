@@ -1,4 +1,4 @@
-package com.team1.finalproject;
+package com.team1.finalproject.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
@@ -94,5 +95,9 @@ public class DataParseBuilder {
 
     public String removeSpace(String str) {
         return str.replaceAll(" ","_");
+    }
+
+    public String availableSeasonCode(){
+        return LocalDate.now().getYear() + "/" + LocalDate.now().getMonth().toString();
     }
 }

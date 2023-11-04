@@ -1,6 +1,6 @@
 package com.team1.finalproject.sportsdata.service;
 
-import com.team1.finalproject.DataParseBuilder;
+import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.sportsdata.entity.Category;
 import com.team1.finalproject.sportsdata.repository.CategoryRepository;
 import com.team1.finalproject.sportsdata.repository.DataMemoryRepository;

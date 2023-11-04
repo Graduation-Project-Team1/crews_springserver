@@ -1,6 +1,6 @@
 package com.team1.finalproject.sportsdata.service;
 
-import com.team1.finalproject.DataParseBuilder;
+import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
 import com.team1.finalproject.memberdata.service.MemberService;
 import com.team1.finalproject.sportsdata.dto.*;
@@ -41,6 +41,7 @@ class SportsServiceImplTest {
     private SportsService sportsService;
     @Autowired
     private DataMemoryRepository dataMemoryRepository;
+    String code = dataParseBuilder.availableSeasonCode();
     Category category;
     Category category1;
     Category category2;
@@ -59,16 +60,16 @@ class SportsServiceImplTest {
                 2L, "Spain", 2L, 2L, "LaLiga"));
         category2 = categoryRepository.save(new Category(3L, "Baseball",
                 3L, "Korea", 3L, 3L, "KBO"));
-        season = seasonRepository.save(new Season(1L, "23-24", category));
-        team = teamRepository.save(new Team(1L,"team1"));
-        team2 = teamRepository.save(new Team(2L,"team2"));
+        season = seasonRepository.save(new Season(1L, "23-24", code, category));
+        team = teamRepository.save(new Team(1L,"team1", code));
+        team2 = teamRepository.save(new Team(2L,"team2", code));
         seasonTeam = seasonTeamRepository.save(new SeasonTeam(season, team));
         season.getSeasonTeams().add(seasonTeam);
         seasonTeam = seasonTeamRepository.save(new SeasonTeam(season, team2));
         season.getSeasonTeams().add(seasonTeam);
         season = seasonRepository.save(season);
         player = playerRepository.save(new Player(1L, "player1", dataParseBuilder.toTimeStamp(200006),
-                1,175L, 1L, "England", "GK", team));
+                1,175L, 1L, "England", "GK", team, code));
         manager = managerRepository.save(new Manager(1L, "manager1", 40,
                 dataParseBuilder.toTimeStamp(200006),"Korea", team));
     }

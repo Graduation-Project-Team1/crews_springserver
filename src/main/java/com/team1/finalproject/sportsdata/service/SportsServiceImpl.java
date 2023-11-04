@@ -2,6 +2,7 @@ package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.common.exception.ErrorCode;
 import com.team1.finalproject.common.exception.GlobalException;
+import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.repository.*;
@@ -22,6 +23,8 @@ public class SportsServiceImpl implements SportsService {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     private final ManagerRepository managerRepository;
+    private final DataParseBuilder dataParseBuilder;
+    String code = dataParseBuilder.availableSeasonCode();
 
     @Override
     public List<String> getSportsList() {
@@ -59,7 +62,7 @@ public class SportsServiceImpl implements SportsService {
         Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
-        Season season = seasonRepository.findByCategory(category).orElseThrow(
+        Season season = seasonRepository.findByCategory(category, dataParseBuilder.availableSeasonCode()).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
         List<SeasonTeam> seasonTeams = season.getSeasonTeams();
@@ -81,7 +84,7 @@ public class SportsServiceImpl implements SportsService {
 
     @Override
     public List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto) {
-        List<Player> players = playerRepository.findByTeamId(dto.getTeamId());
+        List<Player> players = playerRepository.findByTeamId(code, dto.getTeamId());
         List<PlayerInfoResponse> playerInfoResponses = players.stream()
                 .map(PlayerInfoResponse::new)
                 .collect(Collectors.toList());

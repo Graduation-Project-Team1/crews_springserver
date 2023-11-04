@@ -1,6 +1,6 @@
 package com.team1.finalproject.sportsdata.service;
 
-import com.team1.finalproject.DataParseBuilder;
+import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.sportsdata.entity.Category;
 import com.team1.finalproject.sportsdata.entity.Season;
 import com.team1.finalproject.sportsdata.entity.SeasonTeam;
@@ -34,6 +34,8 @@ class SeasonBuildServiceTest {
     @Autowired
     private DataParseBuilder dataParseBuilder;
 
+    String code = dataParseBuilder.availableSeasonCode();
+
     @Test
     void setSeason() {
     }
@@ -42,7 +44,7 @@ class SeasonBuildServiceTest {
     void setTeam() throws ParseException {
         Category category = new Category(1L, "Football", 291L, "South Korea", 3284L, 410L, "K League 1");
         category = categoryRepository.save(category);
-        Season season = new Season(48379L, "K-League 1 2023", category);
+        Season season = new Season(48379L, "K-League 1 2023", code, category);
         season = seasonRepository.save(season);
         Long uniqueId = season.getCategory().getUniqueId();
         Long seasonId = season.getId();
@@ -56,7 +58,7 @@ class SeasonBuildServiceTest {
         if(resultArray!=null){
             for (Object object : resultArray) {
                 JSONObject temp = (JSONObject) ((JSONObject) object).get("team");
-                Team team = new Team((Long) temp.get("id"), (String) temp.get("name"));
+                Team team = new Team((Long) temp.get("id"), (String) temp.get("name"), code);
                 SeasonTeam seasonTeam = new SeasonTeam(season, team);
                 // check if team, seasonTeam exists. -> save in repository
                 if (!teamRepository.existsById(team.getId()))

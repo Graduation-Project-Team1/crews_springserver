@@ -12,7 +12,6 @@ import com.team1.finalproject.sportsdata.entity.Team;
 import com.team1.finalproject.sportsdata.repository.PlayerRepository;
 import com.team1.finalproject.sportsdata.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.token.Token;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

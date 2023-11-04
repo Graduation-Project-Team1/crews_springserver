@@ -17,6 +17,8 @@ public class Season {
     private Long id;
     @Column
     private String name;
+    @Column
+    private String code;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "league_id")
     private Category category;
@@ -24,7 +26,7 @@ public class Season {
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
 
     @Builder
-    public Season(Long id, String name, Category category){
+    public Season(Long id, String name, String code, Category category){
         this.id = id;
         this.name = name;
         this.category = category;

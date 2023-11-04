@@ -1,6 +1,6 @@
 package com.team1.finalproject.MemberTest;
 
-import com.team1.finalproject.DataParseBuilder;
+import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -37,6 +37,7 @@ public class PreferenceTest {
     private PlayerRepository playerRepository;
     @Autowired
     private DataParseBuilder dataParseBuilder;
+    String code = dataParseBuilder.availableSeasonCode();
     Member member;
     Team team;
     Player player;
@@ -44,9 +45,9 @@ public class PreferenceTest {
     @BeforeEach
     public void beforeEach() {
         member = memberRepository.save(new Member("asdf", "1234"));
-        team = teamRepository.save(new Team(1L,"name"));
+        team = teamRepository.save(new Team(1L,"name", code));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
-                20, 170L, 10L, "Korea", "FW", team));
+                20, 170L, 10L, "Korea", "FW", team, code));
         dto = new SetPreferencesRequest("nickname", 1L, 2L);
         memberService.setMemberPreferences(dto, member.getId());
     }
@@ -70,9 +71,9 @@ public class PreferenceTest {
     @Test
     public void updatePreferenceTest() {
         String newNickname = "new nickname";
-        Team newTeam = teamRepository.save(new Team(2L,"name2"));
+        Team newTeam = teamRepository.save(new Team(2L,"name2", code));
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),
-                22, 175L, 10L, "Korea", "FW", team));
+                22, 175L, 10L, "Korea", "FW", team, code));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
         memberService.updateMemberPreferences(dto,member.getId());
         assertThat(member.getPreferences().getNickname()).isEqualTo(newNickname);

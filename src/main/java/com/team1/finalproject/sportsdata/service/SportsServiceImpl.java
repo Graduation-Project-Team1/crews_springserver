@@ -24,7 +24,6 @@ public class SportsServiceImpl implements SportsService {
     private final PlayerRepository playerRepository;
     private final ManagerRepository managerRepository;
     private final DataParseBuilder dataParseBuilder;
-    String code = dataParseBuilder.availableSeasonCode();
 
     @Override
     public List<String> getSportsList() {
@@ -84,7 +83,7 @@ public class SportsServiceImpl implements SportsService {
 
     @Override
     public List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto) {
-        List<Player> players = playerRepository.findByTeamId(code, dto.getTeamId());
+        List<Player> players = playerRepository.findByTeamId(dataParseBuilder.availableSeasonCode(), dto.getTeamId());
         List<PlayerInfoResponse> playerInfoResponses = players.stream()
                 .map(PlayerInfoResponse::new)
                 .collect(Collectors.toList());

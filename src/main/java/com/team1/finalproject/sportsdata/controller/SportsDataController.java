@@ -4,11 +4,16 @@ import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.service.SportsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.aspectj.apache.bcel.util.ClassPath;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -56,5 +61,25 @@ public class SportsDataController {
     public List<PlayerInfoResponse> getPlayerList(@ModelAttribute("dto")PlayerListRequest dto){
         List<PlayerInfoResponse> playerList = sportsService.getPlayerList(dto);
         return playerList;
+    }
+
+    @GetMapping("/record")
+    public ResponseEntity<String> getPlayerRecordTest(@RequestParam Boolean isGoalkeeper) throws IOException {
+        if(isGoalkeeper){
+            ClassPathResource resource = new ClassPathResource("GoalKeeperStatistics.json");
+            String jsonContent = Files.readString(Path.of(resource.getURI()));
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(jsonContent);
+        }
+        else {
+            ClassPathResource resource = new ClassPathResource("OutPlayerStatistics.json");
+            String jsonContent = Files.readString(Path.of(resource.getURI()));
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(jsonContent);
+        }
     }
 }

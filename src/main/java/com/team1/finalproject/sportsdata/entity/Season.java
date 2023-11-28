@@ -29,6 +29,7 @@ public class Season {
     public Season(Long id, String name, String code, Category category){
         this.id = id;
         this.name = name;
+        this.code = code;
         this.category = category;
     }
 }

@@ -9,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -59,8 +62,8 @@ public class CategoryBuildService {
         List<Long> regionIdList = dataMemoryRepository.getRegionIdList();
         log.info("리그 데이터 세팅 시작...");
         for (Long regionId : regionIdList) {
-            String url = "https://sofasport.p.rapidapi.com/v1/tournaments?category_id="+regionId;
-            JSONArray resultArray = dataParseBuilder.getResponse(url);
+            String url = "https://sofasport.p.rapidapi.com/v1/unique-tournaments-alt?category_id="+regionId;
+            JSONArray resultArray = (JSONArray)((JSONObject)dataParseBuilder.getResponse(url).get(0)).get("uniqueTournaments");
             if(resultArray!=null){
                 for (Object o : resultArray) {
                     JSONObject temp = (JSONObject) o;
@@ -69,7 +72,7 @@ public class CategoryBuildService {
                         Long sportsId = dataMemoryRepository.getSportsIdByRegionId(regionId);
                         Category category = new Category(sportsId, dataMemoryRepository.getSportsName(sportsId),
                                 regionId, dataMemoryRepository.getRegionName(regionId), (Long) temp.get("id"),
-                                (Long) temp.get("uniqueId"), (String) temp.get("name"));
+                                null, (String) temp.get("name"));
                         categoryRepository.save(category);
                     }
                 }

@@ -19,15 +19,17 @@ public class DataBuildController {
     private final SeasonBuildService seasonBuildService;
     @PostMapping("/category")
     @ResponseBody
-        public String buildCategoryData() throws ParseException {
-            categoryBuildService.setCategory();
+    public String buildCategoryData() throws ParseException {
+        categoryBuildService.setCategory();
         return "Category Build Successful";
     }
     @PostMapping("/season")
-    public void buildSeasonData() throws ParseException {
+    @ResponseBody
+    public String buildSeasonData() throws ParseException {
         log.info("info log = {}", seasonBuildService.setSeason());
         log.info("info log = {}", seasonBuildService.setTeam());
         log.info("info log = {}", seasonBuildService.setPlayer());
-        log.info("info log = {}", seasonBuildService.setGameByDate());
+        //log.info("info log = {}", seasonBuildService.setGameByDate());
+        return "Seasonal Data Build Successful";
     }
 }

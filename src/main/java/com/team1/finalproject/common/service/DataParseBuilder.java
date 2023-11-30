@@ -42,8 +42,8 @@ public class DataParseBuilder {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
         JSONArray resultArray;
-        if (url.contains("/tournaments/seasons")) {
-            resultArray = (JSONArray) ((JSONObject) jsonObject.get("data")).get("seasons");
+        if (url.contains("/unique-tournaments/seasons?")) {
+            resultArray = (JSONArray) jsonObject.get("data");
         } /*else if (url.contains("/seasons/standings")) {
             resultArray = (JSONArray) ((JSONObject) ((JSONObject) jsonObject.get("data")).get(0)).get("rows");
         }*/ else if (url.contains("/teams/players")) {

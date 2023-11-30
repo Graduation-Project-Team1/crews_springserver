@@ -1,0 +1,27 @@
+[
+  {
+    "keyword": "우승",
+    "moving": 3,
+    "mention": 128
+  },
+  {
+    "keyword": "ACL",
+    "moving": 0,
+    "mention": 113
+  },
+  {
+    "keyword": "홍명보",
+    "moving": -2,
+    "mention": 67
+  },
+  {
+    "keyword": "키치전",
+    "moving": 0,
+    "mention": 51
+  },
+  {
+    "keyword": "살얼음판",
+    "moving": 1,
+    "mention": 44
+  }
+]

@@ -28,8 +28,9 @@ public class SeasonBuildService {
     String code = LocalDate.now().getYear() +"-"+LocalDate.now().getMonth().toString();
     public String setSeason() throws ParseException{
         List<Long> leagueIdList = categoryRepository.findAllLeagueId();
+        System.out.println("leagueIdList = " + leagueIdList);
         for(Long leagueId : leagueIdList){
-            String url = "https://sofasport.p.rapidapi.com/v1/tournaments/seasons?tournament_id="+ leagueId;
+            String url = "https://sofascores.p.rapidapi.com/v1/unique-tournaments/seasons?unique_tournament_id="+ leagueId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
             if(resultArray!=null){
                 for (Object object : resultArray) {
@@ -47,7 +48,9 @@ public class SeasonBuildService {
     public String setTeam() throws ParseException {
         List<Season> seasons = seasonRepository.findAll();
         for(Season season : seasons){
-            Long uniqueId = season.getCategory().getUniqueId();
+            Long uniqueId = season.getCategory().getLeagueId();
+            System.out.println("season = " + season.getName() + season.getId() + season.getCategory());
+            System.out.println("uniqueId = " + uniqueId);
             Long seasonId = season.getId();
             String url = "https://sofasport.p.rapidapi.com/v1/seasons/teams-statistics/result" +
                     "?seasons_statistics_type=overall&unique_tournament_id=" + uniqueId +

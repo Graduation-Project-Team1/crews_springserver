@@ -9,11 +9,16 @@ import com.team1.finalproject.sportsdata.repository.*;
 import jakarta.transaction.Transactional;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @SpringBootTest
@@ -108,4 +113,6 @@ class SeasonBuildServiceTest {
     @Test
     void setGameByDate() {
     }
+
+
 }

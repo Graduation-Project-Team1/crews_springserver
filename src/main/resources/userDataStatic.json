@@ -1,0 +1,16 @@
+[
+    {
+        "nickname": "유저1",
+        "sportsName": "Football",
+        "leagueId": 3284,
+        "teamId": 7653,
+        "playerId": 14072
+    },
+    {
+        "nickname": "유저2",
+        "sportsName": "Football",
+        "leagueId": 3284,
+        "teamId": 7653,
+        "playerId": 570426
+    }
+]

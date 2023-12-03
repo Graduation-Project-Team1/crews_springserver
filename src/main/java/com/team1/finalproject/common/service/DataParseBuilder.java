@@ -56,6 +56,25 @@ public class DataParseBuilder {
         return resultArray;
     }
 
+    public JSONObject getJSONObject(String url) throws ParseException {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", SofaSport_API_Key);
+        headers.set("X-RapidAPI-Host", "sofasport.p.rapidapi.com");
+        String requestBody = "";
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        } catch (HttpClientErrorException.NotFound ex) {
+            System.out.println("API 요청 중에 예외가 발생했습니다.");
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
+        return (JSONObject) jsonObject.get("data");
+    }
     public Timestamp toTimeStamp(long num){
         return new Timestamp(num * 1000);
     }

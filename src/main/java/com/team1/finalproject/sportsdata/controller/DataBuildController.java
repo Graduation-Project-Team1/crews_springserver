@@ -17,19 +17,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DataBuildController {
     private final CategoryBuildService categoryBuildService;
     private final SeasonBuildService seasonBuildService;
+
     @PostMapping("/category")
     @ResponseBody
     public String buildCategoryData() throws ParseException {
         categoryBuildService.setCategory();
         return "Category Build Successful";
     }
+
     @PostMapping("/season")
-    @ResponseBody
     public String buildSeasonData() throws ParseException {
         log.info("info log = {}", seasonBuildService.setSeason());
         log.info("info log = {}", seasonBuildService.setTeam());
         log.info("info log = {}", seasonBuildService.setPlayer());
         //log.info("info log = {}", seasonBuildService.setGameByDate());
         return "Seasonal Data Build Successful";
+    }
+
+    @PostMapping("/player")
+    @ResponseBody
+    public void buildPlayer() throws ParseException {
+        seasonBuildService.setRecord();
     }
 }

@@ -2,19 +2,28 @@ package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.sportsdata.entity.*;
+import com.team1.finalproject.sportsdata.entity.soccer.Defender;
+import com.team1.finalproject.sportsdata.entity.soccer.Forward;
+import com.team1.finalproject.sportsdata.entity.soccer.Goalkeeper;
+import com.team1.finalproject.sportsdata.entity.soccer.Midfielder;
 import com.team1.finalproject.sportsdata.repository.*;
+import com.team1.finalproject.sportsdata.repository.soccer.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SeasonBuildService {
 
@@ -24,6 +33,11 @@ public class SeasonBuildService {
     private final SeasonTeamRepository seasonTeamRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
+    private final SoccerPlayerRepository soccerPlayerRepository;
+    private final ForwardRepository forwardRepository;
+    private final MidfielderRepository midfielderRepository;
+    private final DefenderRepository defenderRepository;
+    private final GoalkeeperRepository goalkeeperRepository;
     private final DataParseBuilder dataParseBuilder;
     String code = LocalDate.now().getYear() +"-"+LocalDate.now().getMonth().toString();
     public String setSeason() throws ParseException{
@@ -139,5 +153,108 @@ public class SeasonBuildService {
             }
         }
         return "Event data set complete";
+    }
+
+    public void setRecord() throws ParseException {
+
+        List<Player> playerList = playerRepository.findAll();
+        for (Player player : playerList) {
+            List<SeasonTeam> seasonTeams = player.getTeam().getSeasonTeams();
+            Season season = seasonTeams.stream()
+                    .filter(seasonTeam -> seasonTeam.getSeason().getName().contains("2023"))
+                    .findFirst().orElseThrow()
+                    .getSeason();
+            Long playerId = player.getId();
+            Long seasonId = season.getId();
+            Long uniqueId = season.getCategory().getUniqueId();
+            String url = "https://sofascores.p.rapidapi.com/v1/players/statistics/result?seasons_id="+seasonId+"&player_id="+playerId+"&unique_tournament_id="+uniqueId+"&player_stat_type=overall";
+            JSONObject data = dataParseBuilder.getJSONObject(url);
+
+            if (data == null) {
+                log.info("Player id "+playerId+" has no data : 낮은 출전 횟수 혹은 K League 1 소속이 아님");
+            }
+            else {
+                JSONObject jsonObject = (JSONObject) data.get("statistics");
+                String position = player.getPosition();
+                playerRepository.delete(player);
+                if(Objects.equals(position, "F")){
+                    Forward forward = Forward.builder()
+                            .name(player.getName())
+                            .id(player.getId())
+                            .dateOfBirth(player.getDateOfBirth())
+                            .age(player.getAge())
+                            .height(player.getHeight())
+                            .shirtNumber(player.getShirtNumber())
+                            .nation(player.getNation())
+                            .position(player.getPosition())
+                            .team(player.getTeam())
+                            .code(player.getCode()).build();
+                    forwardRepository.save(forward);
+                } else if (Objects.equals(position, "M")) {
+                    Midfielder midfielder = Midfielder.builder()
+                            .name(player.getName())
+                            .id(player.getId())
+                            .dateOfBirth(player.getDateOfBirth())
+                            .age(player.getAge())
+                            .height(player.getHeight())
+                            .shirtNumber(player.getShirtNumber())
+                            .nation(player.getNation())
+                            .position(player.getPosition())
+                            .team(player.getTeam())
+                            .code(player.getCode()).build();
+                    midfielderRepository.save(midfielder);
+                } else if (Objects.equals(position, "D")) {
+                    Defender defender = Defender.builder()
+                            .name(player.getName())
+                            .id(player.getId())
+                            .dateOfBirth(player.getDateOfBirth())
+                            .age(player.getAge())
+                            .height(player.getHeight())
+                            .shirtNumber(player.getShirtNumber())
+                            .nation(player.getNation())
+                            .position(player.getPosition())
+                            .team(player.getTeam())
+                            .code(player.getCode()).build();
+                    defenderRepository.save(defender);
+                } else if (Objects.equals(position, "G")) {
+                    Goalkeeper goalkeeper = Goalkeeper.builder()
+                            .name(player.getName())
+                            .id(player.getId())
+                            .dateOfBirth(player.getDateOfBirth())
+                            .age(player.getAge())
+                            .height(player.getHeight())
+                            .shirtNumber(player.getShirtNumber())
+                            .nation(player.getNation())
+                            .position(player.getPosition())
+                            .team(player.getTeam())
+                            .code(player.getCode()).build();
+                    goalkeeperRepository.save(goalkeeper);
+                }
+            }
+        }
+
+        String code = dataParseBuilder.availableSeasonCode();
+        Team team = teamRepository.save(new Team(1L,"name", code));
+        Player player = new Player(2L, "name", dataParseBuilder.toTimeStamp(20000603),
+                20, 170L, 10L, "Korea", "FW", team, code);
+        playerRepository.delete(playerRepository.findById(2L).orElseThrow());
+        Forward forward = Forward.builder()
+                .name(player.getName())
+                .id(player.getId())
+                .dateOfBirth(player.getDateOfBirth())
+                .age(player.getAge())
+                .height(player.getHeight())
+                .shirtNumber(player.getShirtNumber())
+                .nation(player.getNation())
+                .position(player.getPosition())
+                .team(player.getTeam())
+                .code(player.getCode())
+                .fouls(1L)
+                .yellowCards(1L)
+                .redCards(1L)
+                .appearances(1L)
+                .goals(1L)
+                .assists(1L).build();
+        forwardRepository.save(forward);
     }
 }

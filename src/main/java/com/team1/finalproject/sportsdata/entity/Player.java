@@ -5,11 +5,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 
 @Entity
 @Getter
+@SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Player {
     @Id
@@ -34,7 +38,7 @@ public class Player {
     @Column
     private String code;
 
-    @Builder
+    //@Builder
     public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
                   String nation, String position, Team team, String code){
         this.id = id;

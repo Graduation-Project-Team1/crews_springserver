@@ -18,7 +18,7 @@ import java.io.InputStream;
 @Slf4j
 public class TempController {
 
-    @GetMapping("/record")
+    @GetMapping("/data/record")
     public ResponseEntity<String> getPlayerRecordTest(@RequestParam String pos) throws IOException {
         switch (pos) {
             case "fw" -> {

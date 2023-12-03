@@ -233,7 +233,7 @@ public class SeasonBuildService {
             }
         }
 
-        String code = dataParseBuilder.availableSeasonCode();
+        /*String code = dataParseBuilder.availableSeasonCode();
         Team team = teamRepository.save(new Team(1L,"name", code));
         Player player = new Player(2L, "name", dataParseBuilder.toTimeStamp(20000603),
                 20, 170L, 10L, "Korea", "FW", team, code);
@@ -254,6 +254,6 @@ public class SeasonBuildService {
                 .appearances(1L)
                 .goals(1L)
                 .assists(1L).build();
-        forwardRepository.save(forward);
+        forwardRepository.save(forward);*/
     }
 }

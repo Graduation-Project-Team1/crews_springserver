@@ -26,6 +26,7 @@ public class DataBuildController {
     }
 
     @PostMapping("/season")
+    @ResponseBody
     public String buildSeasonData() throws ParseException {
         log.info("info log = {}", seasonBuildService.setSeason());
         log.info("info log = {}", seasonBuildService.setTeam());

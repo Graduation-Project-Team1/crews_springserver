@@ -249,7 +249,6 @@ public class SeasonBuildService {
                 .position(player.getPosition())
                 .team(player.getTeam())
                 .code(player.getCode())
-                .fouls(1L)
                 .yellowCards(1L)
                 .redCards(1L)
                 .appearances(1L)

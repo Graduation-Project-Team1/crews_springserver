@@ -1,0 +1,57 @@
+{
+  "team": {
+    "name": "FC 서울",
+    "category": "국내 축구",
+    "img": "https://i.namu.wiki/i/I9BvUF_0uAfNcTyLtq7vUK9USHBJra-ZGKOeYTTjtkUpRIGFEZt37SR0WxnbeIaX95y0PIEsDf_KAOKo-SIwd3Rul4B-6lIAHvzp_oSHm_bMZyZf3hv-QSdJS9Rmz-snBdpNcnA-UDGnu5vEQ34S7Q.svg",
+    "id": 7646
+  },
+  "news": [
+    {
+      "title": "FC서울 최다 관중 비결은 '모기업 사내 커뮤니티'",
+      "createdAt": "2023.12.01. 오후 05:42",
+      "img": "https://mimgnews.pstatic.net/image/upload/office_logo/009/2017/01/05/logo_009_11_20170105110805.gif",
+      "url": "https://sports.news.naver.com/news.nhn?oid=009&aid=0005223859"
+    },
+    {
+      "title": "15년 만에 '최저 순위' 전북…페트레스쿠 감독 \"뼈아픈 시즌\"",
+      "createdAt": "2023.12.03. 오후 04:48",
+      "img": "https://mimgnews.pstatic.net/image/upload/office_logo/001/2017/01/05/logo_001_11_20170105111305.jpg",
+      "url": "https://sports.news.naver.com/news.nhn?oid=001&aid=0014368713"
+    },
+    {
+      "title": "‘고승범 가격’ FC서울 코치, 3경기 출장 정지",
+      "createdAt": "2023.11.30. 오후 05:58",
+      "img": "https://mimgnews.pstatic.net/image/upload/office_logo/011/2017/01/05/logo_011_11_20170105110805.gif",
+      "url": "https://sports.news.naver.com/news.nhn?oid=011&aid=0004268547"
+    }
+  ],
+  "radio": [],
+  "game": [
+    {
+      "time": "2023.05.22 (월)",
+      "team": [
+        {
+          "score": 1,
+          "img": "https://jbhd-upload-file.s3.ap-northeast-2.amazonaws.com/images/img_emblem_1.827563b2.png"
+        },
+        {
+          "score": 0,
+          "img": "https://files.fcseoul.com/multi01/Club/Club/em_K09.png"
+        }
+      ]
+    },
+    {
+      "time": "2023.05.22 (월)",
+      "team": [
+        {
+          "score": 1,
+          "img": "https://jbhd-upload-file.s3.ap-northeast-2.amazonaws.com/images/img_emblem_1.827563b2.png"
+        },
+        {
+          "score": 0,
+          "img": "https://files.fcseoul.com/multi01/Club/Club/em_K09.png"
+        }
+      ]
+    }
+  ]
+}

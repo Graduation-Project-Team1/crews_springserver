@@ -1,0 +1,86 @@
+[
+    {
+        "goals": 20, 
+        "assists": 10,
+        "yellowCards":5,
+        "redCards":1,
+        "totalShots":80,
+        "shotsOnTarget":20,
+        "penaltyGoals":10,
+        "touches":110,
+        "successfulDribbles":40,
+        "appearances":32
+    },
+    {
+        "goals": 15, 
+        "assists": 10,
+        "yellowCards":3,
+        "redCards":0,
+        "totalShots":40,
+        "shotsOnTarget":5,
+        "penaltyGoals":5,
+        "touches":80,
+        "successfulDribbles":30,
+        "appearances":28
+    },
+    {
+        "goals": 10, 
+        "assists": 11,
+        "yellowCards":2,
+        "redCards":0,
+        "totalShots":30,
+        "shotsOnTarget":5,
+        "penaltyGoals":1,
+        "touches":50,
+        "successfulDribbles":15,
+        "appearances":25
+    },
+    {
+        "goals": 5, 
+        "assists": 5,
+        "yellowCards":1,
+        "redCards":0,
+        "totalShots":30,
+        "shotsOnTarget":5,
+        "penaltyGoals":0,
+        "touches":50,
+        "successfulDribbles":6,
+        "appearances":20
+    },
+    {
+        "goals": 3, 
+        "assists": 6,
+        "yellowCards":2,
+        "redCards":1,
+        "totalShots":40,
+        "shotsOnTarget":6,
+        "penaltyGoals":0,
+        "touches":60,
+        "successfulDribbles":8,
+        "appearances":18
+    },
+    {
+        "goals": 1, 
+        "assists": 3,
+        "yellowCards":0,
+        "redCards":0,
+        "totalShots":30,
+        "shotsOnTarget":4,
+        "penaltyGoals":0,
+        "touches":30,
+        "successfulDribbles":3,
+        "appearances":10
+    },
+    {
+        "goals": 0, 
+        "assists": 1,
+        "yellowCards":0,
+        "redCards":0,
+        "totalShots":10,
+        "shotsOnTarget":1,
+        "penaltyGoals":0,
+        "touches":30,
+        "successfulDribbles":2,
+        "appearances":5
+    }
+]

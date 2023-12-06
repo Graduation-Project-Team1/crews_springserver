@@ -31,15 +31,13 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public SportsInfoResponse getSportsInfo(SportsInfoRequest dto) {
-        Long sportsId = dto.getSportsId();
+    public SportsInfoResponse getSportsInfo(Long sportsId) {
         String sportsName = categoryRepository.findSportsNameBySportsId(sportsId);
         return new SportsInfoResponse(sportsId, sportsName);
     }
 
     @Override
-    public List<LeagueInfoResponse> getLeagueList(LeagueListRequest dto) {
-        String sportsName = dto.getSportsName();
+    public List<LeagueInfoResponse> getLeagueList(String sportsName) {
         List<Category> categories = categoryRepository.findBySportsName(sportsName);
         List<LeagueInfoResponse> leagueInfoResponses = categories.stream()
                 .map(LeagueInfoResponse::new)
@@ -48,18 +46,17 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public LeagueInfoResponse getLeagueInfo(LeagueInfoRequest dto) {
-        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow(
+    public LeagueInfoResponse getLeagueInfo(Long leagueId) {
+        Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
         return new LeagueInfoResponse(category);
     }
 
     @Override
-    public List<TeamInfoResponse> getTeamList(TeamListRequest dto) {
-        System.out.println(dto.getLeagueId());
+    public List<TeamInfoResponse> getTeamList(Long leagueId) {
         List<TeamInfoResponse> teamInfoResponses = new java.util.ArrayList<>(List.of());
-        Category category = categoryRepository.findByLeagueId(dto.getLeagueId()).orElseThrow(
+        Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
         Season season = seasonRepository.findByCategory(category).orElseThrow(
@@ -74,8 +71,7 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public TeamInfoResponse getTeamInfo(TeamInfoRequest dto) {
-        Long teamId = dto.getTeamId();
+    public TeamInfoResponse getTeamInfo(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
@@ -83,17 +79,15 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto) {
-        List<Player> players = playerRepository.findAllByTeamId(dto.getTeamId());
-        List<PlayerInfoResponse> playerInfoResponses = players.stream()
+    public List<PlayerInfoResponse> getPlayerList(Long teamId) {
+        List<Player> players = playerRepository.findAllByTeamId(teamId);
+        return players.stream()
                 .map(PlayerInfoResponse::new)
                 .collect(Collectors.toList());
-        return playerInfoResponses;
     }
 
     @Override
-    public PlayerInfoResponse getPlayerInfo(PlayerInfoRequest dto) {
-        Long playerId = dto.getPlayerId();
+    public PlayerInfoResponse getPlayerInfo(Long playerId) {
         Player player = playerRepository.findById(playerId).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );

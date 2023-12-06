@@ -2,7 +2,6 @@ package com.team1.finalproject.common.service;
 
 import com.team1.finalproject.common.dto.*;
 import com.team1.finalproject.memberdata.service.MemberService;
-import com.team1.finalproject.sportsdata.dto.TeamInfoRequest;
 import com.team1.finalproject.sportsdata.dto.TeamInfoResponse;
 import com.team1.finalproject.sportsdata.service.SportsService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,7 @@ public class PageService {
     private final SportsService sportsService;
 
     public MainPageResponse getMainPage(MainPageRequest dto){
-        TeamInfoResponse teamInfo = sportsService.getTeamInfo(new TeamInfoRequest(
-                memberService.viewMemberData(dto.getMemberId()).getTeamId()));
+        TeamInfoResponse teamInfo = sportsService.getTeamInfo(memberService.viewMemberData(dto.getMemberId()).getTeamId());
 
         //get podcast, teamId = teamInfo.getTeamId;
 

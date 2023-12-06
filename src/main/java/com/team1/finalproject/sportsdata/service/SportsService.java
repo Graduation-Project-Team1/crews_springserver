@@ -8,19 +8,19 @@ public interface SportsService {
 
     List<String> getSportsList();
 
-    SportsInfoResponse getSportsInfo(SportsInfoRequest dto);
+    SportsInfoResponse getSportsInfo(Long sportsId);
 
-    List<LeagueInfoResponse> getLeagueList(LeagueListRequest dto);
+    List<LeagueInfoResponse> getLeagueList(String sportsName);
 
-    LeagueInfoResponse getLeagueInfo(LeagueInfoRequest dto);
+    LeagueInfoResponse getLeagueInfo(Long leagueId);
 
-    List<TeamInfoResponse> getTeamList(TeamListRequest dto);
+    List<TeamInfoResponse> getTeamList(Long leagueId);
 
-    TeamInfoResponse getTeamInfo(TeamInfoRequest dto);
+    TeamInfoResponse getTeamInfo(Long teamId);
 
-    List<PlayerInfoResponse> getPlayerList(PlayerListRequest dto);
+    List<PlayerInfoResponse> getPlayerList(Long teamId);
 
-    PlayerInfoResponse getPlayerInfo(PlayerInfoRequest dto);
+    PlayerInfoResponse getPlayerInfo(Long playerId);
 
     ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto);
 

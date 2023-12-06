@@ -18,7 +18,7 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 public class KaKaoService{
-    public String getToken(String code) throws IOException {
+    public String getKakaoToken(String code) throws IOException {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
         URL url = new URL(host);
@@ -69,7 +69,7 @@ public class KaKaoService{
         return token;
     }
 
-    public Map<String, Object> getUserInfo(String access_token) throws IOException {
+    public Map<String, Object> getKakaoUserInfo(String access_token) throws IOException {
         String host = "https://kapi.kakao.com/v2/user/me";
         Map<String, Object> result = new HashMap<>();
         try {
@@ -118,7 +118,7 @@ public class KaKaoService{
         return result;
     }
 
-    public String getAgreementInfo(String access_token)
+    public String getKakaoAgreementInfo(String access_token)
     {
         StringBuilder result = new StringBuilder();
         String host = "https://kapi.kakao.com/v2/user/scopes";

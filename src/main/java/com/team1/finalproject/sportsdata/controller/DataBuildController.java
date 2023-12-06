@@ -38,6 +38,6 @@ public class DataBuildController {
     @PostMapping("/player")
     @ResponseBody
     public void buildPlayer() throws ParseException {
-        seasonBuildService.setRecord();
+        seasonBuildService.setPlayerRecord();
     }
 }

@@ -28,10 +28,10 @@ public class LoginService {
     private String tokenUri;
     @Value("${resource-uri}")
     private String resourceUri;
-    public void socialLogin(String code, String registrationId) {
+    public void googleLogin(String code, String registrationId) {
         System.out.println("code = " + code);
-        String accessToken = getAccessToken(code, registrationId);
-        JsonNode userResourceNode = getUserResource(accessToken, registrationId);
+        String accessToken = getGoogleAccessToken(code, registrationId);
+        JsonNode userResourceNode = getGoogleUserResources(accessToken, registrationId);
         System.out.println("accessToken = " + accessToken);
 
         System.out.println("userResourceNode = " + userResourceNode);
@@ -44,7 +44,7 @@ public class LoginService {
         System.out.println("nickname = " + nickname);
     }
 
-    private String getAccessToken(String authorizationCode, String registrationId) {
+    private String getGoogleAccessToken(String authorizationCode, String registrationId) {
 
         System.out.println("registrationId = " + registrationId);
         System.out.println("clientId = " + clientId);
@@ -66,10 +66,11 @@ public class LoginService {
 
         ResponseEntity<JsonNode> responseNode = restTemplate.exchange(tokenUri, HttpMethod.POST, entity, JsonNode.class);
         JsonNode accessTokenNode = responseNode.getBody();
+        assert accessTokenNode != null;
         return accessTokenNode.get("access_token").asText();
     }
 
-    private JsonNode getUserResource(String accessToken, String registrationId) {
+    private JsonNode getGoogleUserResources(String accessToken, String registrationId) {
 
 
         HttpHeaders headers = new HttpHeaders();

@@ -1,0 +1,38 @@
+[
+    {
+        "img":" https://www.domin.co.kr/news/photo/201911/1269233_387217_1535.jpg",
+        "name":"허병길",
+        "roles":"대표이사 및 단장",
+        "region":"대한민국"
+    },
+    {
+        "img":"https://dimg.donga.com/wps/NEWS/IMAGE/2023/03/04/118167295.2.jpg",
+        "name":"박지성",
+        "roles":"테크니컬 디렉터",
+        "region":"대한민국"
+    },
+    {
+        "img":"https://i.namu.wiki/i/IgSVPSWJtqWRdxUEpGclintfFuiOWkCf29cqyUfTnFBfcJxJL5x_YFMfKk8xfkEugYNp6vyO7J8RQVv0Mq4c0g.webp",
+        "name":"김두현",
+        "roles":"감독 대행",
+        "region":"대한민국"
+    },
+    {
+        "img":"https://i.namu.wiki/i/L5Qp-f22eajUHV8L24Z93FmBIPwAZ1mIASAwbFaWyo8rFus0bTJ72so8EU8Mo77M3vgoijrUgjCI1DeVh7XCKA.webp",
+        "name":"박원재",
+        "roles":"코치",
+        "region":"대한민국"
+    },
+    {
+        "img":"https://i.namu.wiki/i/A1CEl1f-INbC0TIfvZAuODOcap21_TagWjm1RU8mUD9kP2GVx_nl7CGerSlzCBDrLGzKPaPS8R3toSoB4XFlxw.webp",
+        "name":"이운재",
+        "roles":"골키퍼 코치",
+        "region":"대한민국"
+    },
+    {
+        "img":"https://i.namu.wiki/i/aG-D8qhgX3a-7OHTYlgmjBR_7I0z40SApCjToUxFWzWQSaux4HR6UrrACajGT888tqqD9LaUr-f4ohnvIYg_xw.webp",
+        "name":"이세준",
+        "roles":"피지컬 코치",
+        "region":"대한민국"
+    }
+]

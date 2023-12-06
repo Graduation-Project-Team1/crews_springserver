@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class TempController {
 
     @GetMapping("/data/record")
-    public ResponseEntity<String> getPlayerRecordTest(@RequestParam String pos) throws IOException {
+    public ResponseEntity<String> getPlayerRecordTest(@RequestParam String pos, @RequestParam Long id) throws IOException {
         switch (pos) {
             case "fw" -> {
                 InputStream inputStream = new ClassPathResource("AttackerStatistics.json").getInputStream();
@@ -66,9 +66,43 @@ public class TempController {
         }
     }
 
+    @GetMapping("/data/record/team/{id}")
+    public ResponseEntity<String> getTeamRecord(@PathVariable("id") Long id) throws IOException {
+        InputStream inputStream = new ClassPathResource("TeamStatistics.json").getInputStream();
+        byte[] arr = inputStream.readAllBytes();
+        String jsonContent = new String(arr);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonContent);
+    }
+
+    @GetMapping("/data/record/coach/{id}")
+    public ResponseEntity<String> getCoachRecord(@PathVariable("id") Long id) throws IOException {
+        InputStream inputStream = new ClassPathResource("CoachStatistics.json").getInputStream();
+        byte[] arr = inputStream.readAllBytes();
+        String jsonContent = new String(arr);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonContent);
+    }
+
+
     @GetMapping("/data/news/{id}")
     public ResponseEntity<String> getMainNews(@PathVariable("id") Long id) throws IOException {
         InputStream inputStream = new ClassPathResource("mainNewsApi.json").getInputStream();
+        byte[] arr = inputStream.readAllBytes();
+        String jsonContent = new String(arr);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonContent);
+    }
+
+    @GetMapping("/data/emotion/{id}")
+    public ResponseEntity<String> getEmotions(@PathVariable("id") Long id) throws IOException {
+        InputStream inputStream = new ClassPathResource("TeamEmotion.json").getInputStream();
         byte[] arr = inputStream.readAllBytes();
         String jsonContent = new String(arr);
         return ResponseEntity

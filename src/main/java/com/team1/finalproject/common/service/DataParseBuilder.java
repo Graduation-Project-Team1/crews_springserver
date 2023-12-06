@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class DataParseBuilder {
 
-    @Value("${SofaSport_Key_2}")
+    @Value("${SofaSport_Key_1}")
     private String SofaSport_API_Key;
     public JSONArray getResponse(String url) throws ParseException, HttpClientErrorException.NotFound {
         final HttpHeaders headers = new HttpHeaders();

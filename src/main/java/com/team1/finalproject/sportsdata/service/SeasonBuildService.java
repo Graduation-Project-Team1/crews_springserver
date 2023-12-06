@@ -42,7 +42,6 @@ public class SeasonBuildService {
     String code = LocalDate.now().getYear() +"-"+LocalDate.now().getMonth().toString();
     public String setSeason() throws ParseException{
         List<Long> leagueIdList = categoryRepository.findAllLeagueId();
-        System.out.println("leagueIdList = " + leagueIdList);
         for(Long leagueId : leagueIdList){
             String url = "https://sofascores.p.rapidapi.com/v1/unique-tournaments/seasons?unique_tournament_id="+ leagueId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
@@ -63,8 +62,6 @@ public class SeasonBuildService {
         List<Season> seasons = seasonRepository.findAll();
         for(Season season : seasons){
             Long uniqueId = season.getCategory().getLeagueId();
-            System.out.println("season = " + season.getName() + season.getId() + season.getCategory());
-            System.out.println("uniqueId = " + uniqueId);
             Long seasonId = season.getId();
             String url = "https://sofasport.p.rapidapi.com/v1/seasons/teams-statistics/result" +
                     "?seasons_statistics_type=overall&unique_tournament_id=" + uniqueId +
@@ -155,7 +152,7 @@ public class SeasonBuildService {
         return "Event data set complete";
     }
 
-    public void setRecord() throws ParseException {
+    public void setPlayerRecord() throws ParseException {
 
         List<Player> playerList = playerRepository.findAll();
         for (Player player : playerList) {
@@ -166,8 +163,8 @@ public class SeasonBuildService {
                     .getSeason();
             Long playerId = player.getId();
             Long seasonId = season.getId();
-            Long uniqueId = season.getCategory().getUniqueId();
-            String url = "https://sofascores.p.rapidapi.com/v1/players/statistics/result?seasons_id="+seasonId+"&player_id="+playerId+"&unique_tournament_id="+uniqueId+"&player_stat_type=overall";
+            Long leagueId = season.getCategory().getLeagueId();
+            String url = "https://sofascores.p.rapidapi.com/v1/players/statistics/result?seasons_id="+seasonId+"&player_id="+playerId+"&unique_tournament_id="+leagueId+"&player_stat_type=overall";
             JSONObject data = dataParseBuilder.getJSONObject(url);
 
             if (data == null) {
@@ -176,8 +173,8 @@ public class SeasonBuildService {
             else {
                 JSONObject jsonObject = (JSONObject) data.get("statistics");
                 String position = player.getPosition();
-                playerRepository.delete(player);
                 if(Objects.equals(position, "F")){
+                    playerRepository.delete(player);
                     Forward forward = Forward.builder()
                             .name(player.getName())
                             .id(player.getId())
@@ -188,9 +185,20 @@ public class SeasonBuildService {
                             .nation(player.getNation())
                             .position(player.getPosition())
                             .team(player.getTeam())
-                            .code(player.getCode()).build();
+                            .code(player.getCode())
+                            .yellowCards((Long) jsonObject.get("yellowCards"))
+                            .redCards((Long) jsonObject.get("redCards"))
+                            .appearances((Long) jsonObject.get("appearances"))
+                            .goals((Long) jsonObject.get("goals"))
+                            .assists((Long) jsonObject.get("assists"))
+                            .totalShots((Long) jsonObject.get("totalShots"))
+                            .shotsOnTarget((Long) jsonObject.get("shotsOnTarget"))
+                            .penaltyGoals((Long) jsonObject.get("penaltyGoals"))
+                            .touches((Long) jsonObject.get("touches"))
+                            .successfulDribbles((Long) jsonObject.get("successfulDribbles")).build();
                     forwardRepository.save(forward);
                 } else if (Objects.equals(position, "M")) {
+                    playerRepository.delete(player);
                     Midfielder midfielder = Midfielder.builder()
                             .name(player.getName())
                             .id(player.getId())
@@ -201,9 +209,20 @@ public class SeasonBuildService {
                             .nation(player.getNation())
                             .position(player.getPosition())
                             .team(player.getTeam())
-                            .code(player.getCode()).build();
+                            .code(player.getCode())
+                            .yellowCards((Long) jsonObject.get("yellowCards"))
+                            .redCards((Long) jsonObject.get("redCards"))
+                            .appearances((Long) jsonObject.get("appearances"))
+                            .goals((Long) jsonObject.get("goals"))
+                            .assists((Long) jsonObject.get("assists"))
+                            .totalPasses((Long) jsonObject.get("totalPasses"))
+                            .accuratePasses((Long) jsonObject.get("accuratePasses"))
+                            .accurateCrosses((Long) jsonObject.get("accurateCrosses"))
+                            .interceptions((Long) jsonObject.get("interceptions"))
+                            .touches((Long) jsonObject.get("touches")).build();
                     midfielderRepository.save(midfielder);
                 } else if (Objects.equals(position, "D")) {
+                    playerRepository.delete(player);
                     Defender defender = Defender.builder()
                             .name(player.getName())
                             .id(player.getId())
@@ -214,9 +233,20 @@ public class SeasonBuildService {
                             .nation(player.getNation())
                             .position(player.getPosition())
                             .team(player.getTeam())
-                            .code(player.getCode()).build();
+                            .code(player.getCode())
+                            .yellowCards((Long) jsonObject.get("yellowCards"))
+                            .redCards((Long) jsonObject.get("redCards"))
+                            .appearances((Long) jsonObject.get("appearances"))
+                            .tackles((Long) jsonObject.get("tackles"))
+                            .interceptions((Long) jsonObject.get("interceptions"))
+                            .clearances((Long) jsonObject.get("clearances"))
+                            .blockedShots((Long) jsonObject.get("blockedShots"))
+                            .totalContest((Long) jsonObject.get("totalContest"))
+                            .totalDuelsWon((Long) jsonObject.get("totalDuelsWon"))
+                            .aerialDuelsWon((Long) jsonObject.get("aerialDuelsWon")).build();
                     defenderRepository.save(defender);
                 } else if (Objects.equals(position, "G")) {
+                    playerRepository.delete(player);
                     Goalkeeper goalkeeper = Goalkeeper.builder()
                             .name(player.getName())
                             .id(player.getId())
@@ -227,33 +257,16 @@ public class SeasonBuildService {
                             .nation(player.getNation())
                             .position(player.getPosition())
                             .team(player.getTeam())
-                            .code(player.getCode()).build();
+                            .code(player.getCode())
+                            .yellowCards((Long) jsonObject.get("yellowCards"))
+                            .redCards((Long) jsonObject.get("redCards"))
+                            .appearances((Long) jsonObject.get("appearances"))
+                            .saves((Long) jsonObject.get("saves"))
+                            .goalsConceded((Long) jsonObject.get("goalsConceded"))
+                            .cleanSheet((Long) jsonObject.get("cleanSheet")).build();
                     goalkeeperRepository.save(goalkeeper);
                 }
             }
         }
-
-        /*String code = dataParseBuilder.availableSeasonCode();
-        Team team = teamRepository.save(new Team(1L,"name", code));
-        Player player = new Player(2L, "name", dataParseBuilder.toTimeStamp(20000603),
-                20, 170L, 10L, "Korea", "FW", team, code);
-        playerRepository.delete(playerRepository.findById(2L).orElseThrow());
-        Forward forward = Forward.builder()
-                .name(player.getName())
-                .id(player.getId())
-                .dateOfBirth(player.getDateOfBirth())
-                .age(player.getAge())
-                .height(player.getHeight())
-                .shirtNumber(player.getShirtNumber())
-                .nation(player.getNation())
-                .position(player.getPosition())
-                .team(player.getTeam())
-                .code(player.getCode())
-                .yellowCards(1L)
-                .redCards(1L)
-                .appearances(1L)
-                .goals(1L)
-                .assists(1L).build();
-        forwardRepository.save(forward);*/
     }
 }

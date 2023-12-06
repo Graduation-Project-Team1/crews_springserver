@@ -83,48 +83,48 @@ class SportsServiceImplTest {
 
     @Test
     void getSportsInfo() {
-        SportsInfoResponse sportsInfo = sportsService.getSportsInfo(new SportsInfoRequest(1L));
+        SportsInfoResponse sportsInfo = sportsService.getSportsInfo(1L);
         assertThat(sportsInfo.getSportsName()).isEqualTo("Football");
     }
 
     @Test
     void getLeagueList() {
-        List<LeagueInfoResponse> leagueList = sportsService.getLeagueList(new LeagueListRequest("Football"));
+        List<LeagueInfoResponse> leagueList = sportsService.getLeagueList("Football");
         assertThat(leagueList.get(0).getLeagueName()).isEqualTo("EPL");
         assertThat(leagueList.get(1).getLeagueName()).isEqualTo("LaLiga");
     }
 
     @Test
     void getLeagueInfo() {
-        LeagueInfoResponse leagueInfo = sportsService.getLeagueInfo(new LeagueInfoRequest(1L));
+        LeagueInfoResponse leagueInfo = sportsService.getLeagueInfo(1L);
         assertThat(leagueInfo.getLeagueName()).isEqualTo("EPL");
         assertThat(leagueInfo.getRegionName()).isEqualTo("England");
     }
 
     @Test
     void getTeamList() {
-        List<TeamInfoResponse> teamList = sportsService.getTeamList(new TeamListRequest(1L));
+        List<TeamInfoResponse> teamList = sportsService.getTeamList(1L);
         assertThat(teamList.get(0)).isEqualTo(new TeamInfoResponse(1L, "team1"));
         assertThat(teamList.get(1)).isEqualTo(new TeamInfoResponse(2L, "team2"));
     }
 
     @Test
     void getTeamInfo() {
-        TeamInfoResponse teamInfo1 = sportsService.getTeamInfo(new TeamInfoRequest(1L));
+        TeamInfoResponse teamInfo1 = sportsService.getTeamInfo(1L);
         assertThat(teamInfo1.getTeamName()).isEqualTo("team1");
-        TeamInfoResponse teamInfo2 = sportsService.getTeamInfo(new TeamInfoRequest(2L));
+        TeamInfoResponse teamInfo2 = sportsService.getTeamInfo(2L);
         assertThat(teamInfo2.getTeamName()).isEqualTo("team2");
     }
 
     @Test
     void getPlayerList() {
-        List<PlayerInfoResponse> playerList = sportsService.getPlayerList(new PlayerListRequest(1L));
+        List<PlayerInfoResponse> playerList = sportsService.getPlayerList(1L);
         assertThat(playerList.get(0)).isEqualTo(new PlayerInfoResponse(player));
     }
 
     @Test
     void getPlayerInfo() {
-        PlayerInfoResponse playerInfo = sportsService.getPlayerInfo(new PlayerInfoRequest(1L));
+        PlayerInfoResponse playerInfo = sportsService.getPlayerInfo(1L);
         assertThat(playerInfo).isEqualTo(new PlayerInfoResponse(player));
         System.out.println(playerInfo.getName());
     }

@@ -28,9 +28,8 @@ public class MemberController {
         return new SignUpResponse(true, "Sign up successful");
     }
 
-    @GetMapping("/member")
-    public MemberDataResponse viewMemberData(@RequestBody MemberDataRequest dto) {
-        Long memberId = dto.getMemberId();
+    @GetMapping("/member/{memberId}")
+    public MemberDataResponse viewMemberData(@PathVariable Long memberId) {
         log.info("Info request occurred: target=" + memberId);
         MemberDataResponse memberDataResponse = memberService.viewMemberData(memberId);
         if (memberDataResponse.getSuccess().equals("false"))
@@ -66,9 +65,8 @@ public class MemberController {
     @GetMapping("/member/{id}/preferences")
     public GetPreferencesResponse getMemberPreferences(@PathVariable Long id) {
         log.info("User preferences request occurred: target=" + id);
-        GetPreferencesResponse getPreferencesResponse = memberService.chkMemberPreference(id);
 
-        return getPreferencesResponse;
+        return memberService.chkMemberPreference(id);
     }
     @PutMapping("/member/{id}/preferences")
     public PreferencesResponse setPreferences(@PathVariable Long id, @RequestBody SetPreferencesRequest dto) {

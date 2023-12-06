@@ -1,16 +1,16 @@
 package com.team1.finalproject.sportsdata.controller;
 
-import com.team1.finalproject.sportsdata.dto.*;
+import com.team1.finalproject.sportsdata.dto.LeagueInfoResponse;
+import com.team1.finalproject.sportsdata.dto.PlayerInfoResponse;
+import com.team1.finalproject.sportsdata.dto.TeamInfoResponse;
 import com.team1.finalproject.sportsdata.service.SportsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -22,44 +22,36 @@ public class SportsDataController {
 
     @GetMapping("/sports")
     public List<String> getSportsList() {
-        List<String> sportsList = sportsService.getSportsList();
-        return sportsList;
+        return sportsService.getSportsList();
     }
 
-    @GetMapping("/league")
-    public LeagueInfoResponse getLeagueInfo(@ModelAttribute("dto") LeagueInfoRequest dto) {
-        LeagueInfoResponse leagueInfo = sportsService.getLeagueInfo(dto);
-        return leagueInfo;
+    @GetMapping("/league/list/{sportsName}")
+    public List<LeagueInfoResponse> getLeagueList(@PathVariable("sportsName") String sportsName) {
+        return sportsService.getLeagueList(sportsName);
     }
 
-    @GetMapping("/league/list")
-    public List<LeagueInfoResponse> getLeagueList(@ModelAttribute("dto") LeagueListRequest dto) {
-        List<LeagueInfoResponse> leagueList = sportsService.getLeagueList(dto);
-        return leagueList;
+    @GetMapping("/league/{leagueId}")
+    public LeagueInfoResponse getLeagueInfo(@PathVariable("leagueId") Long leagueId) {
+        return sportsService.getLeagueInfo(leagueId);
     }
 
-    @GetMapping("/team")
-    public TeamInfoResponse getTeamInfo(@ModelAttribute("dto") TeamInfoRequest dto) {
-        TeamInfoResponse teamInfo = sportsService.getTeamInfo(dto);
-        return teamInfo;
+    @GetMapping("/team/list/{leagueId}")
+    public List<TeamInfoResponse> getTeamList(@PathVariable("leagueId") Long leagueId) {
+        return sportsService.getTeamList(leagueId);
     }
 
-    @GetMapping("/team/list")
-    public List<TeamInfoResponse> getTeamList(@ModelAttribute("dto") TeamListRequest dto) {
-        List<TeamInfoResponse> teamList = sportsService.getTeamList(dto);
-        return teamList;
+    @GetMapping("/team/{teamId}")
+    public TeamInfoResponse getTeamInfo(@PathVariable("teamId") Long teamId) {
+        return sportsService.getTeamInfo(teamId);
     }
 
-    @GetMapping("/player")
-    public PlayerInfoResponse getPlayerInfo(@ModelAttribute("dto") PlayerInfoRequest dto) {
-        PlayerInfoResponse playerInfo = sportsService.getPlayerInfo(dto);
-        return playerInfo;
+    @GetMapping("/player/list{teamId}")
+    public List<PlayerInfoResponse> getPlayerList(@PathVariable("teamId") Long teamId) {
+        return sportsService.getPlayerList(teamId);
     }
 
-    @GetMapping("/player/list")
-    public List<PlayerInfoResponse> getPlayerList(@ModelAttribute("dto") PlayerListRequest dto) {
-        List<PlayerInfoResponse> playerList = sportsService.getPlayerList(dto);
-        return playerList;
+    @GetMapping("/player/{playerId}")
+    public PlayerInfoResponse getPlayerInfo(@PathVariable("playerId") Long playerId) {
+        return sportsService.getPlayerInfo(playerId);
     }
-
 }

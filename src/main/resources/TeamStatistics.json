@@ -1,0 +1,22 @@
+[
+    {
+        "ranking": 7,
+        "appearance": 15,
+        "points": 18,
+        "winMatches": 5,
+        "drawMatches": 3,
+        "loseMatches": 7,
+        "totalGoals": 17,
+        "totalconceded": 14,
+        "goalDifference": 3,
+        "recentMatches1":["패", "승", "무", "승", "무"],
+        "kLeagueWinRecord":[2009,2011,2014,2015,2017,2019,2020,2021],
+        "faCupWinRecord":[2000,2003,2005,2020,2022],
+        "superCupWinRecord":[2004],
+        "afcWinRecord":[2006,2016],
+        "topExpensiveSign":"송민규",
+        "topExpensiveFree":"로페즈",
+        "topAppearances":"이동국",
+        "topGoals":"이동국"
+    }
+]

@@ -26,9 +26,11 @@ public interface SportsService {
 
     String getTeamSchedule();
 
+    PlayerInfoResponse getPlayerRecord(Long playerId);
+
+    List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId);
+
     String getTeamRecord();
 
-    String getPlayerRecord();
-
-    String getManagerRecord();
+    ManagerInfoResponse getManagerInfo(Long managerId);
 }

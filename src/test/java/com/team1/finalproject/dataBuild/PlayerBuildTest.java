@@ -1,18 +1,16 @@
 package com.team1.finalproject.dataBuild;
 
 import com.team1.finalproject.common.service.DataParseBuilder;
-import com.team1.finalproject.sportsdata.entity.Player;
-import com.team1.finalproject.sportsdata.entity.Season;
-import com.team1.finalproject.sportsdata.entity.SeasonTeam;
+import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.entity.soccer.Defender;
 import com.team1.finalproject.sportsdata.entity.soccer.Forward;
 import com.team1.finalproject.sportsdata.entity.soccer.SoccerPlayer;
-import com.team1.finalproject.sportsdata.entity.Team;
 import com.team1.finalproject.sportsdata.repository.PlayerRepository;
 import com.team1.finalproject.sportsdata.repository.soccer.DefenderRepository;
 import com.team1.finalproject.sportsdata.repository.soccer.ForwardRepository;
 import com.team1.finalproject.sportsdata.repository.soccer.SoccerPlayerRepository;
 import com.team1.finalproject.sportsdata.repository.TeamRepository;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -119,5 +118,23 @@ public class PlayerBuildTest {
         Defender defender = defenderRepository.findById(160843L).orElseThrow();
         String name = defender.getName();
         System.out.println("name = " + name);
+    }
+
+    @Test
+    public void setManager() throws ParseException {
+        Long id = 6908L;
+        Team team = teamRepository.findById(id).orElseThrow();
+        String url = "https://sofascores.p.rapidapi.com/v1/teams/data?team_id=" + id;
+        JSONObject jsonObject = dataParseBuilder.getJSONObject(url);
+        Long managerId = (Long) ((JSONObject) jsonObject.get("manager")).get("id");
+        System.out.println("managerId = " + managerId);
+        String url_manager = "https://sofascores.p.rapidapi.com/v1/managers/data?manager_id=" + managerId;
+        JSONObject jsonObject1 = dataParseBuilder.getJSONObject(url_manager);
+        String name = (String) jsonObject1.get("name");
+        Timestamp dateOfBirth = dataParseBuilder.toTimeStamp((Long) jsonObject1.get("dateOfBirthTimestamp"));
+        String nationality = (String) jsonObject1.get("nationality");
+        Manager manager = new Manager(managerId, name, dateOfBirth, nationality, team);
+        System.out.println(manager.getNationality());
+        System.out.println("dateOfBirth = " + dateOfBirth);
     }
 }

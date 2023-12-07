@@ -33,14 +33,14 @@ public class Player {
     @Column(name = "nationality")
     private String nation;
     @ManyToOne
-    @JoinColumn(name="team_id")
+    @JoinColumn(name = "team_id")
     private Team team;
     @Column
     private String code;
 
     //@Builder
     public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                  String nation, String position, Team team, String code){
+                  String nation, String position, Team team, String code) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;

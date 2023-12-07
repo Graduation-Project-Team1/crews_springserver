@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(produces = "application/json")
+//@RequestMapping(produces = "application/json")
 public class LoginController {
 
 
@@ -30,7 +30,7 @@ public class LoginController {
     public String kakaoLogin()
     {
         log.info("kakao login request occurred");
-        return "/kakaoCI/login.html";
+        return "kakaoCI/login";
     }
 
     @GetMapping("/kakao/getCI")

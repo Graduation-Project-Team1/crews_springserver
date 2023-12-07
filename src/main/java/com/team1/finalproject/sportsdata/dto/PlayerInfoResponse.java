@@ -1,6 +1,7 @@
 package com.team1.finalproject.sportsdata.dto;
 
 import com.team1.finalproject.sportsdata.entity.Player;
+import com.team1.finalproject.sportsdata.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class PlayerInfoResponse {
     private Integer shirtNumber;
     private String position;
     private String nation;
+    private String teamName;
 
 
     public PlayerInfoResponse(Player player){
@@ -30,6 +32,7 @@ public class PlayerInfoResponse {
         this.shirtNumber = player.getShirtNumber();
         this.position = player.getPosition();
         this.nation = player.getNation();
+        this.teamName = player.getTeam().getName();
     }
 
 }

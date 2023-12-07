@@ -14,7 +14,6 @@ public class ManagerInfoResponse {
 
     private Long id;
     private String name;
-    private int age;
     private Timestamp dateOfBirth;
     private String nation;
     private Long teamId;
@@ -22,9 +21,8 @@ public class ManagerInfoResponse {
     public ManagerInfoResponse(Manager manager){
         this.id = manager.getId();
         this.name = manager.getName();
-        this.age = manager.getAge();
         this.dateOfBirth = manager.getDateOfBirth();
-        this.nation = manager.getNation();
+        this.nation = manager.getNationality();
         this.teamId = manager.getTeam().getId();
     }
 

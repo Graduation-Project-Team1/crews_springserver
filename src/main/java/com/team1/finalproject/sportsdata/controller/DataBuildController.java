@@ -40,4 +40,9 @@ public class DataBuildController {
     public void buildPlayer() throws ParseException {
         seasonBuildService.setPlayerRecord();
     }
+    @PostMapping("/manager")
+    @ResponseBody
+    public void buildManager() throws ParseException {
+        seasonBuildService.setManager();
+    }
 }

@@ -1,5 +1,9 @@
 package com.team1.finalproject.sportsdata.controller;
 
+import com.team1.finalproject.sportsdata.dto.ForwardRecordResponse;
+import com.team1.finalproject.sportsdata.dto.PlayerInfoResponse;
+import com.team1.finalproject.sportsdata.entity.soccer.Forward;
+import com.team1.finalproject.sportsdata.repository.soccer.ForwardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -18,55 +22,7 @@ import java.io.InputStream;
 @Slf4j
 public class TempController {
 
-    @GetMapping("/data/record")
-    public ResponseEntity<String> getPlayerRecordTest(@RequestParam String pos, @RequestParam Long id) throws IOException {
-        switch (pos) {
-            case "fw" -> {
-                InputStream inputStream = new ClassPathResource("AttackerStatistics.json").getInputStream();
-                byte[] arr = inputStream.readAllBytes();
-                String jsonContent = new String(arr);
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(jsonContent);
-            }
-            case "mf" -> {
-                InputStream inputStream = new ClassPathResource("MidfielderStatistics.json").getInputStream();
-                byte[] arr = inputStream.readAllBytes();
-                String jsonContent = new String(arr);
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(jsonContent);
-            }
-            case "df" -> {
-                InputStream inputStream = new ClassPathResource("DefenderStatistics.json").getInputStream();
-                byte[] arr = inputStream.readAllBytes();
-                String jsonContent = new String(arr);
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(jsonContent);
-            }
-            case "gk" -> {
-                InputStream inputStream = new ClassPathResource("GoalKeeperStatistics.json").getInputStream();
-                byte[] arr = inputStream.readAllBytes();
-                String jsonContent = new String(arr);
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(jsonContent);
-            }
-            default -> {
-                log.warn("Parameter pos is not available.");
-                return ResponseEntity
-                        .notFound()
-                        .build();
-            }
-        }
-    }
-
-    @GetMapping("/data/record/team/{id}")
+        @GetMapping("/data/record/team/{id}")
     public ResponseEntity<String> getTeamRecord(@PathVariable("id") Long id) throws IOException {
         InputStream inputStream = new ClassPathResource("TeamStatistics.json").getInputStream();
         byte[] arr = inputStream.readAllBytes();

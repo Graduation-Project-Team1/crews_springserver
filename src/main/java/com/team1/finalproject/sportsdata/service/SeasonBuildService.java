@@ -38,19 +38,21 @@ public class SeasonBuildService {
     private final MidfielderRepository midfielderRepository;
     private final DefenderRepository defenderRepository;
     private final GoalkeeperRepository goalkeeperRepository;
+    private final ManagerRepository managerRepository;
     private final DataParseBuilder dataParseBuilder;
-    String code = LocalDate.now().getYear() +"-"+LocalDate.now().getMonth().toString();
-    public String setSeason() throws ParseException{
+    String code = LocalDate.now().getYear() + "-" + LocalDate.now().getMonth().toString();
+
+    public String setSeason() throws ParseException {
         List<Long> leagueIdList = categoryRepository.findAllLeagueId();
-        for(Long leagueId : leagueIdList){
-            String url = "https://sofascores.p.rapidapi.com/v1/unique-tournaments/seasons?unique_tournament_id="+ leagueId;
+        for (Long leagueId : leagueIdList) {
+            String url = "https://sofascores.p.rapidapi.com/v1/unique-tournaments/seasons?unique_tournament_id=" + leagueId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
-            if(resultArray!=null){
+            if (resultArray != null) {
                 for (Object object : resultArray) {
                     JSONObject temp = (JSONObject) object;
                     Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
                     Season season = new Season((Long) temp.get("id"), (String) temp.get("name"), code, category);
-                    if (!seasonRepository.existsById(season.getId())&&((String) temp.get("name")).contains("23"))
+                    if (!seasonRepository.existsById(season.getId()) && ((String) temp.get("name")).contains("23"))
                         seasonRepository.save(season);
                 }
             }
@@ -60,14 +62,14 @@ public class SeasonBuildService {
 
     public String setTeam() throws ParseException {
         List<Season> seasons = seasonRepository.findAll();
-        for(Season season : seasons){
+        for (Season season : seasons) {
             Long uniqueId = season.getCategory().getLeagueId();
             Long seasonId = season.getId();
             String url = "https://sofasport.p.rapidapi.com/v1/seasons/teams-statistics/result" +
                     "?seasons_statistics_type=overall&unique_tournament_id=" + uniqueId +
                     "&seasons_id=" + seasonId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
-            if(resultArray!=null){
+            if (resultArray != null) {
                 for (Object object : resultArray) {
                     JSONObject temp = (JSONObject) ((JSONObject) object).get("team");
                     Team team = new Team((Long) temp.get("id"), (String) temp.get("name"), code);
@@ -93,11 +95,11 @@ public class SeasonBuildService {
             Long teamId = team.getId();
             String url = "https://sofasport.p.rapidapi.com/v1/teams/players?team_id=" + teamId;
             JSONArray resultArray = dataParseBuilder.getResponse(url);
-            if(resultArray!=null){
+            if (resultArray != null) {
                 for (Object object : resultArray) {
                     JSONObject temp = (JSONObject) ((JSONObject) object).get("player");
-                    if (temp.get("dateOfBirthTimestamp") != null && temp.get("shirtNumber")!=null
-                            && temp.get("height")!=null&&temp.get("shirtNumber")!=null) {
+                    if (temp.get("dateOfBirthTimestamp") != null && temp.get("shirtNumber") != null
+                            && temp.get("height") != null && temp.get("shirtNumber") != null) {
                         String nation = (String) ((JSONObject) temp.get("country")).get("name");
                         Timestamp dateOfBirth = dataParseBuilder.toTimeStamp((Long) temp.get("dateOfBirthTimestamp"));
                         String playerName;
@@ -119,11 +121,11 @@ public class SeasonBuildService {
 
     public String setGameByDate() throws ParseException {
         List<Long> regionIdList = categoryRepository.findAllRegionId();
-        String[] dates = {"2023-06-03", "2023-06-03", "2023-06-06","2023-06-07","2023-06-10","2023-06-11","2023-06-24","2023-06-25"};
+        String[] dates = {"2023-06-03", "2023-06-03", "2023-06-06", "2023-06-07", "2023-06-10", "2023-06-11", "2023-06-24", "2023-06-25"};
         List<String> dateList = new ArrayList<>(List.of(dates));
         Long[] uniqueIds = {410L};
         List<Long> uniqueIdList = new ArrayList<>(List.of(uniqueIds));
-        for(Long regionId : regionIdList){
+        for (Long regionId : regionIdList) {
             for (String date : dateList) {
                 String url = "https://sofasport.p.rapidapi.com/v1/events/schedule/category?date=" + date + "&category_id=" + regionId;
                 JSONArray resultArray = dataParseBuilder.getResponse(url);
@@ -135,7 +137,7 @@ public class SeasonBuildService {
                         String isStarted = (String) ((JSONObject) temp.get("status")).get("description");
                         Long roundNum = (Long) ((JSONObject) temp.get("roundInfo")).get("round");
                         Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament"))
-                                        .get("name")).orElseThrow().getLeagueId();
+                                .get("name")).orElseThrow().getLeagueId();
                         Long uniqueId = (Long) ((JSONObject) ((JSONObject) temp.get("tournament")).get("uniqueTournament")).get("id");
                         if (uniqueIdList.contains(uniqueId)) {
                             Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
@@ -164,16 +166,15 @@ public class SeasonBuildService {
             Long playerId = player.getId();
             Long seasonId = season.getId();
             Long leagueId = season.getCategory().getLeagueId();
-            String url = "https://sofascores.p.rapidapi.com/v1/players/statistics/result?seasons_id="+seasonId+"&player_id="+playerId+"&unique_tournament_id="+leagueId+"&player_stat_type=overall";
+            String url = "https://sofascores.p.rapidapi.com/v1/players/statistics/result?seasons_id=" + seasonId + "&player_id=" + playerId + "&unique_tournament_id=" + leagueId + "&player_stat_type=overall";
             JSONObject data = dataParseBuilder.getJSONObject(url);
 
             if (data == null) {
-                log.info("Player id "+playerId+" has no data : 낮은 출전 횟수 혹은 K League 1 소속이 아님");
-            }
-            else {
+                log.info("Player id " + playerId + " has no data : 낮은 출전 횟수 혹은 K League 1 소속이 아님");
+            } else {
                 JSONObject jsonObject = (JSONObject) data.get("statistics");
                 String position = player.getPosition();
-                if(Objects.equals(position, "F")){
+                if (Objects.equals(position, "F")) {
                     playerRepository.delete(player);
                     Forward forward = Forward.builder()
                             .name(player.getName())
@@ -267,6 +268,30 @@ public class SeasonBuildService {
                     goalkeeperRepository.save(goalkeeper);
                 }
             }
+        }
+    }
+
+    public void setManager() throws ParseException {
+        List<Team> teamList = teamRepository.findAll();
+        for (Team team : teamList) {
+            Long id = team.getId();
+
+            String url = "https://sofascores.p.rapidapi.com/v1/teams/data?team_id=" + id;
+            JSONObject jsonObject = dataParseBuilder.getJSONObject(url);
+            Long managerId = (Long) ((JSONObject) jsonObject.get("manager")).get("id");
+
+            String url_manager = "https://sofascores.p.rapidapi.com/v1/managers/data?manager_id=" + managerId;
+            JSONObject jsonObject1 = dataParseBuilder.getJSONObject(url_manager);
+
+            String name = (String) jsonObject1.get("name");
+            Timestamp dateOfBirth = null;
+            if(jsonObject1.get("dateOfBirthTimestamp")!=null)
+                dateOfBirth = dataParseBuilder.toTimeStamp((Long) jsonObject1.get("dateOfBirthTimestamp"));
+            String nationality = (String) jsonObject1.get("nationality");
+            Manager manager = new Manager(managerId, name, dateOfBirth, nationality, team);
+
+            managerRepository.save(manager);
+            System.out.println("Team: " + team.getName() + " -> Manager: " + manager.getName());
         }
     }
 }

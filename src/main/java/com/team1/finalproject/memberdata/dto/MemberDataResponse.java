@@ -13,8 +13,6 @@ public class MemberDataResponse {
 
     private String email;
 
-    private String nickname;
-
     private Long teamId;
 
     private Long playerId;

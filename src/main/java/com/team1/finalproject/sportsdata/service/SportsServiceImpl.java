@@ -2,7 +2,6 @@ package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.common.exception.ErrorCode;
 import com.team1.finalproject.common.exception.GlobalException;
-import com.team1.finalproject.common.service.DataParseBuilder;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.entity.soccer.Defender;
@@ -38,7 +37,6 @@ public class SportsServiceImpl implements SportsService {
     private final DefenderRepository defenderRepository;
     private final GoalkeeperRepository goalkeeperRepository;
     private final ManagerRepository managerRepository;
-    private final DataParseBuilder dataParseBuilder;
 
     @Override
     public List<String> getSportsList() {

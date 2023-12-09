@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService{
     private final PlayerRepository playerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
-    public String signin(SignUpRequest dto) {
+    public String signUp(SignUpRequest dto) {
         String email = dto.getEmail();
         if (memberRepository.existsByEmail(email))
             return "duplicate email";
@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
-        Preferences preferences = new Preferences(member, dto.getNickname(), team, player);
+        Preferences preferences = new Preferences(member, team, player);
         member.setPreferences(preferences);
         preferencesRepository.save(preferences);
         memberRepository.save(member);
@@ -109,7 +109,7 @@ public class MemberServiceImpl implements MemberService{
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
 
-        preferences.updatePreferences(nickname, team, player);
+        preferences.updatePreferences(team, player);
 
         return new PreferencesResponse("Success");
     }
@@ -119,7 +119,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(id).get();
         if (member != null) {
             Preferences preferences = member.getPreferences();
-            return new MemberDataResponse("true",member.getEmail(), preferences.getNickname(),
+            return new MemberDataResponse("true",member.getEmail(),
                     preferences.getTeam().getId(), preferences.getPlayer().getId());
         }
         return new MemberDataResponse("false");

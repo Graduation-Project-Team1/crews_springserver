@@ -10,14 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetPreferencesResponse {
 
-    private String nickname;
-
     private Long teamId;
 
     private Long playerId;
 
     public GetPreferencesResponse(Preferences preferences) {
-        this.nickname = preferences.getNickname();
         this.teamId = preferences.getPlayer().getId();
         this.playerId = preferences.getTeam().getId();
     }

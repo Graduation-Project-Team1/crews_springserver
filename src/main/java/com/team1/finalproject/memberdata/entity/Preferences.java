@@ -17,8 +17,6 @@ public class Preferences {
     private Long id;
     @OneToOne(mappedBy = "preferences")
     private Member member;
-    @Column
-    private String nickname;
     @ManyToOne
     @JoinColumn(name = "favorite_team")
     private Team team;
@@ -26,15 +24,13 @@ public class Preferences {
     @JoinColumn(name = "favorite_player")
     private Player player;
 
-    public Preferences(Member member, String nickname, Team team, Player player) {
+    public Preferences(Member member, Team team, Player player) {
         this.member = member;
-        this.nickname = nickname;
         this.team = team;
         this.player = player;
     }
 
-    public void updatePreferences(String nickname, Team team, Player player) {
-        this.nickname = nickname;
+    public void updatePreferences(Team team, Player player) {
         this.team = team;
         this.player = player;
     }

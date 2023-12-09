@@ -1,6 +1,7 @@
 package com.team1.finalproject.memberdata.repository;
 
 import com.team1.finalproject.memberdata.entity.Member;
+import org.json.simple.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Boolean existsByEmail(String email);
 
     Optional<Member> findByEmailAndPassword(String email, String password);
+
+    boolean existsByKakaoId(String kakaoId);
+
+    Optional<Member> findbyKakaoId(String kakaoId);
 }

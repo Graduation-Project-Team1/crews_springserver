@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j
@@ -103,7 +101,7 @@ public class KaKaoService {
             String email = kakao_account.get("email").toString();
             /*String age_range = kakao_account.get("age_range").toString();*/
 
-            signUpRequest = new SignUpRequest(email, nickname, kakaoId);
+            signUpRequest = new SignUpRequest(email, nickname, kakaoId, 0L);
 
             br.close();
         } catch (IOException | ParseException e) {
@@ -121,7 +119,7 @@ public class KaKaoService {
         String nickname = dto.getNickName();
         if (memberRepository.existsByKakaoId(kakaoId)) {
             log.warn("Already signed up with kakao.");
-            Member member = memberRepository.findbyKakaoId(kakaoId).orElseThrow();
+            Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow();
             if (member.getPreferences() == null) {
                 log.info("Kakao member " + member.getId() + " does not have preferences.");
                 return "Set preference";
@@ -135,7 +133,7 @@ public class KaKaoService {
             log.warn("Email is already used.");
             return "Duplicate email";
         } else {
-            Member member = new Member(nickname, email, kakaoId);
+            Member member = new Member(nickname, email, kakaoId, dto.getSocialCode());
             memberRepository.save(member);
         }return "Sign in complete. Set preference";
     }

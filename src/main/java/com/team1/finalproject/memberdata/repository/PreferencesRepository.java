@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PreferencesRepository extends JpaRepository<Preferences, Long> {
-    Boolean existsByNickname(String nickname);
+
 }

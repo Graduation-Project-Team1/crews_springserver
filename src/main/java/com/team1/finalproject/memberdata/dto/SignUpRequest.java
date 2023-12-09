@@ -14,6 +14,8 @@ public class SignUpRequest {
     private String password;
     private String chkPassword;
     private String kakaoId;
+    private String googleId;
+    private Long socialCode;
 
     /**
      * CREWS 자체 로그인
@@ -32,16 +34,22 @@ public class SignUpRequest {
 
 
     /**
-     * 카카오 로그인
-     * @param email 카카오 계정 이메일
-     * @param nickName 카카오 계정 이름
-     * @param kakaoId 카카오 계정 고유 ID
+     * 소셜 로그인
+     * @param email 계정 이메일
+     * @param nickName 계정 이름
+     * @param socialId 플랫폼별 계정 고유 ID
+     * @param  socialCode 대상 플랫폼(0L: 카카오, 1L: 구글)
      */
     @Builder
-    public SignUpRequest(String email, String nickName, String kakaoId){
+    public SignUpRequest(String email, String nickName, String socialId, Long socialCode){
         this.email = email;
         this.nickName = nickName;
-        this.kakaoId = kakaoId;
+        this.kakaoId = socialId;
+        if (socialCode == 0L)
+            this.kakaoId = socialId;
+        else if (socialCode == 1L)
+            this.googleId = socialId;
+        this.socialCode = socialCode;
     }
 
 }

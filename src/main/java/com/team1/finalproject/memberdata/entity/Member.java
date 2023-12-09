@@ -26,6 +26,8 @@ public class Member {
     @Column(name = "kakao_id")
     private String kakaoId;
     // 카카오 로그인은 사업자 등록시에만 이메일을 필수요소로 받아올 수 있음
+    @Column(name = "google_id")
+    private String googleId;
     @Column
     private java.sql.Timestamp last_access_date;
     @OneToOne
@@ -39,10 +41,13 @@ public class Member {
     }
 
     @Builder
-    public Member(String nickName, String email, String kakaoId) {
-        this.nickName = nickName;
+    public Member(String email, String nickName, String socialId, Long socialCode) {
         this.email = email;
-        this.kakaoId = kakaoId;
+        this.nickName = nickName;
+        if (socialCode == 0L)
+            this.kakaoId = socialId;
+        else if (socialCode == 1L)
+            this.googleId = socialId;
     }
 
     public void setPreferences(Preferences preferences) {

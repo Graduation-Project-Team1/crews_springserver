@@ -23,9 +23,8 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    private final JwtTokenUtils jwtTokenUtils;
-
-    @GetMapping("/login/oauth2/code/{registrationId}")
+    @GetMapping(value = "/login/oauth2/code/{registrationId}", produces = "application/json")
+    @ResponseBody
     public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
         loginService.googleLogin(code, registrationId);
     }

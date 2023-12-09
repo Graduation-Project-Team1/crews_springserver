@@ -58,7 +58,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Boolean chkduplicateNickname(SetPreferencesRequest dto) {
-        return preferencesRepository.existsByNickname(dto.getNickname());
+        return null;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.team1.finalproject.memberdata.service;
 
+import com.team1.finalproject.config.UserDetailsImpl;
+import com.team1.finalproject.config.jwt.JwtTokenUtils;
 import com.team1.finalproject.memberdata.dto.SignUpRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -8,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ public class KaKaoService {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final JwtTokenUtils jwtTokenUtils;
 
     public String getKakaoToken(String code) throws IOException {
         // 인가코드로 토큰받기
@@ -135,7 +139,8 @@ public class KaKaoService {
         } else {
             Member member = new Member(nickname, email, kakaoId, dto.getSocialCode());
             memberRepository.save(member);
-        }return "Sign in complete. Set preference";
+            return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+        }
     }
 
     public String getKakaoAgreementInfo(String access_token) {

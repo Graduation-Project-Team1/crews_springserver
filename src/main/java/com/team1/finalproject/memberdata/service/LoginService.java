@@ -1,6 +1,8 @@
 package com.team1.finalproject.memberdata.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.team1.finalproject.config.UserDetailsImpl;
+import com.team1.finalproject.config.jwt.JwtTokenUtils;
 import com.team1.finalproject.memberdata.dto.SignUpRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @Transactional
 @RequiredArgsConstructor
 public class LoginService {
+    private final JwtTokenUtils jwtTokenUtils;
 
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate = new RestTemplate();
@@ -64,7 +68,7 @@ public class LoginService {
     public String signUpAsGoogle(SignUpRequest dto) {
         Member member = new Member(dto.getEmail(), dto.getNickName(), dto.getGoogleId(), dto.getSocialCode());
         memberRepository.save(member);
-        return "(Google)Sign in complete. Set preference";
+        return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
     }
 
     private String getGoogleAccessToken(String authorizationCode, String registrationId) {

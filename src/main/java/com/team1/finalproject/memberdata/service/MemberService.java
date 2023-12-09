@@ -3,7 +3,7 @@ package com.team1.finalproject.memberdata.service;
 import com.team1.finalproject.memberdata.dto.*;
 
 public interface MemberService {
-    String signin(SignUpRequest dto);
+    String signUp(SignUpRequest dto);
 
     void logIn(LoginRequest dto);
 

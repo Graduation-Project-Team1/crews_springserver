@@ -15,7 +15,7 @@ public class MemberController {
     @PostMapping("/member")
     public SignUpResponse signUp(@RequestBody SignUpRequest dto) {
         log.info("Sign up request occurred");
-        String result = memberService.signin(dto);
+        String result = memberService.signUp(dto);
         if (result.contains("duplicate")) {
             log.warn("Sign up failed: Given email is already used.");
             return new SignUpResponse(false, "Email already used");

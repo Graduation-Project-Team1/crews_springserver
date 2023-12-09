@@ -1,6 +1,10 @@
 package com.team1.finalproject.memberdata.service;
 
+import com.team1.finalproject.memberdata.dto.SignUpRequest;
+import com.team1.finalproject.memberdata.entity.Member;
+import com.team1.finalproject.memberdata.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,10 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class KaKaoService{
+public class KaKaoService {
+
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+
     public String getKakaoToken(String code) throws IOException {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
@@ -37,16 +46,15 @@ public class KaKaoService{
             bw.write(sb);
             bw.flush();
 
-            int responseCode = urlConnection.getResponseCode();
-            System.out.println("responseCode = " + responseCode);
+            /*int responseCode = urlConnection.getResponseCode();
+            System.out.println("responseCode = " + responseCode);*/
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
+            String line;
             StringBuilder result = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 result.append(line);
             }
-            System.out.println("result = " + result);
 
             // json parsing
             JSONParser parser = new JSONParser();
@@ -54,8 +62,6 @@ public class KaKaoService{
 
             String access_token = elem.get("access_token").toString();
             String refresh_token = elem.get("refresh_token").toString();
-            System.out.println("refresh_token = " + refresh_token);
-            System.out.println("access_token = " + access_token);
 
             token = access_token;
 
@@ -64,14 +70,12 @@ public class KaKaoService{
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-
         return token;
     }
 
-    public Map<String, Object> getKakaoUserInfo(String access_token) throws IOException {
+    public SignUpRequest getKakaoUserInfo(String access_token) {
         String host = "https://kapi.kakao.com/v2/user/me";
-        Map<String, Object> result = new HashMap<>();
+        SignUpRequest signUpRequest = null;
         try {
             URL url = new URL(host);
 
@@ -79,59 +83,75 @@ public class KaKaoService{
             urlConnection.setRequestProperty("Authorization", "Bearer " + access_token);
             urlConnection.setRequestMethod("GET");
 
-            int responseCode = urlConnection.getResponseCode();
-            System.out.println("responseCode = " + responseCode);
-
+            /*int responseCode = urlConnection.getResponseCode();
+            System.out.println("responseCode = " + responseCode);*/
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
+            String line;
             StringBuilder res = new StringBuilder();
-            while((line=br.readLine())!=null)
-            {
+            while ((line = br.readLine()) != null) {
                 res.append(line);
             }
-
-            System.out.println("res = " + res);
-
 
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(res.toString());
             JSONObject kakao_account = (JSONObject) obj.get("kakao_account");
             JSONObject properties = (JSONObject) obj.get("properties");
 
+            String kakaoId = obj.get("id").toString();
+            String nickname = properties.get("nickname").toString();
+            String email = kakao_account.get("email").toString();
+            /*String age_range = kakao_account.get("age_range").toString();*/
 
-            String id = obj.get("id").toString();
-            /*String nickname = properties.get("nickname").toString();
-            String age_range = kakao_account.get("age_range").toString();*/
-
-            result.put("id", id);
-            /*result.put("nickname", nickname);
-            result.put("age_range", age_range);*/
+            signUpRequest = new SignUpRequest(email, nickname, kakaoId);
 
             br.close();
-
-
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-        return result;
+        return signUpRequest;
     }
 
-    public String getKakaoAgreementInfo(String access_token)
-    {
+    public String signUpAsKakao(SignUpRequest dto) throws IOException {
+        String kakaoId = dto.getKakaoId();
+        if (kakaoId==null) {
+            return "Invalid request: Kakao id not Included";
+        }
+        String email = dto.getEmail();
+        String nickname = dto.getNickName();
+        if (memberRepository.existsByKakaoId(kakaoId)) {
+            log.warn("Already signed up with kakao.");
+            Member member = memberRepository.findbyKakaoId(kakaoId).orElseThrow();
+            if (member.getPreferences() == null) {
+                log.info("Kakao member " + member.getId() + " does not have preferences.");
+                return "Set preference";
+            }
+            else {
+                log.info("Kakao member " + member.getId() + " has preferences.");
+                return "Home";
+            }
+
+        } else if (memberRepository.existsByEmail(email)) {
+            log.warn("Email is already used.");
+            return "Duplicate email";
+        } else {
+            Member member = new Member(nickname, email, kakaoId);
+            memberRepository.save(member);
+        }return "Sign in complete. Set preference";
+    }
+
+    public String getKakaoAgreementInfo(String access_token) {
         StringBuilder result = new StringBuilder();
         String host = "https://kapi.kakao.com/v2/user/scopes";
-        try{
+        try {
             URL url = new URL(host);
-            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
+            urlConnection.setRequestProperty("Authorization", "Bearer " + access_token);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
-            while((line=br.readLine())!=null)
-            {
+            while ((line = br.readLine()) != null) {
                 result.append(line);
             }
 

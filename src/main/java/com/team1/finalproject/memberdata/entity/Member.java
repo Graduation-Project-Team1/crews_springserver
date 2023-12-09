@@ -20,8 +20,10 @@ public class Member {
     @Column (unique = true)
     private String email;
     @Column
-    private String password;
+    private String nickName;
     @Column
+    private String password;
+    @Column(name = "kakao_id")
     private String kakaoId;
     // 카카오 로그인은 사업자 등록시에만 이메일을 필수요소로 받아올 수 있음
     @Column
@@ -34,6 +36,13 @@ public class Member {
     public Member(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    @Builder
+    public Member(String nickName, String email, String kakaoId) {
+        this.nickName = nickName;
+        this.email = email;
+        this.kakaoId = kakaoId;
     }
 
     public void setPreferences(Preferences preferences) {

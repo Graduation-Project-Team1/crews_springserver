@@ -4,6 +4,7 @@ import com.team1.finalproject.memberdata.service.KaKaoService;
 import com.team1.finalproject.memberdata.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 //@RequestMapping(produces = "application/json")
 public class LoginController {

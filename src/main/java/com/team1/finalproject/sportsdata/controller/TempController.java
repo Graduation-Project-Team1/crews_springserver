@@ -111,6 +111,17 @@ public class TempController {
                 .body(jsonContent);
     }
 
+    @GetMapping("/data/trend")
+    public ResponseEntity<String> getTeamTrend(@RequestParam Long teamId) throws IOException {
+        InputStream inputStream = new ClassPathResource("TeamTrend.json").getInputStream();
+        byte[] arr = inputStream.readAllBytes();
+        String jsonContent = new String(arr);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonContent);
+    }
+
     @GetMapping("/onboard")
     public ResponseEntity<String> getOnboardData(@RequestParam Long userId) throws IOException {
         InputStream inputStream = new ClassPathResource("userDataStatic.json").getInputStream();

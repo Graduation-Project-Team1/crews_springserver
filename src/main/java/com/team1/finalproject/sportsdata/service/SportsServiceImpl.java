@@ -78,7 +78,8 @@ public class SportsServiceImpl implements SportsService {
         List<SeasonTeam> seasonTeams = season.getSeasonTeams();
         for (SeasonTeam seasonTeam : seasonTeams) {
             Team team = seasonTeam.getTeam();
-            teamInfoResponses.add(new TeamInfoResponse(team));
+            Manager manager = managerRepository.findByTeam(team).orElseThrow();
+            teamInfoResponses.add(new TeamInfoResponse(team, manager));
         }
         return teamInfoResponses;
     }

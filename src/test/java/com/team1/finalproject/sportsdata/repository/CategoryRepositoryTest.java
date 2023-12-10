@@ -23,18 +23,6 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Test
-    void setCategory() throws IOException, ParseException, JSONException {
-        InputStream inputStream = new ClassPathResource("category.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String s = new String(arr);
-        JSONObject object = new JSONObject(s);
-        JSONArray jsonArray = (JSONArray) object.get("data");
-        JSONObject object1 = (JSONObject) jsonArray.get(0);
-        JSONArray jsonArray1 = (JSONArray) object1.get("uniqueTournaments");
-        System.out.println("jsonArray1 = " + jsonArray1.get(0));
-
-    }
 
 
 }

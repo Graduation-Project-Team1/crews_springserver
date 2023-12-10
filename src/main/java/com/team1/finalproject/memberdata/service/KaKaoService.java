@@ -102,9 +102,9 @@ public class KaKaoService {
 
             String kakaoId = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
+            System.out.println("nickname = " + nickname);
             String email = kakao_account.get("email").toString();
-            /*String age_range = kakao_account.get("age_range").toString();*/
-
+            System.out.println("email = " + email);
             signUpRequest = new SignUpRequest(email, nickname, kakaoId, 0L);
 
             br.close();
@@ -130,19 +130,18 @@ public class KaKaoService {
             }
             else {
                 log.info("Kakao member " + member.getId() + " has preferences.");
-                return "Home";
+                return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
             }
 
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
             return "Duplicate email";
         } else {
-            Member member = new Member(nickname, email, kakaoId, dto.getSocialCode());
+            Member member = new Member(email, nickname, kakaoId, dto.getSocialCode());
             memberRepository.save(member);
-            return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+            return "Sign up successful. Set preference.";
         }
     }
-
     public String getKakaoAgreementInfo(String access_token) {
         StringBuilder result = new StringBuilder();
         String host = "https://kapi.kakao.com/v2/user/scopes";

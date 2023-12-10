@@ -1,12 +1,12 @@
 package com.team1.finalproject.memberdata.entity;
 
+import com.team1.finalproject.memberdata.dto.SignUpRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +29,7 @@ public class Member {
     @Column(name = "google_id")
     private String googleId;
     @Column
-    private java.sql.Timestamp last_access_date;
+    private LocalDateTime last_access_time;
     @OneToOne
     @JoinColumn(name = "preferences_id")
     private Preferences preferences;
@@ -50,6 +50,16 @@ public class Member {
             this.googleId = socialId;
     }
 
+    @Builder
+    public Member(SignUpRequest dto) {
+        this.email = dto.getEmail();
+        this.nickName = dto.getNickName();
+        if (dto.getSocialCode() == 0L)
+            this.kakaoId = dto.getKakaoId();
+        else if (dto.getSocialCode() == 1L)
+            this.googleId = dto.getGoogleId();
+    }
+
     public void setPreferences(Preferences preferences) {
         this.preferences = preferences;
     }
@@ -59,6 +69,6 @@ public class Member {
     }
 
     public void updateAccessDate() {
-        this.last_access_date = Timestamp.valueOf(LocalDateTime.now());
+        this.last_access_time = LocalDateTime.now();
     }
 }

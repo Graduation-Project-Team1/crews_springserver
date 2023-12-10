@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,28 +22,29 @@ import org.springframework.web.client.RestTemplate;
 @Transactional
 @RequiredArgsConstructor
 public class LoginService {
+
     private final JwtTokenUtils jwtTokenUtils;
 
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${client-id}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
-    @Value("${client-secret}")
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
-    @Value("${redirect-uri}")
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String redirectUri;
     @Value("${token-uri}")
     private String tokenUri;
     @Value("${resource-uri}")
     private String resourceUri;
     public String googleLogin(String code, String registrationId) {
-        String accessToken = getGoogleAccessToken(code, registrationId);
-        JsonNode userResourceNode = getGoogleUserResources(accessToken, registrationId);
 
-        String id = userResourceNode.get("id").asText();
-        String email = userResourceNode.get("email").asText();
-        String nickname = userResourceNode.get("name").asText();
+        String accessToken = getGoogleAccessToken(code, registrationId);
+        SignUpRequest dto = getGoogleUserResources(accessToken, registrationId);
+
+        String id = dto.getGoogleId();
+        String email = dto.getEmail();
 
         if(memberRepository.existsByGoogleId(id)){
             log.warn("Already signed up with google.");
@@ -55,29 +55,19 @@ public class LoginService {
             }
             else {
                 log.info("Google member " + member.getId() + " has preferences.");
-                return "Home";
+                return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
             }
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
             return "Duplicate email";
         } else {
-            return signUpAsGoogle(new SignUpRequest(email, nickname, id, 1L));
+            Member member = new Member(dto);
+            memberRepository.save(member);
+            return "Sign in successful. Set preference.";
         }
     }
 
-    public String signUpAsGoogle(SignUpRequest dto) {
-        Member member = new Member(dto.getEmail(), dto.getNickName(), dto.getGoogleId(), dto.getSocialCode());
-        memberRepository.save(member);
-        return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
-    }
-
     private String getGoogleAccessToken(String authorizationCode, String registrationId) {
-
-        System.out.println("registrationId = " + registrationId);
-        System.out.println("clientId = " + clientId);
-        System.out.println("clientSecret = " + clientSecret);
-        System.out.println("redirectUri = " + redirectUri);
-        System.out.println("tokenUri = " + tokenUri);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", authorizationCode);
@@ -97,10 +87,16 @@ public class LoginService {
         return accessTokenNode.get("access_token").asText();
     }
 
-    private JsonNode getGoogleUserResources(String accessToken, String registrationId) {
+    private SignUpRequest getGoogleUserResources(String accessToken, String registrationId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity entity = new HttpEntity(headers);
-        return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
+        JsonNode jsonNode = restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
+
+        String id = jsonNode.get("id").asText();
+        String email = jsonNode.get("email").asText();
+        String nickname = jsonNode.get("name").asText();
+
+        return new SignUpRequest(email, nickname, id, 1L);
     }
 }

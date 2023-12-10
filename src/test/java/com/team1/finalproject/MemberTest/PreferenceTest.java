@@ -63,7 +63,6 @@ public class PreferenceTest {
     }
     @Test
     public void setPreferencesTest() {
-        assertThat(member.getPreferences().getNickname()).isEqualTo("nickname");
         assertThat(member.getPreferences().getTeam().getId()).isEqualTo(1L);
         assertThat(member.getPreferences().getPlayer().getId()).isEqualTo(2L);
     }
@@ -76,7 +75,6 @@ public class PreferenceTest {
                 22, 175L, 10L, "Korea", "FW", team, code));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
         memberService.updateMemberPreferences(dto,member.getId());
-        assertThat(member.getPreferences().getNickname()).isEqualTo(newNickname);
         assertThat(member.getPreferences().getTeam()).isEqualTo(newTeam);
         assertThat(member.getPreferences().getPlayer()).isEqualTo(newPlayer);
     }

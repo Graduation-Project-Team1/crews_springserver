@@ -21,6 +21,11 @@ public class TeamInfoResponse {
 
     private String managerName;
 
+    /** 팀 정보 반환
+     *
+     * @param team 팀 엔티티
+     * @param manager 소속 감독 엔티티
+     */
 
     public TeamInfoResponse(Team team, Manager manager){
         this.teamId = team.getId();

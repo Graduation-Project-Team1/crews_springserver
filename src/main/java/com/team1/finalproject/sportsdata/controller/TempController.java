@@ -133,7 +133,7 @@ public class TempController {
                 .body(jsonContent);
     }
 
-    @GetMapping("/podcast")
+    /*@GetMapping("/podcast")
     public ResponseEntity<String> getPodcast() throws IOException {
         InputStream inputStream = new ClassPathResource("PodcastListData.json").getInputStream();
         byte[] arr = inputStream.readAllBytes();
@@ -142,5 +142,5 @@ public class TempController {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jsonContent);
-    }
+    }*/
 }

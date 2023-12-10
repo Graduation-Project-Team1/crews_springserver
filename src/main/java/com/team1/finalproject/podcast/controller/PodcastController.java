@@ -19,13 +19,12 @@ public class PodcastController {
     private final PodcastService podcastService;
 
     @GetMapping("/podcast")
-    public ResponseEntity<?> getRecentPodcast(@RequestParam Long teamId) throws IOException {
-        return podcastService.getPodcastByTeamId(teamId);
-    }
-
-    @GetMapping("/podcast")
-    public ResponseEntity<?> getPodcast(@RequestParam Long podcastId) throws IOException {
-        return podcastService.getPodcastById(podcastId);
+    public ResponseEntity<?> getRecentPodcast(@RequestParam(required = false) Long teamId, @RequestParam(required = false) Long podcastId) throws IOException {
+        if(teamId!=null)
+            return podcastService.getPodcastByTeamId(teamId);
+        else if(podcastId!=null)
+            return podcastService.getPodcastById(podcastId);
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/podcast/list")

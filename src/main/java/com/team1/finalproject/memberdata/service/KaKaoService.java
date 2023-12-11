@@ -30,9 +30,9 @@ public class KaKaoService {
     private final MemberRepository memberRepository;
     private final JwtTokenUtils jwtTokenUtils;
 
-    @Value("spring.security.oauth2.client.registration.kakao.client-id")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
-    @Value("spring.security.oauth2.client.registration.kakao.redirect-uri")
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
 
     public String getKakaoToken(String code) throws IOException {
@@ -108,9 +108,7 @@ public class KaKaoService {
 
             String kakaoId = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
-            System.out.println("nickname = " + nickname);
             String email = kakao_account.get("email").toString();
-            System.out.println("email = " + email);
             signUpRequest = new SignUpRequest(email, nickname, kakaoId, 0L);
 
             br.close();

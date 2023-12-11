@@ -13,26 +13,26 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/member")
-    public SignUpResponse signUp(@RequestBody SignUpRequest dto) {
+    public LogInResponse signUp(@RequestBody SignUpRequest dto) {
         log.info("Sign up request occurred");
         String result = memberService.signUp(dto);
         if (result.contains("duplicate")) {
             log.warn("Sign up failed: Given email is already used.");
-            return new SignUpResponse(false, "Email already used");
+            return new LogInResponse(false, "Email already used");
         }
         if (result.contains("password")) {
             log.warn("Sign up failed: Given passwords doesn't matches each other.");
-            return new SignUpResponse(false, "Recheck your password");
+            return new LogInResponse(false, "Recheck your password");
         }
         log.info("Sign up successful");
-        return new SignUpResponse(true, "Sign up successful");
+        return new LogInResponse(true, "Sign up successful");
     }
 
     @GetMapping("/member/{memberId}")
-    public MemberDataResponse viewMemberData(@PathVariable Long memberId) {
+    public MemberDataResponse viewMemberData(@PathVariable Long memberId) throws ClassNotFoundException {
         log.info("Info request occurred: target=" + memberId);
         MemberDataResponse memberDataResponse = memberService.viewMemberData(memberId);
-        if (memberDataResponse.getSuccess().equals("false"))
+        if (memberDataResponse.getState().equals("false"))
             log.info("Invalid request: Cannot find requested data");
         else
             log.info("Info request successful");
@@ -69,14 +69,14 @@ public class MemberController {
         return memberService.chkMemberPreference(id);
     }
     @PutMapping("/member/{id}/preferences")
-    public PreferencesResponse setPreferences(@PathVariable Long id, @RequestBody SetPreferencesRequest dto) {
+    public LogInResponse setPreferences(@PathVariable Long id, @RequestBody SetPreferencesRequest dto) {
         log.info("User preferences setting request occurred: target=" + id);
-        PreferencesResponse preferencesResponse = memberService.setMemberPreferences(dto, id);
-        if (preferencesResponse.getSuccess().equals("Success"))
+        LogInResponse logInResponse = memberService.setMemberPreferences(dto, id);
+        if (logInResponse.getSuccess().equals("Success"))
             log.info("User preferences updated successfully: target=" + id);
         else
             log.info("Request Failed");
-        return preferencesResponse;
+        return logInResponse;
     }
     @PatchMapping("/member/{id}/preferences")
     public PreferencesResponse updatePreferences(@PathVariable Long id, @RequestBody UpdatePreferencesRequest dto) {

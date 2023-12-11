@@ -16,7 +16,7 @@ public class PageService {
     private final MemberService memberService;
     private final SportsService sportsService;
 
-    public MainPageResponse getMainPage(MainPageRequest dto){
+    public MainPageResponse getMainPage(MainPageRequest dto) throws ClassNotFoundException {
         TeamInfoResponse teamInfo = sportsService.getTeamInfo(memberService.viewMemberData(dto.getMemberId()).getTeamId());
 
         //get podcast, teamId = teamInfo.getTeamId;

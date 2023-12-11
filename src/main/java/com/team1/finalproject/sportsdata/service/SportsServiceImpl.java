@@ -37,6 +37,7 @@ public class SportsServiceImpl implements SportsService {
     private final DefenderRepository defenderRepository;
     private final GoalkeeperRepository goalkeeperRepository;
     private final ManagerRepository managerRepository;
+    private final GameRepository gameRepository;
 
     @Override
     public List<String> getSportsList() {
@@ -120,8 +121,17 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public String getTeamSchedule() {
-        return null;
+    public List<GameInfoResponse> getTeamSchedule(Long teamId) {
+        List<GameInfoResponse> gameInfoResponses = new ArrayList<>();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        List<Game> games = gameRepository.findAllByTeam(team);
+
+        for (Game game : games) {
+            gameInfoResponses.add(new GameInfoResponse(game));
+        }
+
+        return gameInfoResponses;
     }
 
     @Override

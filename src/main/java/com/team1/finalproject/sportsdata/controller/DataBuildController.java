@@ -31,10 +31,14 @@ public class DataBuildController {
         log.info("info log = {}", seasonBuildService.setSeason());
         log.info("info log = {}", seasonBuildService.setTeam());
         log.info("info log = {}", seasonBuildService.setPlayer());
-        //log.info("info log = {}", seasonBuildService.setGameByDate());
+        log.info("info log = {}", seasonBuildService.setGameByDate());
         return "Seasonal Data Build Successful";
     }
-
+    @PostMapping("/game")
+    @ResponseBody
+    public void buildGame() throws ParseException {
+        log.info("info log = {}", seasonBuildService.setGameByDate());
+    }
     @PostMapping("/player")
     @ResponseBody
     public void buildPlayer() throws ParseException {

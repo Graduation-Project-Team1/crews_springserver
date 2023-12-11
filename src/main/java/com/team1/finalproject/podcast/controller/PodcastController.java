@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +29,7 @@ public class PodcastController {
     }
 
     @GetMapping("/podcast/list")
+    @ResponseBody
     public List<PodcastInfoResponse> getPodcastList(@RequestParam Long teamId) {
         return podcastService.getPodcastInfoList(teamId);
     }

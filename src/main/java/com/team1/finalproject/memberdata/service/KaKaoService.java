@@ -2,6 +2,7 @@ package com.team1.finalproject.memberdata.service;
 
 import com.team1.finalproject.config.UserDetailsImpl;
 import com.team1.finalproject.config.jwt.JwtTokenUtils;
+import com.team1.finalproject.memberdata.dto.LogInResponse;
 import com.team1.finalproject.memberdata.dto.SignUpRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -10,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,11 @@ public class KaKaoService {
     private final MemberRepository memberRepository;
     private final JwtTokenUtils jwtTokenUtils;
 
+    @Value("spring.security.oauth2.client.registration.kakao.client-id")
+    private String clientId;
+    @Value("spring.security.oauth2.client.registration.kakao.redirect-uri")
+    private String redirectUri;
+
     public String getKakaoToken(String code) throws IOException {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
@@ -41,8 +47,8 @@ public class KaKaoService {
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
             String sb = "grant_type=authorization_code" +
-                    "&client_id=b6d6b8757acb893872695778f57324b7" +
-                    "&redirect_uri=http://localhost:8080/kakao/getCI" +
+                    "&client_id=" + clientId +
+                    "&redirect_uri=" + redirectUri +
                     "&code=" + code;
 
             bw.write(sb);
@@ -114,10 +120,10 @@ public class KaKaoService {
         return signUpRequest;
     }
 
-    public String signUpAsKakao(SignUpRequest dto) throws IOException {
+    public LogInResponse signUpAsKakao(SignUpRequest dto) {
         String kakaoId = dto.getKakaoId();
-        if (kakaoId==null) {
-            return "Invalid request: Kakao id not Included";
+        if (kakaoId == null) {
+            return new LogInResponse(false, "Not Found");
         }
         String email = dto.getEmail();
         String nickname = dto.getNickName();
@@ -126,22 +132,23 @@ public class KaKaoService {
             Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow();
             if (member.getPreferences() == null) {
                 log.info("Kakao member " + member.getId() + " does not have preferences.");
-                return "Set preference";
-            }
-            else {
+                return new LogInResponse(false, "preference");
+            } else {
                 log.info("Kakao member " + member.getId() + " has preferences.");
-                return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+                String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+                return new LogInResponse(true, "complete", jwtToken);
             }
 
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
-            return "Duplicate email";
+            return new LogInResponse(false, "email");
         } else {
             Member member = new Member(email, nickname, kakaoId, dto.getSocialCode());
             memberRepository.save(member);
-            return "Sign up successful. Set preference.";
+            return new LogInResponse(false, "preference");
         }
     }
+
     public String getKakaoAgreementInfo(String access_token) {
         StringBuilder result = new StringBuilder();
         String host = "https://kapi.kakao.com/v2/user/scopes";

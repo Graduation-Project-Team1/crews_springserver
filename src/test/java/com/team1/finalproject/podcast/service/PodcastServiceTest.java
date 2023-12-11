@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -59,5 +62,12 @@ class PodcastServiceTest {
         }
         Podcast podcast = podcastRepository.findTopByTeamOrderByMadeAtDesc(team).orElseThrow();
         System.out.println("podcast.getTitle() = " + podcast.getTitle());
+    }
+
+    @Test
+    void getPodcast() throws IOException {
+        Podcast podcast = podcastRepository.findById(1L).get();
+        System.out.println("podcast.getTitle() = " + podcast.getTitle());
+        ResponseEntity<ByteArrayResource> audio = podcastService.getAudio(podcast);
     }
 }

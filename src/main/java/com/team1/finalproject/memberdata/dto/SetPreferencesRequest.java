@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SetPreferencesRequest {
-    //private Nation nation;
-    private String nickname;
 
     private Long teamId;
 

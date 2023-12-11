@@ -3,6 +3,7 @@ package com.team1.finalproject.memberdata.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.team1.finalproject.config.UserDetailsImpl;
 import com.team1.finalproject.config.jwt.JwtTokenUtils;
+import com.team1.finalproject.memberdata.dto.LogInResponse;
 import com.team1.finalproject.memberdata.dto.SignUpRequest;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
@@ -38,7 +39,7 @@ public class LoginService {
     private String tokenUri;
     @Value("${resource-uri}")
     private String resourceUri;
-    public String googleLogin(String code, String registrationId) {
+    public LogInResponse googleLogin(String code, String registrationId) {
 
         String accessToken = getGoogleAccessToken(code, registrationId);
         SignUpRequest dto = getGoogleUserResources(accessToken, registrationId);
@@ -51,19 +52,20 @@ public class LoginService {
             Member member = memberRepository.findByGoogleId(id).orElseThrow();
             if (member.getPreferences() == null) {
                 log.info("Google member " + member.getId() + " does not have preferences.");
-                return "Set preference";
+                return new LogInResponse(false, "preference");
             }
             else {
                 log.info("Google member " + member.getId() + " has preferences.");
-                return jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+                String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+                return new LogInResponse(true, "complete", jwtToken);
             }
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
-            return "Duplicate email";
+            return new LogInResponse(false, "email");
         } else {
             Member member = new Member(dto);
             memberRepository.save(member);
-            return "Sign in successful. Set preference.";
+            return new LogInResponse(false, "preference");
         }
     }
 

@@ -1,16 +1,14 @@
 package com.team1.finalproject.memberdata.controller;
 
-import com.team1.finalproject.config.jwt.JwtTokenUtils;
+import com.team1.finalproject.memberdata.dto.LogInResponse;
 import com.team1.finalproject.memberdata.service.KaKaoService;
 import com.team1.finalproject.memberdata.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -25,8 +23,8 @@ public class LoginController {
 
     @GetMapping(value = "/login/oauth2/code/{registrationId}", produces = "application/json")
     @ResponseBody
-    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
-        loginService.googleLogin(code, registrationId);
+    public LogInResponse googleLogin(@RequestParam String code, @PathVariable String registrationId) {
+        return loginService.googleLogin(code, registrationId);
     }
 
     @GetMapping("/kakao/do")
@@ -38,7 +36,7 @@ public class LoginController {
 
     @GetMapping("/kakao/getCI")
     @ResponseBody
-    public String getCI(@RequestParam String code) throws IOException {
+    public LogInResponse getCI(@RequestParam String code) throws IOException {
         String access_token = ks.getKakaoToken(code);
         if(access_token==null)
             System.out.println("Error signing up with Kakao.");

@@ -1,9 +1,6 @@
 package com.team1.finalproject.sportsdata.controller;
 
-import com.team1.finalproject.sportsdata.dto.LeagueInfoResponse;
-import com.team1.finalproject.sportsdata.dto.ManagerInfoResponse;
-import com.team1.finalproject.sportsdata.dto.PlayerInfoResponse;
-import com.team1.finalproject.sportsdata.dto.TeamInfoResponse;
+import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.service.SportsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +48,11 @@ public class SportsDataController {
     @GetMapping("/player")
     public PlayerInfoResponse getPlayerInfo(@RequestParam Long playerId) {
         return sportsService.getPlayerInfo(playerId);
+    }
+
+    @GetMapping("/schedule")
+    public List<GameInfoResponse> getTeamSchedule(@RequestParam Long teamId) {
+        return sportsService.getTeamSchedule(teamId);
     }
 
     @GetMapping("/manager")

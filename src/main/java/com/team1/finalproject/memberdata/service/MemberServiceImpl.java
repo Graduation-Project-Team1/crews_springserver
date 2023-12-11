@@ -2,6 +2,8 @@ package com.team1.finalproject.memberdata.service;
 
 import com.team1.finalproject.common.exception.ErrorCode;
 import com.team1.finalproject.common.exception.GlobalException;
+import com.team1.finalproject.config.UserDetailsImpl;
+import com.team1.finalproject.config.jwt.JwtTokenUtils;
 import com.team1.finalproject.memberdata.dto.*;
 import com.team1.finalproject.memberdata.entity.Member;
 import com.team1.finalproject.memberdata.entity.Preferences;
@@ -27,6 +29,7 @@ public class MemberServiceImpl implements MemberService{
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenUtils jwtTokenUtils;
     @Override
     public String signUp(SignUpRequest dto) {
         String email = dto.getEmail();
@@ -77,7 +80,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public PreferencesResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) {
+    public LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) {
         Team team = teamRepository.findById(dto.getTeamId()).orElseThrow(
                 () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
         );
@@ -87,12 +90,14 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
+        if(member.getPreferences()!=null)
+            return new LogInResponse(false, "invalid request");
         Preferences preferences = new Preferences(member, team, player);
         member.setPreferences(preferences);
         preferencesRepository.save(preferences);
         memberRepository.save(member);
-
-        return new PreferencesResponse("Success");
+        String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
+        return new LogInResponse(true, "complete", jwtToken);
     }
 
     @Override
@@ -115,14 +120,11 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberDataResponse viewMemberData(Long id) {
-        Member member = memberRepository.findById(id).get();
-        if (member != null) {
-            Preferences preferences = member.getPreferences();
-            return new MemberDataResponse("true",member.getEmail(),
-                    preferences.getTeam().getId(), preferences.getPlayer().getId());
-        }
-        return new MemberDataResponse("false");
+    public MemberDataResponse viewMemberData(Long id) throws ClassNotFoundException {
+        Member member = memberRepository.findById(id).orElseThrow(ClassNotFoundException::new);
+        if (member.getPreferences() != null)
+            return new MemberDataResponse("Success", member);
+        return new MemberDataResponse("Failed");
     }
 
     @Override

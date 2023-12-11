@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PageController {
     private final PageService pageService;
     @GetMapping("/main")
-    public MainPageResponse showMainPage(HttpServletRequest request, @RequestBody MainPageRequest dto) {
+    public MainPageResponse showMainPage(HttpServletRequest request, @RequestBody MainPageRequest dto) throws ClassNotFoundException {
         log.info(request + ": Main Page requested");
         return pageService.getMainPage(dto);
     }

@@ -11,11 +11,11 @@ public interface MemberService {
 
     UpdatePasswordResponse updateMemberPassword(UpdatePasswordRequest dto, Long memberId);
 
-    PreferencesResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId);
+    LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId);
 
     PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId);
 
-    MemberDataResponse viewMemberData(Long memberId);
+    MemberDataResponse viewMemberData(Long memberId) throws ClassNotFoundException;
 
     MemberDeletionResponse deleteMember(Long memberId);
     GetPreferencesResponse chkMemberPreference(Long memberId);

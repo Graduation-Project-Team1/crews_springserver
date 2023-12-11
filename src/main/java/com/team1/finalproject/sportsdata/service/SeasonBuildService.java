@@ -121,7 +121,7 @@ public class SeasonBuildService {
 
     public String setGameByDate() throws ParseException {
         List<Long> regionIdList = categoryRepository.findAllRegionId();
-        String[] dates = {"2023-06-03", "2023-06-03", "2023-06-06", "2023-06-07", "2023-06-10", "2023-06-11", "2023-06-24", "2023-06-25"};
+        String[] dates = {"2023-12-02", "2023-12-03", "2023-12-06", "2023-12-9"};
         List<String> dateList = new ArrayList<>(List.of(dates));
         Long[] uniqueIds = {410L};
         List<Long> uniqueIdList = new ArrayList<>(List.of(uniqueIds));
@@ -136,11 +136,9 @@ public class SeasonBuildService {
                         Team teamAway = teamRepository.findByName((String) ((JSONObject) temp.get("awayTeam")).get("name"), code);
                         String isStarted = (String) ((JSONObject) temp.get("status")).get("description");
                         Long roundNum = (Long) ((JSONObject) temp.get("roundInfo")).get("round");
-                        Long leagueId = categoryRepository.findByLeagueName((String) ((JSONObject) temp.get("tournament"))
-                                .get("name")).orElseThrow().getLeagueId();
                         Long uniqueId = (Long) ((JSONObject) ((JSONObject) temp.get("tournament")).get("uniqueTournament")).get("id");
                         if (uniqueIdList.contains(uniqueId)) {
-                            Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow();
+                            Category category = categoryRepository.findByLeagueId(uniqueId).orElseThrow();
                             Game event = new Game((Long) temp.get("id"), isStarted, roundNum,
                                     dataParseBuilder.toTimeStamp((Long) temp.get("startTimestamp")), category, teamHome, teamAway);
                             // check if player data is already in repository

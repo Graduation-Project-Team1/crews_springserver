@@ -24,7 +24,7 @@ public interface SportsService {
 
     ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto);
 
-    String getTeamSchedule();
+    List<GameInfoResponse> getTeamSchedule(Long teamId);
 
     PlayerInfoResponse getPlayerRecord(Long playerId);
 

@@ -41,7 +41,7 @@ public class PodcastService {
         String duration = podcast.getDuration();
 
         // 파일 경로로 음성 파일 호출.
-        String filePath = podcast.getPath();
+        String filePath = "/pod/"+ podcast.getPath();
         //String filePath = "src/main/resources/Feat_MINO_Prod_GRAY.mp3";
         File file = new File(filePath);
         Path path = file.toPath();
@@ -52,11 +52,11 @@ public class PodcastService {
 
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + title + ".mp3");
-        headers.add("Podcast-Title", title);
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=audio.mp3");
+       /* headers.add("Podcast-Title", title);
         headers.add("Podcast-Text", text);
         headers.add("Podcast-MadeAt", String.valueOf(madeAt));
-        headers.add("Podcast-Duration", duration);
+        headers.add("Podcast-Duration", duration);*/
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentLength(audioData.length);
 

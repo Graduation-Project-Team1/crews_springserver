@@ -94,10 +94,11 @@ public class MemberServiceImpl implements MemberService{
             return new LogInResponse(false, "invalid request");
         Preferences preferences = new Preferences(member, team, player);
         member.setPreferences(preferences);
+        member.setNickname(dto.getNickname());
         preferencesRepository.save(preferences);
         memberRepository.save(member);
         String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
-        return new LogInResponse(true, "complete", jwtToken);
+        return new LogInResponse(true, "complete", memberId, jwtToken);
     }
 
     @Override

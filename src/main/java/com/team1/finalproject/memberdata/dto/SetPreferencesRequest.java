@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SetPreferencesRequest {
 
+    private String nickname;
+
     private Long teamId;
 
     private Long playerId;

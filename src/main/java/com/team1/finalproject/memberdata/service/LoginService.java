@@ -50,14 +50,15 @@ public class LoginService {
         if(memberRepository.existsByGoogleId(id)){
             log.warn("Already signed up with google.");
             Member member = memberRepository.findByGoogleId(id).orElseThrow();
+            Long memberId = member.getId();
             if (member.getPreferences() == null) {
-                log.info("Google member " + member.getId() + " does not have preferences.");
+                log.info("Google member " + memberId + " does not have preferences.");
                 return new LogInResponse(false, "preference");
             }
             else {
-                log.info("Google member " + member.getId() + " has preferences.");
+                log.info("Google member " + memberId + " has preferences.");
                 String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
-                return new LogInResponse(true, "complete", jwtToken);
+                return new LogInResponse(true, "complete", memberId, jwtToken);
             }
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");

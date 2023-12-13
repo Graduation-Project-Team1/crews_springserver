@@ -1,7 +1,12 @@
 package com.team1.finalproject.sportsdata.service;
 
+import com.team1.finalproject.common.dto.SearchResponse;
 import com.team1.finalproject.common.exception.ErrorCode;
 import com.team1.finalproject.common.exception.GlobalException;
+import com.team1.finalproject.feign.TestFeignClient;
+import com.team1.finalproject.feign.dto.QueryResponse;
+import com.team1.finalproject.podcast.entity.Podcast;
+import com.team1.finalproject.podcast.repository.PodcastRepository;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.entity.soccer.Defender;
@@ -38,6 +43,8 @@ public class SportsServiceImpl implements SportsService {
     private final GoalkeeperRepository goalkeeperRepository;
     private final ManagerRepository managerRepository;
     private final GameRepository gameRepository;
+    private final TestFeignClient testFeignClient;
+    private final PodcastRepository podcastRepository;
 
     @Override
     public List<String> getSportsList() {
@@ -194,6 +201,34 @@ public class SportsServiceImpl implements SportsService {
     public ManagerInfoResponse getManagerInfo(Long managerId) {
         Manager manager = managerRepository.findById(managerId).orElseThrow();
         return new ManagerInfoResponse(manager);
+    }
+
+    @Override
+    public SearchResponse getSearchResult(String query) {
+        SearchResponse searchResponse = new SearchResponse();
+        QueryResponse response = testFeignClient.getENGLetter(query);
+        String q = response.getName().get(0);
+
+        List<Team> teams = teamRepository.searchAllByNameContainingIgnoreCase(q.trim());
+        if (teams.size() != 0) {
+            for (Team team : teams) {
+                searchResponse.addTeam(team);
+                searchResponse.addNews(testFeignClient.getNews(team.getId()).getNews());
+                searchResponse.addCommunity(testFeignClient.getCommunity(team.getId()).getCommunity());
+            }
+        }
+
+        List<Player> playerList = playerRepository.searchTop5ByNameContainingIgnoreCase(q);
+        for (Player player : playerList) {
+            searchResponse.addPlayer(player);
+        }
+
+        List<Podcast> podcastList = podcastRepository.searchTop5ByTitleContainingAndTextContainingOrderByMadeAtDesc(query, query);
+        for (Podcast podcast : podcastList) {
+            searchResponse.addPodcast(podcast);
+        }
+
+        return searchResponse;
     }
 
 }

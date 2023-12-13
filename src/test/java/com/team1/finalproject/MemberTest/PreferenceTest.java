@@ -48,7 +48,7 @@ public class PreferenceTest {
         team = teamRepository.save(new Team(1L,"name", code));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
                 20, 170L, 10L, "Korea", "FW", team, code));
-        dto = new SetPreferencesRequest("nickname", 1L, 2L);
+        dto = new SetPreferencesRequest("sd", 1L, 2L);
         memberService.setMemberPreferences(dto, member.getId());
     }
     @Test
@@ -85,7 +85,7 @@ public class PreferenceTest {
     }
 
     @Test
-    public void viewUserDataTest() {
+    public void viewUserDataTest() throws ClassNotFoundException {
         System.out.println("memberRepository = " + memberRepository.findAll().get(0).getId());
         MemberDataResponse memberDataResponseDto = memberService.viewMemberData(member.getId());
         System.out.println("memberDataResponseDto = " + memberDataResponseDto);

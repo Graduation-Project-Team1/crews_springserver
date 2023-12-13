@@ -1,5 +1,6 @@
 package com.team1.finalproject.feign;
 
+import com.team1.finalproject.feign.dto.QueryResponse;
 import com.team1.finalproject.feign.wrapper.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,4 +35,7 @@ public interface TestFeignClient {
 
     @GetMapping(value = "/opinion/{teamId}", produces = "application/json", consumes = "application/json")
     OpinionResponseWrapper getOpinion(@PathVariable("teamId") Long teamId);
+
+    @GetMapping(value = "/k2r/{query}", produces = "application/json", consumes = "application/json")
+    QueryResponse getENGLetter(@PathVariable("query") String query);
 }

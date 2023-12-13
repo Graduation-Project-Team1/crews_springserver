@@ -1,8 +1,10 @@
 package com.team1.finalproject.sportsdata.controller;
 
+import com.team1.finalproject.common.dto.SearchResponse;
 import com.team1.finalproject.feign.*;
 import com.team1.finalproject.feign.dto.*;
 import com.team1.finalproject.feign.wrapper.*;
+import com.team1.finalproject.sportsdata.service.SportsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -23,6 +25,7 @@ import java.util.List;
 public class TempController {
 
     private final TestFeignClient testFeignClient;
+    private final SportsService sportsService;
     @GetMapping("/data/record/team/{id}")
     public ResponseEntity<String> getTeamRecord(@PathVariable("id") Long id) throws IOException {
         InputStream inputStream = new ClassPathResource("TeamStatistics.json").getInputStream();
@@ -101,14 +104,8 @@ public class TempController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> getSearchResult(@RequestParam String query) throws IOException {
-        InputStream inputStream = new ClassPathResource("searchResultApi.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String jsonContent = new String(arr);
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonContent);
+    public SearchResponse getSearchResult(@RequestParam String query) {
+        return sportsService.getSearchResult(query);
     }
 
 

@@ -1,6 +1,5 @@
 package com.team1.finalproject.podcast.repository;
 
-import com.team1.finalproject.memberdata.entity.Preferences;
 import com.team1.finalproject.podcast.entity.Podcast;
 import com.team1.finalproject.sportsdata.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +18,6 @@ public interface PodcastRepository extends JpaRepository<Podcast, Long> {
     Optional<Podcast> findTopByTeamOrderByMadeAtDesc(Team team);
 
     List<Podcast> findAllByTeam(Team team);
+
+    List<Podcast> searchTop5ByTitleContainingAndTextContainingOrderByMadeAtDesc(String query, String query2);
 }

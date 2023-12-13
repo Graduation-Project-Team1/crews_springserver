@@ -1,8 +1,13 @@
 package com.team1.finalproject.sportsdata.service;
 
+import com.team1.finalproject.common.dto.SearchResponse;
 import com.team1.finalproject.common.service.DataParseBuilder;
+import com.team1.finalproject.feign.TestFeignClient;
+import com.team1.finalproject.feign.dto.QueryResponse;
 import com.team1.finalproject.memberdata.repository.MemberRepository;
 import com.team1.finalproject.memberdata.service.MemberService;
+import com.team1.finalproject.podcast.entity.Podcast;
+import com.team1.finalproject.podcast.repository.PodcastRepository;
 import com.team1.finalproject.sportsdata.dto.*;
 import com.team1.finalproject.sportsdata.entity.*;
 import com.team1.finalproject.sportsdata.repository.*;
@@ -41,7 +46,12 @@ class SportsServiceImplTest {
     private SportsService sportsService;
     @Autowired
     private DataMemoryRepository dataMemoryRepository;
-    String code = dataParseBuilder.availableSeasonCode();
+    @Autowired
+    private TestFeignClient testFeignClient;
+    @Autowired
+    private PodcastRepository podcastRepository;
+    /*String code = dataParseBuilder.availableSeasonCode();*/
+    String code = "asdf";
     Category category;
     Category category1;
     Category category2;
@@ -138,5 +148,17 @@ class SportsServiceImplTest {
     void 레포지토리점검() {
         boolean b = dataMemoryRepository.containsRegion(1L);
         System.out.println("b = " + b);
+    }
+
+    @Test
+    void searchQuery() {
+        String query = "전";
+        QueryResponse response = testFeignClient.getENGLetter(query);
+        String q = response.getName().get(0).trim();
+        List<Team> teams = teamRepository.searchAllByNameContainingIgnoreCase(q);
+        for (Team team : teams) {
+            System.out.println("team.getName() = " + team.getName());
+        }
+        
     }
 }

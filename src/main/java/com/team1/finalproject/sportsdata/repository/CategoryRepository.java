@@ -26,4 +26,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findBySportsId(Long sportsId);
     @Query("select distinct c.sportsName from Category c where c.sportsId = :sportsId")
     String findSportsNameBySportsId(@Param("sportsId") Long sportsId);
+
+
 }

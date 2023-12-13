@@ -1,5 +1,6 @@
 package com.team1.finalproject.sportsdata.service;
 
+import com.team1.finalproject.common.dto.SearchResponse;
 import com.team1.finalproject.sportsdata.dto.*;
 
 import java.util.List;
@@ -33,4 +34,6 @@ public interface SportsService {
     String getTeamRecord();
 
     ManagerInfoResponse getManagerInfo(Long managerId);
+
+    SearchResponse getSearchResult(String query);
 }

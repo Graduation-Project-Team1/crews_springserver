@@ -68,6 +68,10 @@ public class Member {
         this.password = newPassword;
     }
 
+    public void setNickname(String nickname) {
+        this.nickName = nickname;
+    }
+
     public void updateAccessDate() {
         this.last_access_time = LocalDateTime.now();
     }

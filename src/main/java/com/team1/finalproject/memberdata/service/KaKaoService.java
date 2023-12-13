@@ -128,13 +128,14 @@ public class KaKaoService {
         if (memberRepository.existsByKakaoId(kakaoId)) {
             log.warn("Already signed up with kakao.");
             Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow();
+            Long memberId = member.getId();
             if (member.getPreferences() == null) {
-                log.info("Kakao member " + member.getId() + " does not have preferences.");
+                log.info("Kakao member " + memberId + " does not have preferences.");
                 return new LogInResponse(false, "preference");
             } else {
-                log.info("Kakao member " + member.getId() + " has preferences.");
+                log.info("Kakao member " + memberId + " has preferences.");
                 String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
-                return new LogInResponse(true, "complete", jwtToken);
+                return new LogInResponse(true, "complete", memberId, jwtToken);
             }
 
         } else if (memberRepository.existsByEmail(email)) {

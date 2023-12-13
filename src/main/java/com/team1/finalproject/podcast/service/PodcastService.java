@@ -42,7 +42,6 @@ public class PodcastService {
 
         // 파일 경로로 음성 파일 호출.
         String filePath = "/pod/"+ podcast.getPath();
-        //String filePath = "src/main/resources/Feat_MINO_Prod_GRAY.mp3";
         File file = new File(filePath);
         Path path = file.toPath();
 

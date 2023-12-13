@@ -1,9 +1,8 @@
 package com.team1.finalproject.sportsdata.controller;
 
-import com.team1.finalproject.sportsdata.dto.ForwardRecordResponse;
-import com.team1.finalproject.sportsdata.dto.PlayerInfoResponse;
-import com.team1.finalproject.sportsdata.entity.soccer.Forward;
-import com.team1.finalproject.sportsdata.repository.soccer.ForwardRepository;
+import com.team1.finalproject.feign.*;
+import com.team1.finalproject.feign.dto.*;
+import com.team1.finalproject.feign.wrapper.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -16,13 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class TempController {
 
-        @GetMapping("/data/record/team/{id}")
+    private final TestFeignClient testFeignClient;
+    @GetMapping("/data/record/team/{id}")
     public ResponseEntity<String> getTeamRecord(@PathVariable("id") Long id) throws IOException {
         InputStream inputStream = new ClassPathResource("TeamStatistics.json").getInputStream();
         byte[] arr = inputStream.readAllBytes();
@@ -45,26 +46,58 @@ public class TempController {
     }
 
 
-    @GetMapping("/data/news/{id}")
-    public ResponseEntity<String> getMainNews(@PathVariable("id") Long id) throws IOException {
-        InputStream inputStream = new ClassPathResource("mainNewsApi.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String jsonContent = new String(arr);
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonContent);
+    @GetMapping("/news/{teamId}")
+    public List<NewsResponse> getMainNews(@PathVariable("teamId") Long teamId) {
+        NewsResponseWrapper newsResponseWrapper = testFeignClient.getNews(teamId);
+        return newsResponseWrapper.getNews();
     }
 
-    @GetMapping("/data/emotion/{id}")
-    public ResponseEntity<String> getEmotions(@PathVariable("id") Long id) throws IOException {
-        InputStream inputStream = new ClassPathResource("TeamEmotion.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String jsonContent = new String(arr);
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonContent);
+    @GetMapping("/news/{teamId}/pos")
+    public List<NewsResponse> getPositiveNews(@PathVariable("teamId") Long teamId) {
+        NewsResponseWrapper newsResponseWrapper = testFeignClient.getPositiveNews(teamId);
+        return newsResponseWrapper.getNews();
+    }
+
+    @GetMapping("/news/{teamId}/neg")
+    public List<NewsResponse> getNegativeNews(@PathVariable("teamId") Long teamId) {
+        NewsResponseWrapper newsResponseWrapper = testFeignClient.getNegativeNews(teamId);
+        return newsResponseWrapper.getNews();
+    }
+
+    @GetMapping("/sns/{teamId}")
+    public List<SnsResponse> getSnsData(@PathVariable("teamId") Long teamId) {
+        SnsResponseWrapper snsResponseWrapper = testFeignClient.getSNS(teamId);
+        return  snsResponseWrapper.getSns();
+    }
+
+    @GetMapping("/community/{teamId}")
+    public List<CommunityResponse> getCommunity(@PathVariable("teamId") Long teamId) {
+        CommunityResponseWrapper communityResponseWrapper = testFeignClient.getCommunity(teamId);
+        return communityResponseWrapper.getCommunity();
+    }
+
+    @GetMapping("/community/{teamId}/pos")
+    public List<CommunityResponse> getPositiveCommunity(@PathVariable("teamId") Long teamId) {
+        CommunityResponseWrapper communityResponseWrapper = testFeignClient.getCommunityPositive(teamId);
+        return communityResponseWrapper.getCommunity();
+    }
+
+    @GetMapping("/community/{teamId}/neg")
+    public List<CommunityResponse> getNegativeCommunity(@PathVariable("teamId") Long teamId) {
+        CommunityResponseWrapper communityResponseWrapper = testFeignClient.getCommunityNegative(teamId);
+        return communityResponseWrapper.getCommunity();
+    }
+
+    @GetMapping("/community/{teamId}/keyword")
+    public List<KeywordResponse> getKeyword(@PathVariable("teamId") Long teamId) {
+        KeywordResponseWrapper keywordResponseWrapper = testFeignClient.getKeyword(teamId);
+        return keywordResponseWrapper.getKeywords();
+    }
+
+    @GetMapping("/community/{teamId}/emotion")
+    public OpinionResponse getEmotions(@PathVariable("teamId") Long teamId) {
+        OpinionResponseWrapper opinionResponseWrapper = testFeignClient.getOpinion(teamId);
+        return opinionResponseWrapper.getOpinion();
     }
 
     @GetMapping("/search")
@@ -78,27 +111,6 @@ public class TempController {
                 .body(jsonContent);
     }
 
-    @GetMapping("/sns/{id}")
-    public ResponseEntity<String> getSnsData(@PathVariable("id") Long id) throws IOException {
-        InputStream inputStream = new ClassPathResource("snsDataApi.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String jsonContent = new String(arr);
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonContent);
-    }
-
-    @GetMapping("/totalNews/{id}")
-    public ResponseEntity<String> getTotalNews(@PathVariable("id") Long id) throws IOException {
-        InputStream inputStream = new ClassPathResource("totalNewsApi.json").getInputStream();
-        byte[] arr = inputStream.readAllBytes();
-        String jsonContent = new String(arr);
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonContent);
-    }
 
     @GetMapping("/data/trend/{id}")
     public ResponseEntity<String> getTrend(@PathVariable("id") Long id) throws IOException {

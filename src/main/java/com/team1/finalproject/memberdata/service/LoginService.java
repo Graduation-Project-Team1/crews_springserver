@@ -53,7 +53,7 @@ public class LoginService {
             Long memberId = member.getId();
             if (member.getPreferences() == null) {
                 log.info("Google member " + memberId + " does not have preferences.");
-                return new LogInResponse(false, "preference");
+                return new LogInResponse(false, "preference", memberId);
             }
             else {
                 log.info("Google member " + memberId + " has preferences.");
@@ -62,11 +62,11 @@ public class LoginService {
             }
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
-            return new LogInResponse(false, "email");
+            return new LogInResponse(false, "email", null);
         } else {
             Member member = new Member(dto);
             memberRepository.save(member);
-            return new LogInResponse(false, "preference");
+            return new LogInResponse(false, "preference", member.getId());
         }
     }
 

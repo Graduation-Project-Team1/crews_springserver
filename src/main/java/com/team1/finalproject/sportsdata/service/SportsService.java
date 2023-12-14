@@ -31,7 +31,7 @@ public interface SportsService {
     List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId);
     List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos);
 
-    String getTeamRecord();
+    TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId);
 
     ManagerInfoResponse getManagerInfo(Long managerId);
 

@@ -121,7 +121,7 @@ public class KaKaoService {
     public LogInResponse signUpAsKakao(SignUpRequest dto) {
         String kakaoId = dto.getKakaoId();
         if (kakaoId == null) {
-            return new LogInResponse(false, "Not Found");
+            return new LogInResponse(false, "Not Found", null);
         }
         String email = dto.getEmail();
         String nickname = dto.getNickName();
@@ -131,7 +131,7 @@ public class KaKaoService {
             Long memberId = member.getId();
             if (member.getPreferences() == null) {
                 log.info("Kakao member " + memberId + " does not have preferences.");
-                return new LogInResponse(false, "preference");
+                return new LogInResponse(false, "preference", memberId);
             } else {
                 log.info("Kakao member " + memberId + " has preferences.");
                 String jwtToken = jwtTokenUtils.generateJwtToken(new UserDetailsImpl(member));
@@ -140,11 +140,11 @@ public class KaKaoService {
 
         } else if (memberRepository.existsByEmail(email)) {
             log.warn("Email is already used.");
-            return new LogInResponse(false, "email");
+            return new LogInResponse(false, "email", null);
         } else {
             Member member = new Member(email, nickname, kakaoId, dto.getSocialCode());
             memberRepository.save(member);
-            return new LogInResponse(false, "preference");
+            return new LogInResponse(false, "preference", member.getId());
         }
     }
 

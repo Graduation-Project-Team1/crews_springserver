@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 public class SoccerTeam {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne
     @JoinColumn(name="team_id")
     private Team team;
+    @Column
+    private String recentForm;
     @Column
     private Long matches;
     @Column
@@ -38,9 +40,10 @@ public class SoccerTeam {
     @Column
     private Long fouls;
 
-    public SoccerTeam(Team team, Long matches, Long wins, Long losses, Long draws, Long points,
-                      Long goalsScored, Long goalsConceded, Long assists, Long fouls) {
+    public SoccerTeam(Team team, String recentForm, Long matches, Long wins, Long losses, Long draws,
+                      Long points, Long goalsScored, Long goalsConceded, Long assists, Long fouls) {
         this.team = team;
+        this.recentForm = recentForm;
         this.matches = matches;
         this.wins = wins;
         this.losses = losses;

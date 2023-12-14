@@ -40,6 +40,7 @@ public class SeasonBuildService {
     private final GoalkeeperRepository goalkeeperRepository;
     private final ManagerRepository managerRepository;
     private final DataParseBuilder dataParseBuilder;
+    private final SoccerTeamRepository soccerTeamRepository;
     String code = LocalDate.now().getYear() + "-" + LocalDate.now().getMonth().toString();
 
     public String setSeason() throws ParseException {
@@ -283,13 +284,79 @@ public class SeasonBuildService {
 
             String name = (String) jsonObject1.get("name");
             Timestamp dateOfBirth = null;
-            if(jsonObject1.get("dateOfBirthTimestamp")!=null)
+            if (jsonObject1.get("dateOfBirthTimestamp") != null)
                 dateOfBirth = dataParseBuilder.toTimeStamp((Long) jsonObject1.get("dateOfBirthTimestamp"));
             String nationality = (String) jsonObject1.get("nationality");
             Manager manager = new Manager(managerId, name, dateOfBirth, nationality, team);
 
             managerRepository.save(manager);
             System.out.println("Team: " + team.getName() + " -> Manager: " + manager.getName());
+        }
+    }
+
+    public void setTeamRecordForSeason() throws ParseException {
+        List<Season> seasonList = seasonRepository.findAll();
+        for (Season season : seasonList) {
+            Long leagueId = season.getCategory().getLeagueId();
+            Long seasonId = season.getId();
+            String url = "https://sofascores.p.rapidapi.com/v1/seasons/standings" +
+                    "?seasons_id=" + seasonId + "&standing_type=total&unique_tournament_id=" + leagueId;
+            JSONArray response = dataParseBuilder.getResponse(url);
+            /*
+                response.get : 0과 1의 경우를 모두 수행하도록 수정 필요
+            * */
+            JSONObject jsonObject = (JSONObject) response.get(1);
+            JSONArray rows = (JSONArray) jsonObject.get("rows");
+            for (Object row : rows) {
+                JSONObject rowObject = (JSONObject) row;
+                Long teamId = (Long) ((JSONObject) rowObject.get("team")).get("id");
+                Long matches = (Long) rowObject.get("matches");
+                Long wins = (Long) rowObject.get("wins");
+                Long losses = (Long) rowObject.get("losses");
+                Long draws = (Long) rowObject.get("draws");
+                Long points = (Long) rowObject.get("points");
+                String url1 = "https://sofascores.p.rapidapi.com/v1/teams/statistics/result?" +
+                        "season_id=" + seasonId + "&unique_tournament_id=" + leagueId + "&team_id=" + teamId;
+                JSONObject object = dataParseBuilder.getJSONObject(url1);
+                Long goalsScored = (Long) object.get("goalsScored");
+                Long goalsConceded = (Long) object.get("goalsConceded");
+                Long assists = (Long) object.get("assists");
+                Long fouls = (Long) object.get("fouls");
+                StringBuilder recentForm = new StringBuilder();
+                String url2 = "https://sofascores.p.rapidapi.com/v1/teams/recent-form?team_id=" + teamId;
+                JSONObject jsonObject1 = dataParseBuilder.getJSONObject(url2);
+                JSONArray events = (JSONArray) jsonObject1.get("events");
+                for (Object o : events) {
+                    JSONObject object1 = (JSONObject) o;
+                    Long winnerCode = (Long) object1.get("winnerCode");
+                    // 홈팀 승리일 때
+                    if (winnerCode == 1) {
+                        Long homeTeamId = (Long) ((JSONObject) object1.get("homeTeam")).get("id");
+                        // 대상 팀이 홈팀이면
+                        if (homeTeamId.equals(teamId))
+                            recentForm.append("승");
+                        else
+                            recentForm.append("패");
+                    }
+                    // 어웨이팀 승리일 때
+                    else if (winnerCode == 2) {
+                        Long awayTeamId = (Long) ((JSONObject) object1.get("awayTeam")).get("id");
+                        // 대상 팀이 어웨이팀이면
+                        if (awayTeamId.equals(teamId))
+                            recentForm.append("승");
+                        else
+                            recentForm.append("패");
+                    }
+                    // 무승부
+                    else if (winnerCode == 3) {
+                        recentForm.append("무");
+                    }
+                }
+                Team team = teamRepository.findById(teamId).orElseThrow();
+                SoccerTeam soccerTeam = new SoccerTeam(team, recentForm.toString(), matches, wins, losses, draws, points, goalsScored, goalsConceded, assists, fouls);
+                if(!soccerTeamRepository.existsByTeam(team))
+                    soccerTeamRepository.save(soccerTeam);
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ public class PodcastInfoResponse {
         this.text = podcast.getText();
         this.madeAt = podcast.getMadeAt();
         this.duration = podcast.getDuration();
-        this.path = podcast.getPath();
+        this.path = "/pod/"+podcast.getPath();
         this.teamName = podcast.getTeam().getName();
     }
 }

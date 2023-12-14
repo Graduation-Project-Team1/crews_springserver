@@ -67,7 +67,7 @@ class SportsServiceImplTest {
     Player player;
     Manager manager;
 
-    /*@BeforeEach
+    @BeforeEach
     public void beforeEach() {
         category = categoryRepository.save(new Category(1L, "Football",
                 1L, "England", 1L, 1L, "EPL"));
@@ -164,37 +164,10 @@ class SportsServiceImplTest {
         for (Team team : teams) {
             System.out.println("team.getName() = " + team.getName());
         }
-    }*/
+    }
 
     @Test
     void seasonRecord() throws ParseException {
-        String url = "https://sofascores.p.rapidapi.com/v1/seasons/standings" +
-                "?seasons_id="+48379+"&standing_type=total&unique_tournament_id="+410;
-        JSONArray response = dataParseBuilder.getResponse(url);
-        JSONObject jsonObject = (JSONObject) response.get(0);
-        JSONArray rows = (JSONArray) jsonObject.get("rows");
-        for (Object row : rows) {
-            JSONObject rowObject = (JSONObject) row;
-            Long teamId = (Long) ((JSONObject) rowObject.get("team")).get("id");
-            Long matches = (Long) rowObject.get("matches");
-            Long wins = (Long) rowObject.get("wins");
-            Long losses = (Long) rowObject.get("losses");
-            Long draws = (Long) rowObject.get("draws");
-            Long points = (Long) rowObject.get("points");
 
-            String url1 ="https://sofascores.p.rapidapi.com/v1/teams/statistics/result?" +
-                    "season_id="+48379+"&unique_tournament_id="+410+"&team_id="+teamId;
-            JSONObject object = dataParseBuilder.getJSONObject(url1);
-            Long goalsScored = (Long) object.get("goalsScored");
-            Long goalsConceded = (Long) object.get("goalsConceded");
-            Long assists = (Long) object.get("assists");
-            Long fouls = (Long) object.get("fouls");
-
-            Team team1 = teamRepository.findById(teamId).orElseThrow();
-            SoccerTeam soccerTeam = new SoccerTeam(team1, matches, wins, losses, draws, points, goalsScored, goalsConceded, assists, fouls);
-            soccerTeamRepository.save(soccerTeam);
-        }
-        SoccerTeam soccerTeam = soccerTeamRepository.findById(6908L).orElseThrow();
-        System.out.println("soccerTeam = " + soccerTeam.getGoalDiff());
     }
 }

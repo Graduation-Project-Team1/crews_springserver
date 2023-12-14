@@ -25,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,6 +45,7 @@ public class SportsServiceImpl implements SportsService {
     private final GameRepository gameRepository;
     private final TestFeignClient testFeignClient;
     private final PodcastRepository podcastRepository;
+    private final SoccerTeamRepository soccerTeamRepository;
 
     @Override
     public List<String> getSportsList() {
@@ -220,8 +219,10 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public String getTeamRecord() {
-        return null;
+    public TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        SoccerTeam soccerTeam = soccerTeamRepository.findByTeam(team).orElseThrow();
+        return new TeamSeasonRecordResponse(soccerTeam);
     }
 
     @Override

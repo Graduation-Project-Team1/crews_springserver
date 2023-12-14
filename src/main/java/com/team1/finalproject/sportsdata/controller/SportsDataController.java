@@ -73,4 +73,10 @@ public class SportsDataController {
         else
             return sportsService.getPlayerRecordByTeam(teamId);
     }
+
+    @GetMapping("/team/{teamId}/season")
+    public TeamSeasonRecordResponse getTeamSeasonRecord(@PathVariable("teamId") Long teamId) {
+        return sportsService.getTeamSeasonRecord(teamId);
+    }
+
 }

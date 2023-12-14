@@ -15,17 +15,7 @@ public class MemberController {
     @PostMapping("/member")
     public LogInResponse signUp(@RequestBody SignUpRequest dto) {
         log.info("Sign up request occurred");
-        String result = memberService.signUp(dto);
-        if (result.contains("duplicate")) {
-            log.warn("Sign up failed: Given email is already used.");
-            return new LogInResponse(false, "Email already used");
-        }
-        if (result.contains("password")) {
-            log.warn("Sign up failed: Given passwords doesn't matches each other.");
-            return new LogInResponse(false, "Recheck your password");
-        }
-        log.info("Sign up successful");
-        return new LogInResponse(true, "Sign up successful");
+        return memberService.signUp(dto);
     }
 
     @GetMapping("/member/{memberId}")
@@ -68,6 +58,7 @@ public class MemberController {
 
         return memberService.chkMemberPreference(id);
     }
+
     @PutMapping("/member/{id}/preferences")
     public LogInResponse setPreferences(@PathVariable Long id, @RequestBody SetPreferencesRequest dto) {
         log.info("User preferences setting request occurred: target=" + id);
@@ -78,6 +69,7 @@ public class MemberController {
             log.info("Request Failed");
         return logInResponse;
     }
+
     @PatchMapping("/member/{id}/preferences")
     public PreferencesResponse updatePreferences(@PathVariable Long id, @RequestBody UpdatePreferencesRequest dto) {
         log.info("User preferences update request occurred: target=" + id);

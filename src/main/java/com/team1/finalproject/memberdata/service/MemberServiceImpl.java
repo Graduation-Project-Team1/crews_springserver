@@ -23,27 +23,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PreferencesRepository preferencesRepository;
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
+
     @Override
-    public String signUp(SignUpRequest dto) {
+    public LogInResponse signUp(SignUpRequest dto) {
         String email = dto.getEmail();
         if (memberRepository.existsByEmail(email))
-            return "duplicate email";
-        if(!dto.getPassword().equals(dto.getChkPassword())){
-            System.out.println(dto.getPassword()+", "+ dto.getChkPassword());
-            return "password doesn't matches";}
+            return new LogInResponse(false, "Email already used", null);
+        if (!dto.getPassword().equals(dto.getChkPassword())) {
+            System.out.println(dto.getPassword() + ", " + dto.getChkPassword());
+            return new LogInResponse(false, "Recheck your password", null);
+        }
         // 비밀번호 bcrypt 암호화
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         Member member = new Member(email, password);
         memberRepository.save(member);
 
-        return "complete";
+        return new LogInResponse(true, "Sign up successful", member.getId());
     }
 
     @Override
@@ -90,8 +92,8 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
-        if(member.getPreferences()!=null)
-            return new LogInResponse(false, "invalid request");
+        if (member.getPreferences() != null)
+            return new LogInResponse(false, "invalid request", null);
         Preferences preferences = new Preferences(member, team, player);
         member.setPreferences(preferences);
         member.setNickname(dto.getNickname());
@@ -136,8 +138,7 @@ public class MemberServiceImpl implements MemberService{
             preferencesRepository.delete(preferences);
             memberRepository.delete(member);
             return new MemberDeletionResponse("Success");
-        }
-        else {
+        } else {
             return new MemberDeletionResponse("Failed");
         }
     }
@@ -148,7 +149,7 @@ public class MemberServiceImpl implements MemberService{
                 () -> new GlobalException(ErrorCode.INVALID_USER)
         );
         Preferences preferences = member.getPreferences();
-        if(preferences==null){
+        if (preferences == null) {
             throw new GlobalException(ErrorCode.INVALID_USER);
         }
         return new GetPreferencesResponse(preferences);

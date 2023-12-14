@@ -15,8 +15,9 @@ public class LogInResponse {
     private String token;
 
     @Builder
-    public LogInResponse(Boolean success, String message) {
+    public LogInResponse(Boolean success, String message, Long memberId) {
         this.success = success;
         this.message = message;
+        this.memberId = memberId;
     }
 }

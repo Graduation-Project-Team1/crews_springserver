@@ -47,7 +47,7 @@ public class PreferenceTest {
         member = memberRepository.save(new Member("asdf", "1234"));
         team = teamRepository.save(new Team(1L,"name", code));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
-                20, 170L, 10L, "Korea", "FW", team, code));
+                20, 170L, 10L, "Korea", "FW", team, code, null));
         dto = new SetPreferencesRequest("sd", 1L, 2L);
         memberService.setMemberPreferences(dto, member.getId());
     }
@@ -72,7 +72,7 @@ public class PreferenceTest {
         String newNickname = "new nickname";
         Team newTeam = teamRepository.save(new Team(2L,"name2", code));
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),
-                22, 175L, 10L, "Korea", "FW", team, code));
+                22, 175L, 10L, "Korea", "FW", team, code, null));
         UpdatePreferencesRequest dto = new UpdatePreferencesRequest(newNickname, newTeam.getId(), newPlayer.getId());
         memberService.updateMemberPreferences(dto,member.getId());
         assertThat(member.getPreferences().getTeam()).isEqualTo(newTeam);

@@ -89,7 +89,7 @@ public class DataParseBuilder {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
             byte[] body = response.getBody();
-            String filepath = "/media/players/"+id+".png";
+            String filepath = "src/main/resources/players/"+id+".png";
             try (FileOutputStream fos = new FileOutputStream(filepath)){
                 fos.write(body);
             }

@@ -37,10 +37,12 @@ public class Player {
     private Team team;
     @Column
     private String code;
+    @Column
+    private String photo;
 
     //@Builder
     public Player(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                  String nation, String position, Team team, String code) {
+                  String nation, String position, Team team, String code, String photo) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -51,10 +53,15 @@ public class Player {
         this.team = team;
         this.age = age;
         this.code = code;
+        this.photo = photo;
     }
 
     public boolean containsNull() {
         return dateOfBirth == null || height == null || shirtNumber == null || nation == null
                 || position == null || team == null || age == null;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

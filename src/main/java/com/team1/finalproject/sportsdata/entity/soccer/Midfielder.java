@@ -32,12 +32,12 @@ public class Midfielder extends SoccerPlayer {
     private Long touches;
 
     public Midfielder(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                      String nation, String position, Team team, String code,
+                      String nation, String position, Team team, String code, String photo,
                       Long yellowCards, Long redCards, Long appearances,
                       Long goals, Long assists, Long totalPasses, Long accuratePasses,
                       Long accurateCrosses, Long interceptions, Long touches) {
         // 부모 클래스의 생성자 호출
-        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code, yellowCards, redCards, appearances);
+        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code, photo, yellowCards, redCards, appearances);
         this.goals = goals;
         this.assists = assists;
         this.totalPasses = totalPasses;

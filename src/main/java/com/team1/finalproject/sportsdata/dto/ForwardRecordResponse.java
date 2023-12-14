@@ -23,6 +23,7 @@ public class ForwardRecordResponse extends SoccerPlayerRecordResponse{
     private String position;
     private String nation;
     private String teamName;
+    private String photo;
     private Long yellowCards;
     private Long redCards;
     private Long appearances;
@@ -44,6 +45,7 @@ public class ForwardRecordResponse extends SoccerPlayerRecordResponse{
         this.position = forward.getPosition();
         this.nation = forward.getNation();
         this.teamName = forward.getTeam().getName();
+        this.photo = forward.getPhoto();
         this.yellowCards = forward.getYellowCards();
         this.redCards = forward.getRedCards();
         this.appearances = forward.getAppearances();

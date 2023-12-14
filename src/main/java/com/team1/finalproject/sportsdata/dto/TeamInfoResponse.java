@@ -21,6 +21,8 @@ public class TeamInfoResponse {
 
     private String managerName;
 
+    private String logo;
+
     /** 팀 정보 반환
      *
      * @param team 팀 엔티티
@@ -32,10 +34,12 @@ public class TeamInfoResponse {
         this.teamName = team.getName();
         this.managerId = manager.getId();
         this.managerName = manager.getName();
+        this.logo = team.getLogo();
     }
 
     public TeamInfoResponse(Team team){
         this.teamId = team.getId();
         this.teamName = team.getName();
+        this.logo = team.getLogo();
     }
 }

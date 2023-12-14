@@ -172,4 +172,11 @@ class SportsServiceImplTest {
         String s = dataParseBuilder.getImage(url, 12994L);
         System.out.println("s = " + s);
     }
+
+    @Test
+    void init() {
+        Team team1 = teamRepository.findById(6908L).orElseThrow();
+        team1.setLogo("asdf");
+        teamRepository.save(team1);
+    }
 }

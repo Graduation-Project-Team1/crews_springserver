@@ -24,6 +24,7 @@ public class GoalkeeperRecordResponse extends SoccerPlayerRecordResponse {
     private String position;
     private String nation;
     private String teamName;
+    private String photo;
     private Long yellowCards;
     private Long redCards;
     private Long appearances;
@@ -41,6 +42,7 @@ public class GoalkeeperRecordResponse extends SoccerPlayerRecordResponse {
         this.position = goalkeeper.getPosition();
         this.nation = goalkeeper.getNation();
         this.teamName = goalkeeper.getTeam().getName();
+        this.photo = goalkeeper.getPhoto();
         this.yellowCards = goalkeeper.getYellowCards();
         this.redCards = goalkeeper.getRedCards();
         this.appearances = goalkeeper.getAppearances();

@@ -23,6 +23,7 @@ public class SoccerPlayerRecordResponse extends PlayerInfoResponse{
     private Integer shirtNumber;
     private String position;
     private String nation;
+    private String photo;
     private Long yellowCards;
     private Long redCards;
     private Long appearances;
@@ -36,6 +37,7 @@ public class SoccerPlayerRecordResponse extends PlayerInfoResponse{
         this.shirtNumber = soccerPlayer.getShirtNumber();
         this.position = soccerPlayer.getPosition();
         this.nation = soccerPlayer.getNation();
+        this.photo = soccerPlayer.getPhoto();
         this.yellowCards = soccerPlayer.getYellowCards();
         this.redCards = soccerPlayer.getRedCards();
         this.appearances = soccerPlayer.getAppearances();

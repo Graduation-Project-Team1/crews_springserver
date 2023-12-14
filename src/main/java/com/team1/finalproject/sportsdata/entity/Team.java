@@ -20,6 +20,8 @@ public class Team {
     private String name;
     @Column
     private String code;
+    @Column
+    private String logo;
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
 
@@ -34,5 +36,9 @@ public class Team {
         this.name = name;
         this.code = code;
         this.seasonTeams = seasonTeams;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

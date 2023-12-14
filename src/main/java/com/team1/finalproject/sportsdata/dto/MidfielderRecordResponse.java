@@ -24,6 +24,7 @@ public class MidfielderRecordResponse extends SoccerPlayerRecordResponse{
     private String position;
     private String nation;
     private String teamName;
+    private String photo;
     private Long yellowCards;
     private Long redCards;
     private Long appearances;
@@ -45,6 +46,7 @@ public class MidfielderRecordResponse extends SoccerPlayerRecordResponse{
         this.position = midfielder.getPosition();
         this.nation = midfielder.getNation();
         this.teamName = midfielder.getTeam().getName();
+        this.photo = midfielder.getPhoto();
         this.yellowCards = midfielder.getYellowCards();
         this.redCards = midfielder.getRedCards();
         this.appearances = midfielder.getAppearances();

@@ -108,7 +108,7 @@ public class SeasonBuildService {
                         else
                             playerName = (String) temp.get("name");
                         Player player = new Player((Long) temp.get("id"), playerName, dateOfBirth, dataParseBuilder.calculateAge(dateOfBirth),
-                                (Long) temp.get("height"), (Long) temp.get("shirtNumber"), nation, (String) temp.get("position"), team, code);
+                                (Long) temp.get("height"), (Long) temp.get("shirtNumber"), nation, (String) temp.get("position"), team, code, null);
                         // check if player's name exists
                         if (!playerRepository.existsByName(code, playerName) && !player.containsNull())
                             playerRepository.save(player);
@@ -373,5 +373,20 @@ public class SeasonBuildService {
                 }
             }
         }
+    }
+
+    public void initializePhoto() {
+        List<Team> teamList = teamRepository.findAll();
+        for (Team team : teamList) {
+            Long teamId = team.getId();
+            team.setLogo("https://media.crews.jongmin.xyz/"+ teamId +".png");
+            List<Player> playerList = playerRepository.findAllByTeamId(teamId);
+            for (Player player : playerList) {
+                Long playerId = player.getId();
+                player.setPhoto("https://media.crews.jongmin.xyz/players/"+playerId+".png");
+            }
+            playerRepository.saveAll(playerList);
+        }
+        teamRepository.saveAll(teamList);
     }
 }

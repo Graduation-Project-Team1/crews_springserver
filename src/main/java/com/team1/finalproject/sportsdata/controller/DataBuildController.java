@@ -61,4 +61,10 @@ public class DataBuildController {
     public void buildPlayerPhoto() {
         seasonBuildService.setPlayerPhoto();
     }
+
+    @PostMapping("/photo/init")
+    @ResponseBody
+    public void initPhoto() {
+        seasonBuildService.initializePhoto();
+    }
 }

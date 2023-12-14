@@ -27,9 +27,9 @@ public class SoccerPlayer extends Player {
 
     //@Builder(builderMethodName = "soccerPlayerBuilder")
     public SoccerPlayer(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                        String nation, String position, Team team, String code,
+                        String nation, String position, Team team, String code, String photo,
                         Long yellowCards, Long redCards, Long appearances) {
-        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code);
+        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code, photo);
         this.yellowCards = yellowCards;
         this.redCards = redCards;
         this.appearances = appearances;

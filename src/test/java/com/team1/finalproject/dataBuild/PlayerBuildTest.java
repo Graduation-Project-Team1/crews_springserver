@@ -54,7 +54,7 @@ public class PlayerBuildTest {
     @Test
     public void buildSoccerPlayer() {
         player = new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
-                20, 170L, 10L, "Korea", "FW", team, code);
+                20, 170L, 10L, "Korea", "FW", team, code, null);
         SoccerPlayer soccerPlayer = SoccerPlayer.builder()
                 .name(player.getName())
                 .id(player.getId())

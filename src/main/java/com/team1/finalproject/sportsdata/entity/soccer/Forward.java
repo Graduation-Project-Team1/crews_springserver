@@ -32,12 +32,12 @@ public class Forward extends SoccerPlayer {
     private Long successfulDribbles;
 
     public Forward(Long id, String name, Timestamp dateOfBirth, int age, Long height, Long shirtNumber,
-                   String nation, String position, Team team, String code,
+                   String nation, String position, Team team, String code, String photo,
                    Long yellowCards, Long redCards, Long appearances,
                    Long goals, Long assists, Long totalShots, Long shotsOnTarget,
                    Long penaltyGoals, Long touches, Long successfulDribbles) {
         // 부모 클래스의 생성자 호출
-        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code, yellowCards, redCards, appearances);
+        super(id, name, dateOfBirth, age, height, shirtNumber, nation, position, team, code, photo, yellowCards, redCards, appearances);
         this.goals = goals;
         this.assists = assists;
         this.totalShots = totalShots;

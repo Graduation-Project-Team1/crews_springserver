@@ -21,6 +21,7 @@ public class PlayerInfoResponse {
     private String position;
     private String nation;
     private String teamName;
+    private String photo;
 
 
     public PlayerInfoResponse(Player player){
@@ -33,6 +34,7 @@ public class PlayerInfoResponse {
         this.position = player.getPosition();
         this.nation = player.getNation();
         this.teamName = player.getTeam().getName();
+        this.photo = player.getPhoto();
     }
 
 }

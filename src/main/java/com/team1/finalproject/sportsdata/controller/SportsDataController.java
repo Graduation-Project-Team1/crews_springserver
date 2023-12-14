@@ -78,5 +78,4 @@ public class SportsDataController {
     public TeamSeasonRecordResponse getTeamSeasonRecord(@PathVariable("teamId") Long teamId) {
         return sportsService.getTeamSeasonRecord(teamId);
     }
-
 }

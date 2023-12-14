@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -74,6 +76,29 @@ public class DataParseBuilder {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
         return (JSONObject) jsonObject.get("data");
+    }
+
+    public String getImage(String url, Long id) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", SofaSport_API_Key);
+        headers.set("X-RapidAPI-Host", "sofasport.p.rapidapi.com");
+        String requestBody = "";
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<byte[]> response;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+            byte[] body = response.getBody();
+            String filepath = "/media/players/"+id+".png";
+            try (FileOutputStream fos = new FileOutputStream(filepath)){
+                fos.write(body);
+            }
+        } catch (HttpClientErrorException.NotFound | IOException ex) {
+            System.out.println("API 요청 중에 예외가 발생했습니다.");
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        return "successful";
     }
     public Timestamp toTimeStamp(long num){
         return new Timestamp(num * 1000);

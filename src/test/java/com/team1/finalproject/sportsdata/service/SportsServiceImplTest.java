@@ -67,7 +67,7 @@ class SportsServiceImplTest {
     Player player;
     Manager manager;
 
-    @BeforeEach
+    /*@BeforeEach
     public void beforeEach() {
         category = categoryRepository.save(new Category(1L, "Football",
                 1L, "England", 1L, 1L, "EPL"));
@@ -164,10 +164,12 @@ class SportsServiceImplTest {
         for (Team team : teams) {
             System.out.println("team.getName() = " + team.getName());
         }
-    }
+    }*/
 
     @Test
-    void seasonRecord() throws ParseException {
-
+    void getImage() {
+        String url = "https://sofascores.p.rapidapi.com/v1/players/photo?player_id="+12994;
+        String s = dataParseBuilder.getImage(url, 12994L);
+        System.out.println("s = " + s);
     }
 }

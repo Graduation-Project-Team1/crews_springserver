@@ -55,4 +55,10 @@ public class DataBuildController {
     public void buildTeamRecordSeason() throws ParseException {
         seasonBuildService.setTeamRecordForSeason();
     }
+
+    @PostMapping("/player/photo")
+    @ResponseBody
+    public void buildPlayerPhoto() {
+        seasonBuildService.setPlayerPhoto();
+    }
 }

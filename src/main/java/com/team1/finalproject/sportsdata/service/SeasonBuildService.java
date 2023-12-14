@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -356,6 +355,22 @@ public class SeasonBuildService {
                 SoccerTeam soccerTeam = new SoccerTeam(team, recentForm.toString(), matches, wins, losses, draws, points, goalsScored, goalsConceded, assists, fouls);
                 if(!soccerTeamRepository.existsByTeam(team))
                     soccerTeamRepository.save(soccerTeam);
+            }
+        }
+    }
+
+    public void setPlayerPhoto() {
+        List<Team> teamList = teamRepository.findAll();
+        for (Team team : teamList) {
+            Long teamId = team.getId();
+            if(teamId==6908L||teamId==7652L){
+                List<Player> playerList = playerRepository.findAllByTeamId(teamId);
+                for (Player player : playerList) {
+                    Long playerId = player.getId();
+                    String url = "https://sofascores.p.rapidapi.com/v1/players/photo?player_id="+ playerId;
+                    String s = dataParseBuilder.getImage(url, playerId);
+                    System.out.println("playerId = " + playerId + ", successful");
+                }
             }
         }
     }

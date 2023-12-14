@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -152,23 +154,33 @@ public class SportsServiceImpl implements SportsService {
                 .getCategory()
                 .getSportsId();
         String position = player.getPosition();
+        System.out.println("position = " + position);
+        System.out.println("playerId = " + playerId);
         // in case sports = football
         if (sportsId == 1L) {
             switch (position) {
                 case "F" -> {
-                    Forward forward = forwardRepository.findById(playerId).orElseThrow();
+                    Forward forward = forwardRepository.findById(playerId).orElse(null);
+                    if(forward==null)
+                        return null;
                     return new ForwardRecordResponse(forward);
                 }
                 case "M" -> {
-                    Midfielder midfielder = midfielderRepository.findById(playerId).orElseThrow();
+                    Midfielder midfielder = midfielderRepository.findById(playerId).orElse(null);
+                    if(midfielder==null)
+                        return null;
                     return new MidfielderRecordResponse(midfielder);
                 }
                 case "D" -> {
-                    Defender defender = defenderRepository.findById(playerId).orElseThrow();
+                    Defender defender = defenderRepository.findById(playerId).orElse(null);
+                    if(defender==null)
+                        return null;
                     return new DefenderRecordResponse(defender);
                 }
                 case "G" -> {
-                    Goalkeeper goalkeeper = goalkeeperRepository.findById(playerId).orElseThrow();
+                    Goalkeeper goalkeeper = goalkeeperRepository.findById(playerId).orElse(null);
+                    if(goalkeeper==null)
+                        return null;
                     return new GoalkeeperRecordResponse(goalkeeper);
                 }
                 default -> {
@@ -187,7 +199,22 @@ public class SportsServiceImpl implements SportsService {
         for (PlayerInfoResponse playerInfoResponse : playerList) {
             Long id = playerInfoResponse.getId();
             PlayerInfoResponse playerRecord = getPlayerRecord(id);
-            playerRecordList.add(playerRecord);
+            if(playerRecord!=null)
+                playerRecordList.add(playerRecord);
+        }
+        return playerRecordList;
+    }
+
+    @Override
+    public List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos) {
+        List<PlayerInfoResponse> playerRecordList = new ArrayList<>();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        List<Player> playerList = playerRepository.findByTeamAndPosition(team, pos);
+        for (Player player : playerList) {
+            Long id = player.getId();
+            PlayerInfoResponse playerRecord = getPlayerRecord(id);
+            if(playerRecord!=null)
+                playerRecordList.add(playerRecord);
         }
         return playerRecordList;
     }

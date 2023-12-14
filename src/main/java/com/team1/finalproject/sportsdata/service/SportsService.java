@@ -28,8 +28,8 @@ public interface SportsService {
     List<GameInfoResponse> getTeamSchedule(Long teamId);
 
     PlayerInfoResponse getPlayerRecord(Long playerId);
-
     List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId);
+    List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos);
 
     String getTeamRecord();
 

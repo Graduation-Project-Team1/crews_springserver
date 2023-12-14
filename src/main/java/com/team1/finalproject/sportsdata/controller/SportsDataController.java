@@ -60,8 +60,17 @@ public class SportsDataController {
         return sportsService.getManagerInfo(managerId);
     }
 
-    @GetMapping("/record")
+    @GetMapping("/player/record")
     public PlayerInfoResponse getPlayerRecord(@RequestParam Long playerId) {
         return sportsService.getPlayerRecord(playerId);
+    }
+
+    @GetMapping("/player/record/list")
+    public List<PlayerInfoResponse> getPlayerRecordByTeam(@RequestParam Long teamId,
+                                                          @RequestParam(required = false) String pos) {
+        if(pos!=null)
+            return sportsService.getPlayerRecordByTeamAndPos(teamId, pos);
+        else
+            return sportsService.getPlayerRecordByTeam(teamId);
     }
 }

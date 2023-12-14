@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,16 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private List<SeasonTeam> seasonTeams = new ArrayList<>();
 
-    @Builder
-    public Team(Long id, String name, String code){
+    public Team(Long id, String name, String code) {
         this.id = id;
         this.name = name;
         this.code = code;
+    }
+
+    public Team(Long id, String name, String code, List<SeasonTeam> seasonTeams) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.seasonTeams = seasonTeams;
     }
 }

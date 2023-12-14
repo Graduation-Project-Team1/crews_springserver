@@ -1,6 +1,7 @@
 package com.team1.finalproject.sportsdata.repository;
 
 import com.team1.finalproject.sportsdata.entity.Player;
+import com.team1.finalproject.sportsdata.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findByTeamId(@Param("code")String code, @Param("team") Team team);*/
 
     List<Player> searchTop5ByNameContainingIgnoreCase(String query);
+
+    List<Player> findByTeamAndPosition(Team team, String pos);
 }

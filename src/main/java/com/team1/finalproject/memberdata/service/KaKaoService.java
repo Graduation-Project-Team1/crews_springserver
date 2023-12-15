@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,7 +128,9 @@ public class KaKaoService {
         String nickname = dto.getNickName();
         if (memberRepository.existsByKakaoId(kakaoId)) {
             log.warn("Already signed up with kakao.");
-            Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow();
+            Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
+                    () -> new UsernameNotFoundException("존재하지 않는 사용자 입니다.")
+            );
             Long memberId = member.getId();
             if (member.getPreferences() == null) {
                 log.info("Kakao member " + memberId + " does not have preferences.");

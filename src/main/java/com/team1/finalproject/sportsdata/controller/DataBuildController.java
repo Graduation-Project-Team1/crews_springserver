@@ -21,7 +21,7 @@ public class DataBuildController {
     @PostMapping("/category")
     @ResponseBody
     public String buildCategoryData() throws ParseException {
-        categoryBuildService.setCategory();
+        log.info("info log = {}", categoryBuildService.setCategory());
         return "Category Build Successful";
     }
 

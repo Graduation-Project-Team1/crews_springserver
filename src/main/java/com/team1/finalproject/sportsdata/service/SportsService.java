@@ -13,27 +13,27 @@ public interface SportsService {
 
     List<LeagueInfoResponse> getLeagueList(String sportsName);
 
-    LeagueInfoResponse getLeagueInfo(Long leagueId);
+    LeagueInfoResponse getLeagueInfo(Long leagueId) throws ClassNotFoundException;
 
-    List<TeamInfoResponse> getTeamList(Long leagueId);
+    List<TeamInfoResponse> getTeamList(Long leagueId) throws ClassNotFoundException;
 
-    TeamInfoResponse getTeamInfo(Long teamId);
+    TeamInfoResponse getTeamInfo(Long teamId) throws ClassNotFoundException;
 
     List<PlayerInfoResponse> getPlayerList(Long teamId);
 
-    PlayerInfoResponse getPlayerInfo(Long playerId);
+    PlayerInfoResponse getPlayerInfo(Long playerId) throws ClassNotFoundException;
 
-    ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto);
+    ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto) throws ClassNotFoundException;
 
-    List<GameInfoResponse> getTeamSchedule(Long teamId);
+    List<GameInfoResponse> getTeamSchedule(Long teamId) throws ClassNotFoundException;
 
-    PlayerInfoResponse getPlayerRecord(Long playerId);
-    List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId);
-    List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos);
+    PlayerInfoResponse getPlayerRecord(Long playerId) throws ClassNotFoundException;
+    List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId) throws ClassNotFoundException;
+    List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos) throws ClassNotFoundException;
 
-    TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId);
+    TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId) throws ClassNotFoundException;
 
-    ManagerInfoResponse getManagerInfo(Long managerId);
+    ManagerInfoResponse getManagerInfo(Long managerId) throws ClassNotFoundException;
 
     SearchResponse getSearchResult(String query);
 }

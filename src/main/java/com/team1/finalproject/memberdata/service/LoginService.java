@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -49,7 +50,9 @@ public class LoginService {
 
         if(memberRepository.existsByGoogleId(id)){
             log.warn("Already signed up with google.");
-            Member member = memberRepository.findByGoogleId(id).orElseThrow();
+            Member member = memberRepository.findByGoogleId(id).orElseThrow(
+                    () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+            );
             Long memberId = member.getId();
             if (member.getPreferences() == null) {
                 log.info("Google member " + memberId + " does not have preferences.");

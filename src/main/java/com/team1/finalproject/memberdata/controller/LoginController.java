@@ -13,7 +13,6 @@ import java.io.IOException;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping(produces = "application/json")
 public class LoginController {
 
 

@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
         String email = dto.getEmail();
         String password = dto.getPassword();
         Member member = memberRepository.findByEmailAndPassword(email, password).orElseThrow(
-                () -> new UsernameNotFoundException("유효하지 않은 요청입니다.")
+                () -> new UsernameNotFoundException("아이디 또는 비밀번호가 유효하지 않습니다.")
         );
         // 유저 데이터가 담긴 토큰 발급
 
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean chkduplicateNickname(SetPreferencesRequest dto) {
+    public Boolean chkDuplicateNickname(SetPreferencesRequest dto) {
         return null;
     }
 
@@ -71,10 +71,9 @@ public class MemberServiceImpl implements MemberService {
         String password = dto.getPassword();
         String newPassword = bCryptPasswordEncoder.encode(dto.getNewPassword());
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+                () -> new UsernameNotFoundException("존재하지 않는 사용자입니다.")
         );
-
-        if (member.getPassword() == password)
+        if (member.getPassword().equals(password))
             member.setPassword(newPassword);
         else
             return new UpdatePasswordResponse("Failed");
@@ -82,15 +81,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) {
+    public LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) throws ClassNotFoundException {
         Team team = teamRepository.findById(dto.getTeamId()).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다.")
         );
         Player player = playerRepository.findById(dto.getPlayerId()).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 선수입니다.")
         );
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+                () -> new UsernameNotFoundException("존재하지 않는 사용자입니다.")
         );
         if (member.getPreferences() != null)
             return new LogInResponse(false, "invalid request", null);
@@ -104,27 +103,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId) {
+    public PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId) throws ClassNotFoundException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
         Preferences preferences = member.getPreferences();
-        String nickname = dto.getNickname();
         Team team = teamRepository.findById(dto.getTeamId()).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다.")
         );
         Player player = playerRepository.findById(dto.getPlayerId()).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 선수입니다.")
         );
-
         preferences.updatePreferences(team, player);
-
         return new PreferencesResponse("Success");
     }
 
     @Override
-    public MemberDataResponse viewMemberData(Long id) throws ClassNotFoundException {
-        Member member = memberRepository.findById(id).orElseThrow(ClassNotFoundException::new);
+    public MemberDataResponse viewMemberData(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+        );
         if (member.getPreferences() != null)
             return new MemberDataResponse("Success", member);
         return new MemberDataResponse("Failed");
@@ -132,21 +130,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDeletionResponse deleteMember(Long memberId) {
-        if (memberRepository.existsById(memberId)) {
-            Member member = memberRepository.findById(memberId).get();
-            Preferences preferences = member.getPreferences();
-            preferencesRepository.delete(preferences);
-            memberRepository.delete(member);
-            return new MemberDeletionResponse("Success");
-        } else {
-            return new MemberDeletionResponse("Failed");
-        }
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
+        );
+        Preferences preferences = member.getPreferences();
+        preferencesRepository.delete(preferences);
+        memberRepository.delete(member);
+        return new MemberDeletionResponse("Success");
     }
 
     @Override
     public GetPreferencesResponse chkMemberPreference(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new GlobalException(ErrorCode.INVALID_USER)
+                () -> new UsernameNotFoundException("존재하지 않는 아이디 입니다.")
         );
         Preferences preferences = member.getPreferences();
         if (preferences == null) {

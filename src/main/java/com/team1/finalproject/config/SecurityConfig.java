@@ -28,6 +28,7 @@ public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final MemberRepository memberRepository;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CharacterEncodingFilter filter;
 
     @Bean
@@ -43,12 +44,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/member",
-                                "/build/category",
-                                "/build/season",
+                        .requestMatchers("/member", "/member/{id}/preferences", "/login", "/login/oauth2/**",
                                 "/kakao/**",
-                                "/data/**",
-                                "/**").permitAll()
+                                "/data/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -57,17 +55,8 @@ public class SecurityConfig {
                 .addFilter(corsFilter())
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .addFilter(jwtAuthenticationFilter)
-                .addFilter(
-                        new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenUtils))
-                .exceptionHandling((exceptionHandling)->exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
-//        http
-//                .and()
-//                .authorizeHttpRequests(requests -> requests
-//                        .requestMatchers(HttpMethod.POST ,"/sign").permitAll()
-//                        .anyRequest().authenticated()
-//                );
-//                .requestMatchers("/sign","/sign/*").permitAll()
-//                .anyRequest().authenticated();
+                .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenUtils))
+                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
 
         return http.build();
     }

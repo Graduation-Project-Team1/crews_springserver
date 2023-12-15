@@ -7,13 +7,13 @@ public interface MemberService {
 
     void logIn(LoginRequest dto);
 
-    Boolean chkduplicateNickname(SetPreferencesRequest dto);
+    Boolean chkDuplicateNickname(SetPreferencesRequest dto);
 
     UpdatePasswordResponse updateMemberPassword(UpdatePasswordRequest dto, Long memberId);
 
-    LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId);
+    LogInResponse setMemberPreferences(SetPreferencesRequest dto, Long memberId) throws ClassNotFoundException;
 
-    PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId);
+    PreferencesResponse updateMemberPreferences(UpdatePreferencesRequest dto, Long memberId) throws ClassNotFoundException;
 
     MemberDataResponse viewMemberData(Long memberId) throws ClassNotFoundException;
 

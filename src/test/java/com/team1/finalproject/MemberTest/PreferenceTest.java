@@ -81,7 +81,7 @@ public class PreferenceTest {
 
     @Test
     public void duplicateNicknameTest() {
-        assertThat(memberService.chkduplicateNickname(dto)).isEqualTo(true);
+        assertThat(memberService.chkDuplicateNickname(dto)).isEqualTo(true);
     }
 
     @Test

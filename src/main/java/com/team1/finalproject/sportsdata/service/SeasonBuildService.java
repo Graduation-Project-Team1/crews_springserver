@@ -32,7 +32,6 @@ public class SeasonBuildService {
     private final SeasonTeamRepository seasonTeamRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
-    private final SoccerPlayerRepository soccerPlayerRepository;
     private final ForwardRepository forwardRepository;
     private final MidfielderRepository midfielderRepository;
     private final DefenderRepository defenderRepository;
@@ -369,7 +368,7 @@ public class SeasonBuildService {
                     Long playerId = player.getId();
                     String url = "https://sofascores.p.rapidapi.com/v1/players/photo?player_id="+ playerId;
                     String s = dataParseBuilder.getImage(url, playerId);
-                    System.out.println("playerId = " + playerId + ", successful");
+                    System.out.println("playerId = " + playerId + s);
                 }
             }
         }

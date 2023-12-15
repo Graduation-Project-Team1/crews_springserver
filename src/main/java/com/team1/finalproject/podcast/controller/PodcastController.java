@@ -20,7 +20,8 @@ public class PodcastController {
     private final PodcastService podcastService;
 
     @GetMapping("/podcast")
-    public ResponseEntity<?> getRecentPodcast(@RequestParam(required = false) Long teamId, @RequestParam(required = false) Long podcastId) throws IOException {
+    public ResponseEntity<?> getRecentPodcast(@RequestParam(required = false) Long teamId,
+                                              @RequestParam(required = false) Long podcastId) throws IOException, ClassNotFoundException {
         if(teamId!=null)
             return podcastService.getPodcastByTeamId(teamId);
         else if(podcastId!=null)
@@ -30,7 +31,7 @@ public class PodcastController {
 
     @GetMapping("/podcast/list")
     @ResponseBody
-    public List<PodcastInfoResponse> getPodcastList(@RequestParam Long teamId) {
+    public List<PodcastInfoResponse> getPodcastList(@RequestParam Long teamId) throws ClassNotFoundException {
         return podcastService.getPodcastInfoList(teamId);
     }
 }

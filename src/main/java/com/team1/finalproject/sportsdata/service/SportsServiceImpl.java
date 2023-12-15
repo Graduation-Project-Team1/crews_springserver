@@ -1,8 +1,6 @@
 package com.team1.finalproject.sportsdata.service;
 
 import com.team1.finalproject.common.dto.SearchResponse;
-import com.team1.finalproject.common.exception.ErrorCode;
-import com.team1.finalproject.common.exception.GlobalException;
 import com.team1.finalproject.feign.TestFeignClient;
 import com.team1.finalproject.feign.dto.QueryResponse;
 import com.team1.finalproject.podcast.entity.Podcast;
@@ -61,28 +59,27 @@ public class SportsServiceImpl implements SportsService {
     @Override
     public List<LeagueInfoResponse> getLeagueList(String sportsName) {
         List<Category> categories = categoryRepository.findBySportsName(sportsName);
-        List<LeagueInfoResponse> leagueInfoResponses = categories.stream()
+        return categories.stream()
                 .map(LeagueInfoResponse::new)
                 .collect(Collectors.toList());
-        return leagueInfoResponses;
     }
 
     @Override
-    public LeagueInfoResponse getLeagueInfo(Long leagueId) {
+    public LeagueInfoResponse getLeagueInfo(Long leagueId) throws ClassNotFoundException {
         Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 리그입니다.")
         );
         return new LeagueInfoResponse(category);
     }
 
     @Override
-    public List<TeamInfoResponse> getTeamList(Long leagueId) {
+    public List<TeamInfoResponse> getTeamList(Long leagueId) throws ClassNotFoundException {
         List<TeamInfoResponse> teamInfoResponses = new java.util.ArrayList<>(List.of());
         Category category = categoryRepository.findByLeagueId(leagueId).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 리그입니다.")
         );
         Season season = seasonRepository.findByCategory(category).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 시즌입니다.")
         );
         List<SeasonTeam> seasonTeams = season.getSeasonTeams();
         for (SeasonTeam seasonTeam : seasonTeams) {
@@ -94,11 +91,10 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public TeamInfoResponse getTeamInfo(Long teamId) {
+    public TeamInfoResponse getTeamInfo(Long teamId) throws ClassNotFoundException {
         Team team = teamRepository.findById(teamId).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다.")
         );
-
         Manager manager = managerRepository.findByTeam(team).orElseThrow();
         return new TeamInfoResponse(team, manager);
     }
@@ -112,26 +108,27 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public PlayerInfoResponse getPlayerInfo(Long playerId) {
+    public PlayerInfoResponse getPlayerInfo(Long playerId) throws ClassNotFoundException {
         Player player = playerRepository.findById(playerId).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 선수입니다.")
         );
         return new PlayerInfoResponse(player);
     }
 
     @Override
-    public ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto) {
+    public ManagerInfoResponse getManagerInfo(ManagerInfoRequest dto) throws ClassNotFoundException {
         Long managerId = dto.getManagerId();
         Manager manager = managerRepository.findById(managerId).orElseThrow(
-                () -> new GlobalException(ErrorCode.DATA_NOT_FOUND)
+                () -> new ClassNotFoundException("존재하지 않는 감독입니다.")
         );
         return new ManagerInfoResponse(manager);
     }
 
     @Override
-    public List<GameInfoResponse> getTeamSchedule(Long teamId) {
+    public List<GameInfoResponse> getTeamSchedule(Long teamId) throws ClassNotFoundException {
         List<GameInfoResponse> gameInfoResponses = new ArrayList<>();
-        Team team = teamRepository.findById(teamId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다."));
 
         List<Game> games = gameRepository.findAllByTeam(team);
 
@@ -143,8 +140,10 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public PlayerInfoResponse getPlayerRecord(Long playerId) {
-        Player player = playerRepository.findById(playerId).orElseThrow();
+    public PlayerInfoResponse getPlayerRecord(Long playerId) throws ClassNotFoundException {
+        Player player = playerRepository.findById(playerId).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 선수입니다.")
+        );
         Long sportsId = player.getTeam().getSeasonTeams()
                 .stream()
                 .filter(seasonTeam -> seasonTeam.getSeason().getName().contains("2023"))
@@ -153,8 +152,6 @@ public class SportsServiceImpl implements SportsService {
                 .getCategory()
                 .getSportsId();
         String position = player.getPosition();
-        System.out.println("position = " + position);
-        System.out.println("playerId = " + playerId);
         // in case sports = football
         if (sportsId == 1L) {
             switch (position) {
@@ -192,7 +189,7 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId) {
+    public List<PlayerInfoResponse> getPlayerRecordByTeam(Long teamId) throws ClassNotFoundException {
         List<PlayerInfoResponse> playerRecordList = new ArrayList<>();
         List<PlayerInfoResponse> playerList = getPlayerList(teamId);
         for (PlayerInfoResponse playerInfoResponse : playerList) {
@@ -205,9 +202,11 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos) {
+    public List<PlayerInfoResponse> getPlayerRecordByTeamAndPos(Long teamId, String pos) throws ClassNotFoundException {
         List<PlayerInfoResponse> playerRecordList = new ArrayList<>();
-        Team team = teamRepository.findById(teamId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다.")
+        );
         List<Player> playerList = playerRepository.findByTeamAndPosition(team, pos);
         for (Player player : playerList) {
             Long id = player.getId();
@@ -219,15 +218,21 @@ public class SportsServiceImpl implements SportsService {
     }
 
     @Override
-    public TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId) {
-        Team team = teamRepository.findById(teamId).orElseThrow();
-        SoccerTeam soccerTeam = soccerTeamRepository.findByTeam(team).orElseThrow();
+    public TeamSeasonRecordResponse getTeamSeasonRecord(Long teamId) throws ClassNotFoundException {
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 팀입니다.")
+        );
+        SoccerTeam soccerTeam = soccerTeamRepository.findByTeam(team).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 축구 구단입니다. 혹은 축구 구단으로 등록되지 않은 팀입니다.")
+        );
         return new TeamSeasonRecordResponse(soccerTeam);
     }
 
     @Override
-    public ManagerInfoResponse getManagerInfo(Long managerId) {
-        Manager manager = managerRepository.findById(managerId).orElseThrow();
+    public ManagerInfoResponse getManagerInfo(Long managerId) throws ClassNotFoundException {
+        Manager manager = managerRepository.findById(managerId).orElseThrow(
+                () -> new ClassNotFoundException("존재하지 않는 감독입니다.")
+        );
         return new ManagerInfoResponse(manager);
     }
 

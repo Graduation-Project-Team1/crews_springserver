@@ -11,7 +11,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +32,6 @@ public class PodcastService {
 
     public ResponseEntity<ByteArrayResource> getAudio(Podcast podcast) throws IOException {
 
-        String title = podcast.getTitle();
-        String text = podcast.getText();
-        LocalDateTime madeAt = podcast.getMadeAt();
-        String duration = podcast.getDuration();
-
         // 파일 경로로 음성 파일 호출.
         String filePath = "/pod/"+ podcast.getPath();
         File file = new File(filePath);
@@ -52,10 +44,6 @@ public class PodcastService {
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=audio.mp3");
-       /* headers.add("Podcast-Title", title);
-        headers.add("Podcast-Text", text);
-        headers.add("Podcast-MadeAt", String.valueOf(madeAt));
-        headers.add("Podcast-Duration", duration);*/
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentLength(audioData.length);
 
@@ -66,9 +54,11 @@ public class PodcastService {
                 .body(resource);
     }
 
-    public List<PodcastInfoResponse> getPodcastInfoList(Long teamId) {
+    public List<PodcastInfoResponse> getPodcastInfoList(Long teamId) throws ClassNotFoundException {
         List<PodcastInfoResponse> podcastInfoList = new ArrayList<>();
-        Team team = teamRepository.findById(teamId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new ClassNotFoundException("요청한 Id의 팀이 존재하지 않습니다.")
+        );
         List<Podcast> allByTeam = podcastRepository.findAllByTeam(team);
         for (Podcast podcast : allByTeam) {
             podcastInfoList.add(new PodcastInfoResponse(podcast));
@@ -76,17 +66,21 @@ public class PodcastService {
         return podcastInfoList;
     }
 
-    public ResponseEntity<ByteArrayResource> getPodcastByTeamId(Long teamId) throws IOException {
-        Team team = teamRepository.findById(teamId).orElseThrow();
+    public ResponseEntity<ByteArrayResource> getPodcastByTeamId(Long teamId) throws IOException, ClassNotFoundException {
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new ClassNotFoundException("요청한 Id의 팀이 존재하지 않습니다.")
+        );
         // 팀 기준 가장 최신의 팟캐스트
-        Podcast podcast = podcastRepository.findTopByTeamOrderByMadeAtDesc(team).orElseThrow();
-
+        Podcast podcast = podcastRepository.findTopByTeamOrderByMadeAtDesc(team).orElseThrow(
+                () -> new ClassNotFoundException("요청한 팀의 팟캐스트가 존재하지 않습니다.")
+        );
         return getAudio(podcast);
     }
 
-    public ResponseEntity<ByteArrayResource> getPodcastById(Long podcastId) throws IOException {
-        Podcast podcast = podcastRepository.findById(podcastId).orElseThrow();
-
+    public ResponseEntity<ByteArrayResource> getPodcastById(Long podcastId) throws IOException, ClassNotFoundException {
+        Podcast podcast = podcastRepository.findById(podcastId).orElseThrow(
+                () -> new ClassNotFoundException("요청한 팀의 팟캐스트가 존재하지 않습니다.")
+        );
         return getAudio(podcast);
     }
 }

@@ -27,7 +27,6 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class KaKaoService {
 
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final JwtTokenUtils jwtTokenUtils;
 

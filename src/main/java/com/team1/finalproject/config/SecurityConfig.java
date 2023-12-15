@@ -44,9 +44,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/member", "/member/{id}/preferences", "/login", "/login/oauth2/**",
-                                "/kakao/**",
-                                "/data/**").permitAll()
+                        .requestMatchers("/member",
+                                "/member/{id}/preferences",
+                                "/login", "/login/oauth2/**",
+                                "/kakao/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -56,7 +57,7 @@ public class SecurityConfig {
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .addFilter(jwtAuthenticationFilter)
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenUtils))
-                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
+                .exceptionHandling((exceptionHandling)->exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint));
 
         return http.build();
     }

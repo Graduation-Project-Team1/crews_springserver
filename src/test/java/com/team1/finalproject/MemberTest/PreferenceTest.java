@@ -43,7 +43,7 @@ public class PreferenceTest {
     Player player;
     SetPreferencesRequest dto;
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws ClassNotFoundException {
         member = memberRepository.save(new Member("asdf", "1234"));
         team = teamRepository.save(new Team(1L,"name", code));
         player = playerRepository.save(new Player(2L, "name", dataParseBuilder.toTimeStamp(200006),
@@ -68,7 +68,7 @@ public class PreferenceTest {
     }
 
     @Test
-    public void updatePreferenceTest() {
+    public void updatePreferenceTest() throws ClassNotFoundException {
         String newNickname = "new nickname";
         Team newTeam = teamRepository.save(new Team(2L,"name2", code));
         Player newPlayer = playerRepository.save(new Player(3L, "name2", dataParseBuilder.toTimeStamp(200006),

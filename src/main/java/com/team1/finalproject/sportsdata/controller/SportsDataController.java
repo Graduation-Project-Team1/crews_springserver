@@ -26,17 +26,17 @@ public class SportsDataController {
     }
 
     @GetMapping("/league")
-    public LeagueInfoResponse getLeagueInfo(@RequestParam Long leagueId) {
+    public LeagueInfoResponse getLeagueInfo(@RequestParam Long leagueId) throws ClassNotFoundException {
         return sportsService.getLeagueInfo(leagueId);
     }
 
     @GetMapping("/team/list")
-    public List<TeamInfoResponse> getTeamList(@RequestParam Long leagueId) {
+    public List<TeamInfoResponse> getTeamList(@RequestParam Long leagueId) throws ClassNotFoundException {
         return sportsService.getTeamList(leagueId);
     }
 
     @GetMapping("/team")
-    public TeamInfoResponse getTeamInfo(@RequestParam Long teamId) {
+    public TeamInfoResponse getTeamInfo(@RequestParam Long teamId) throws ClassNotFoundException {
         return sportsService.getTeamInfo(teamId);
     }
 
@@ -46,28 +46,28 @@ public class SportsDataController {
     }
 
     @GetMapping("/player")
-    public PlayerInfoResponse getPlayerInfo(@RequestParam Long playerId) {
+    public PlayerInfoResponse getPlayerInfo(@RequestParam Long playerId) throws ClassNotFoundException {
         return sportsService.getPlayerInfo(playerId);
     }
 
     @GetMapping("/schedule")
-    public List<GameInfoResponse> getTeamSchedule(@RequestParam Long teamId) {
+    public List<GameInfoResponse> getTeamSchedule(@RequestParam Long teamId) throws ClassNotFoundException {
         return sportsService.getTeamSchedule(teamId);
     }
 
     @GetMapping("/manager")
-    public ManagerInfoResponse getManagerInfo(@RequestParam Long managerId) {
+    public ManagerInfoResponse getManagerInfo(@RequestParam Long managerId) throws ClassNotFoundException {
         return sportsService.getManagerInfo(managerId);
     }
 
     @GetMapping("/player/record")
-    public PlayerInfoResponse getPlayerRecord(@RequestParam Long playerId) {
+    public PlayerInfoResponse getPlayerRecord(@RequestParam Long playerId) throws ClassNotFoundException {
         return sportsService.getPlayerRecord(playerId);
     }
 
     @GetMapping("/player/record/list")
     public List<PlayerInfoResponse> getPlayerRecordByTeam(@RequestParam Long teamId,
-                                                          @RequestParam(required = false) String pos) {
+                                                          @RequestParam(required = false) String pos) throws ClassNotFoundException {
         if(pos!=null)
             return sportsService.getPlayerRecordByTeamAndPos(teamId, pos);
         else
@@ -75,7 +75,7 @@ public class SportsDataController {
     }
 
     @GetMapping("/team/{teamId}/season")
-    public TeamSeasonRecordResponse getTeamSeasonRecord(@PathVariable("teamId") Long teamId) {
+    public TeamSeasonRecordResponse getTeamSeasonRecord(@PathVariable("teamId") Long teamId) throws ClassNotFoundException {
         return sportsService.getTeamSeasonRecord(teamId);
     }
 }

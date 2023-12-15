@@ -1,7 +1,6 @@
 package com.team1.finalproject.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team1.finalproject.common.exception.ErrorCode;
 import com.team1.finalproject.common.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

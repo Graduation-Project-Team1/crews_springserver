@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QueryResponse {
-    @JsonProperty("name")
-    private List<String> name;
+    private List<String> names;
+
+    private String name;
 }

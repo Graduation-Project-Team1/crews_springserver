@@ -240,9 +240,15 @@ public class SportsServiceImpl implements SportsService {
     public SearchResponse getSearchResult(String query) {
         SearchResponse searchResponse = new SearchResponse();
         QueryResponse response = testFeignClient.getENGLetter(query);
-        String q = response.getName().get(0);
+        System.out.println("q = " + response);
+        String q;
+        if (response.getName() == null)
+            q = response.getNames().get(0);
+        else
+            q = response.getName();
 
         List<Team> teams = teamRepository.searchAllByNameContainingIgnoreCase(q.trim());
+        System.out.println("teams = " + teams);
         if (teams.size() != 0) {
             for (Team team : teams) {
                 searchResponse.addTeam(team);

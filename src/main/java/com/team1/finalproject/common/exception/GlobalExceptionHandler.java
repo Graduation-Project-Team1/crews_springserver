@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalException.class)
     protected ResponseEntity<?> handleGlobalException(GlobalException e) {
+        e.printStackTrace();
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
                 .body(ResponseDto.fail(
                         e.getErrorCode().getCode(),
@@ -26,6 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClassNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<?> handleClassNotFoundException(ClassNotFoundException e) {
+        e.printStackTrace();
         return ResponseEntity.status(400)
                 .body(ResponseDto.fail(
                         "404 Not Found",
@@ -36,6 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<?> handleNoSuchElementException(NoSuchElementException e) {
+        e.printStackTrace();
         return ResponseEntity.status(400)
                 .body(ResponseDto.fail(
                         "404 Not Found",
@@ -46,6 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<?> handleIOException(IOException e) {
+        e.printStackTrace();
         return ResponseEntity.status(400)
                 .body(ResponseDto.fail(
                         "500 Server Error",
@@ -56,12 +60,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException e) {
+        e.printStackTrace();
         return ResponseEntity.status(400)
                 .body(ResponseDto.fail(
                         "404 Not Found",
                         e.getMessage())
                 );
     }
-    //UsernameNotFoundException
 }
 

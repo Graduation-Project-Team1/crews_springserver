@@ -1,6 +1,5 @@
 package com.team1.finalproject.common.dto;
 
-import com.team1.finalproject.feign.TestFeignClient;
 import com.team1.finalproject.feign.dto.CommunityResponse;
 import com.team1.finalproject.feign.dto.NewsResponse;
 import com.team1.finalproject.podcast.dto.PodcastInfoResponse;
@@ -11,7 +10,6 @@ import com.team1.finalproject.sportsdata.entity.Player;
 import com.team1.finalproject.sportsdata.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ public class SearchResponse {
     private List<PodcastInfoResponse> podcastInfoResponses;
     private List<CommunityResponse> communityResponses;
     private List<NewsResponse> newsResponses;
-
 
     public void addTeam(Team team) {
         if(this.teamInfoResponses==null){

@@ -47,7 +47,8 @@ public class SecurityConfig {
                         .requestMatchers("/member",
                                 "/member/{id}/preferences",
                                 "/login", "/login/oauth2/**",
-                                "/kakao/**").permitAll()
+                                "/kakao/**",
+                                "**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
